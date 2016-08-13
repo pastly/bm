@@ -6,10 +6,19 @@ TITLE_SEPERATOR_CHAR='-'
 POST_EXTENSION='bbg'
 POST_DIR='posts'
 ED="${EDITOR}"
+MARKDOWN="$(which Markdown.pl)"
+
+[ ! -x "${MARKDOWN}" ] && echo "Markdown.pl not found" && exit 1
 
 function strip_comments {
 	FILE="$1"
 	grep --invert-match "^${COMMENT_CODE}" "${FILE}"
+}
+
+function get_date {
+	FILE="$1"
+	strip_comments "${FILE}" | \
+		head -n 1
 }
 
 function get_title {
@@ -18,10 +27,11 @@ function get_title {
 		head -n 2 | tail -n 1
 }
 
-function get_date {
+function get_content {
 	FILE="$1"
 	strip_comments "${FILE}" | \
-		head -n 1
+		tail -n +3
+
 }
 
 function to_lower {

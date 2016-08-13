@@ -4,29 +4,41 @@ M4FLAGS=--prefix-builtins
 MARKDOWN=Markdown.pl
 MARKDOWNFLAGS=
 
-.SUFFIXES: .html.in .html \
-	.md.in .md
+.SUFFIXES:
+.SUFFIXES: .html .bbg
 
-FINAL_HTML_FILES := \
-	build/index.html
+.PHONY: all clean index
 
-FINAL_MD_FILES := \
-	build/mdtest.html
+POST_DIR=posts
+BUILD_DIR=build
+BUILT_POST_DIR=$(BUILD_DIR)/posts
+BUILT_TAG_DIR=$(BUILD_DIR)/tags
 
-FINAL_FILES := \
-	${FINAL_HTML_FILES} \
-	${FINAL_MD_FILES}
+POST_FILES := $(shell find $(POST_DIR) -name '*.bbg')
+BUILT_POSTS := $(POST_FILES:.bbg=.html)
+BUILT_POSTS := $(notdir $(BUILT_POSTS))
+BUILT_POSTS := $(addprefix $(BUILT_POST_DIR)/,$(BUILT_POSTS))
 
-all: ${FINAL_FILES} tags
+#$(BUILTPOSTDIR)/*.html: $(BUILTPOSTDIR)/%.html: $(POSTDIR)/*/*/%.bbg
+#
+#$(POSTDIR)/*/*/%.bbg:
+#	./build-posts.sh $(BUILTPOSTDIR) $@
+
+all: $(BUILT_POSTS) $(BUILD_DIR)/index.html
+
+$(BUILT_POSTS): $(POST_FILES)
+	./build-post.sh $@ $(POST_FILES)
+
+$(BUILD_DIR)/index.html: $(POST_FILES)
+	./build-index.sh $@ $(POST_FILES)
 
 clean:
-	rm -r ${FINAL_FILES}
+	rm -r $(BUILD_DIR)
 
-tags: mdtest.md.in
-	echo "YES"
+#build/%.html: $(POST_FILES)
 
-build/%.html: %.html.in
-	${M4} ${M4FLAGS} $< > build/$*.html
-
-build/%.html: %.md.in
-	${MARKDOWN} ${MARKDOWNFLAGS} $< | ${M4} ${M4FLAGS} > build/$*.html
+#build/%.html: %.html.in
+#	${M4} ${M4FLAGS} $< > build/$*.html
+#
+#build/%.html: %.md.in
+#	${MARKDOWN} ${MARKDOWNFLAGS} $< | ${M4} ${M4FLAGS} > build/$*.html

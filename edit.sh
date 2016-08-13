@@ -11,7 +11,7 @@ NUM_FOUND_FILES=$(find "${POST_DIR}" -type f -name "${SEARCH_VALUE}*" | wc --lin
 
 if [[ "${NUM_FOUND_FILES}" == "1" ]]
 then
-	${ED} $(find . -type f -name "${SEARCH_VALUE}*")
+	${ED} $(find ${POST_DIR} -type f -name "${SEARCH_VALUE}*")
 elif [[ "${NUM_FOUND_FILES}" > "1" ]]
 then
 	echo "Ambiguous search term ${SEARCH_VALUE}"
