@@ -36,7 +36,7 @@ done
 cat << EOF > "${TEMP_INDEX_FILE}"
 m4_include(include/html.m4)
 START_HTML(Tags - ${BLOG_NAME})
-HEADER_HTML(${BLOG_NAME})
+HEADER_HTML(${BLOG_NAME}, [[${BLOG_COMMENT}]])
 <h1>Tags</h1>
 EOF
 for TAG in ${ALL_TAGS[@]}
@@ -45,7 +45,7 @@ do
 	cat << EOF > "${TEMP_TAG_FILE}"
 m4_include(include/html.m4)
 START_HTML($TAG - ${BLOG_NAME})
-HEADER_HTML(${BLOG_NAME})
+HEADER_HTML(${BLOG_NAME}, [[${BLOG_COMMENT}]])
 <h2>$TAG</h2>
 <ul>
 EOF
