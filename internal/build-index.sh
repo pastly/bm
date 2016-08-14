@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source globals.sh
+source internal/globals.sh
 
 OUT_FILE="$1"
 shift

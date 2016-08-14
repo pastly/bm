@@ -7,8 +7,11 @@ POST_EXTENSION='bbg'
 POST_DIR='posts'
 ED="${EDITOR}"
 MARKDOWN="$(which Markdown.pl)"
+M4="$(which m4)"
+M4_FLAGS="--prefix-builtins"
 
 [ ! -x "${MARKDOWN}" ] && echo "Markdown.pl not found" && exit 1
+[ ! -x "${M4}" ] && echo "m4 not found" && exit 1
 
 function strip_comments {
 	FILE="$1"
@@ -67,4 +70,11 @@ function get_tags {
 	strip_comments "${FILE}" | \
 		grep --extended-regexp --only-matching "${TAG_CODE}[[:alnum:]]+" | \
 		sort | uniq | to_lower
+}
+
+function content_make_tag_links {
+	while read DATA
+	do
+		echo "${DATA}" | sed -e 's|@@\([[:alnum:]]\+\)|<a href=/tags/\L\1>\E\1</a>|g'
+	done
 }

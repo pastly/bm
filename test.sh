@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-source globals.sh
+source internal/globals.sh
 
 get_tags $1

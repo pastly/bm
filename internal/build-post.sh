@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source globals.sh
+source internal/globals.sh
 
 function build_post {
 	IN="$1"
@@ -8,18 +8,24 @@ function build_post {
 	OUT="$2"
 
 	strip_comments "${IN}" > "${TEMP}"
+
 	TITLE="$(get_title "${TEMP}")"
+	DATE="$(get_date "${TEMP}")"
+	DATE="$(date --date="@${DATE}" +'%Y-%m-%d')"
 
 	CONTENT="$(get_content "${TEMP}")"
 	CONTENT="$(echo "${CONTENT}" | ${MARKDOWN})"
-	cat << EOF > "${OUT}"
-<title>${TITLE}</title>
-<body>
-<h1>${TITLE}</h1>
+	CONTENT="$(echo "${CONTENT}" | content_make_tag_links)"
+
+	"${M4}" ${M4_FLAGS} > ${OUT} << EOF
+m4_include(include/html.m4)
+START_HTML(${TITLE})
+HEADER_HTML(${TITLE}, ${DATE}, $(whoami))
 ${CONTENT}
-</body>
+FOOTER_HTML
+END_HTML
 EOF
-rm "${TEMP}"
+	rm "${TEMP}"
 }
 
 OUT_DIR="$(dirname $1)"
