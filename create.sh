@@ -7,6 +7,9 @@ set_editor
 TEMP="$(mktemp)"
 NOW=$(date +'%s')
 
+TITLE="My Newest Post"
+[[ "$@" != "" ]] && TITLE="$@"
+
 cat << EOF > ${TEMP}
 ${NOW}
 ## Create your post below. Lines beginning with "${COMMENT_CODE}" will be stripped
@@ -21,7 +24,7 @@ ${NOW}
 ##
 ## Tags will have the preceeding "@@" removed and hyperlinks added. Other than,
 ## these additions, use markdown to format your post.
-My Newest Post
+${TITLE}
 EOF
 
 "${ED}" "${TEMP}"
