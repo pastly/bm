@@ -1,11 +1,11 @@
 CMD_BUILD_POST=./internal/build-post.sh
 CMD_BUILD_INDEX=./internal/build-index.sh
+CMD_BUILD_TAGS=./internal/build-tags.sh
 
 RM=rm
 RM_FLAGS=-r
 
 .SUFFIXES:
-.SUFFIXES: .html .bbg
 
 .PHONY: all clean
 
@@ -25,7 +25,9 @@ INCLUDE_FILES := $(shell find $(INCLUDE_DIR) -name '*.html' -or -name '*.m4')
 BUILT_POSTS := $(POST_FILES:.bbg=.html) # posts/year/month/post-title-123.{bbg,html}
 BUILT_POSTS := $(notdir $(BUILT_POSTS)) # post-title-123.html
 BUILT_POSTS := $(addprefix $(BUILT_POST_DIR)/,$(BUILT_POSTS)) # build/posts/post-title-123.html
-BUILT_META_FILES := $(BUILD_DIR)/index.html
+BUILT_META_FILES := \
+	$(BUILD_DIR)/index.html \
+	$(BUILT_TAG_DIR)/index.html
 
 all: $(BUILT_POSTS) $(BUILT_META_FILES)
 
@@ -34,6 +36,9 @@ $(BUILT_POSTS): $(POST_FILES) $(INCLUDE_FILES)
 
 $(BUILD_DIR)/index.html: $(POST_FILES) $(INCLUDE_FILES)
 	$(CMD_BUILD_INDEX) $@ $(POST_FILES)
+
+$(BUILT_TAG_DIR)/index.html: $(POST_FILES)
+	$(CMD_BUILD_TAGS) $@ $(POST_FILES)
 
 clean:
 	$(RM) $(RM_FLAGS) -- $(BUILD_DIR)

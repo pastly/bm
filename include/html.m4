@@ -19,6 +19,10 @@ m4_define(`END_HTML',
 m4_define(`HEADER_HTML',
 m4_include(`include/header.html')
 )
+m4_define(`POST_HEADER_HTML',
+HEADER_HTML
+m4_include(`include/post.header.html')
+)
 m4_define(`FOOTER_HTML',
 m4_include(`include/footer.html')
 )

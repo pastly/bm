@@ -20,7 +20,7 @@ function build_post {
 	"${M4}" ${M4_FLAGS} > ${OUT} << EOF
 m4_include(include/html.m4)
 START_HTML(${TITLE})
-HEADER_HTML(${TITLE}, ${DATE}, $(whoami))
+POST_HEADER_HTML(${TITLE}, ${DATE}, $(whoami))
 ${CONTENT}
 FOOTER_HTML
 END_HTML

@@ -38,7 +38,7 @@ do
 			TITLE=$(get_title "${TEMP}" | to_lower | strip_space)
 			FILENAME="${POST_DIR}/${YEAR}/${MONTH}/${TITLE}${TITLE_SEPERATOR_CHAR}${RANDOM}.${POST_EXTENSION}"
 			mv "${TEMP}" "${FILENAME}"
-			echo "Find your post at ${FILENAME}"
+			make
 			break;;
 		[Nn]* )
 			rm "${TEMP}"
@@ -47,5 +47,4 @@ do
 			echo "Please answer yes or no";;
 	esac
 done
-echo DONE
 

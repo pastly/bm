@@ -69,12 +69,18 @@ function get_tags {
 	FILE="$1"
 	strip_comments "${FILE}" | \
 		grep --extended-regexp --only-matching "${TAG_CODE}[[:alnum:]]+" | \
-		sort | uniq | to_lower
+		sed -e 's|@@||g' | to_lower | \
+		sort | uniq
 }
-
+function file_has_tag {
+	FILE="$1"
+	TAG="@@$2"
+	LINE_COUNT=$(grep --ignore-case "${TAG}" "$FILE" | wc -l)
+	[[ "${LINE_COUNT}" > 0 ]] && echo "foobar" || echo ""
+}
 function content_make_tag_links {
 	while read DATA
 	do
-		echo "${DATA}" | sed -e 's|@@\([[:alnum:]]\+\)|<a href=/tags/\L\1>\E\1</a>|g'
+		echo "${DATA}" | sed -e 's|@@\([[:alnum:]]\+\)|<a href=/tags/\L\1.html>\E\1</a>|g'
 	done
 }
