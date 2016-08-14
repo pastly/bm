@@ -48,10 +48,10 @@ a {
 a:hover {
 	color:A_HOVER_COLOR
 }
-h1#blogname {
+h1#blogtitle {
 	margin-bottom:5px;
 }
-h2#blogcomment {
+h2#blogsubtitle {
 	margin-top:0px;
 	font-size:medium;
 	font-weight:normal;
