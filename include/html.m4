@@ -2,7 +2,7 @@ m4_define(`START_HTML',
 <!DOCTYPE html>
 <html>
 <head>
-  <title>$1 - system33 blog</title>
+  <title>$1</title>
   <link href="/static/style.css" rel="stylesheet" type="text/css" />
   <!-- <link href="/common/font.css" rel="stylesheet" type="text/css">
   <link rel="shortcut icon" href="/common/favicon.ico" type="image/x-icon">
@@ -13,10 +13,13 @@ m4_define(`START_HTML',
 <body>
 <div id='divbodyholder'>
 )
+
 m4_define(`END_HTML',
+</div> <!-- divbodyholder -->
 </body>
 </html>
 )
+
 m4_define(`HEADER_HTML',
 <div id='headerholder'>
 <div id='header'>
@@ -25,10 +28,12 @@ m4_include(`include/header.html')
 </div> <!-- headerholder -->
 <div id='divbody'>
 )
+
 m4_define(`POST_HEADER_HTML',
-HEADER_HTML
+HEADER_HTML($1)
 m4_include(`include/post.header.html')
 )
+
 m4_define(`FOOTER_HTML',
 </div> <!-- divbody -->
 <div id='footerholder'>
@@ -36,5 +41,4 @@ m4_define(`FOOTER_HTML',
 m4_include(`include/footer.html')
 </div> <!-- footer -->
 </div> <!-- footerholder -->
-</div> <!-- divbodyholder -->
 )

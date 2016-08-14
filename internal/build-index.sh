@@ -9,8 +9,8 @@ TEMP=$(mktemp)
 
 cat << EOF > "${TEMP}"
 m4_include(include/html.m4)
-START_HTML(Home)
-HEADER_HTML(Home)
+START_HTML(${BLOG_NAME} - Home)
+HEADER_HTML(${BLOG_NAME})
 <h1>Posts</h1>
 <ul>
 EOF

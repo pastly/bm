@@ -19,8 +19,8 @@ function build_post {
 
 	"${M4}" ${M4_FLAGS} > ${OUT} << EOF
 m4_include(include/html.m4)
-START_HTML(${TITLE})
-POST_HEADER_HTML(${TITLE}, ${DATE}, $(whoami))
+START_HTML(${TITLE} - ${BLOG_NAME})
+POST_HEADER_HTML(${BLOG_NAME}, ${TITLE}, ${DATE}, $(whoami))
 ${CONTENT}
 FOOTER_HTML
 END_HTML

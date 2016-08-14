@@ -10,6 +10,8 @@ MARKDOWN="$(which Markdown.pl)"
 M4="$(which m4)"
 M4_FLAGS="--prefix-builtins"
 
+source include/config.sh
+
 [ ! -x "${MARKDOWN}" ] && echo "Markdown.pl not found" && exit 1
 [ ! -x "${M4}" ] && echo "m4 not found" && exit 1
 

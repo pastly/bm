@@ -1,3 +1,4 @@
 build/
 posts/
 *.swp
+config.sh
