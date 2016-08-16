@@ -76,7 +76,7 @@ function get_tags {
 }
 function file_has_tag {
 	FILE="$1"
-	TAG="${TAG_CODE}2"
+	TAG="${TAG_CODE}$2"
 	LINE_COUNT=$(grep --ignore-case "${TAG}" "$FILE" | wc -l)
 	[[ "${LINE_COUNT}" > 0 ]] && echo "foobar" || echo ""
 }
