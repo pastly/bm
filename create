@@ -32,7 +32,7 @@ EOF
 "${ED}" "${TEMP}"
 
 read -p "Would you like to save this post? " ANSWER
-while [ 1 ]; 
+while [ 1 ]
 do
 	case $ANSWER in
 		[Yy]* )
