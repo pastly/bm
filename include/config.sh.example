@@ -1,2 +1,7 @@
+##
+## All options must be specified
+## Even if they are defined to be empty
+##
 BLOG_TITLE="My Super Awesome Blog"
 BLOG_SUBTITLE="Where super awesome things happen"
+DEFAULT_AUTHOR="$(whoami)"

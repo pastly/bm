@@ -12,6 +12,8 @@ TITLE="My Newest Post"
 
 cat << EOF > ${TEMP}
 ${NOW}
+${NOW}
+${DEFAULT_AUTHOR}
 ${COMMENT_CODE} Create your post below. Lines beginning with "${COMMENT_CODE}" will be stripped
 ${COMMENT_CODE} out.
 ${COMMENT_CODE}

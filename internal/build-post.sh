@@ -12,6 +12,9 @@ function build_post {
 	TITLE="$(get_title "${TEMP}")"
 	DATE="$(get_date "${TEMP}")"
 	DATE="$(date --date="@${DATE}" +'%Y-%m-%d')"
+	MOD_DATE="$(get_mod_date "${TEMP}")"
+	MOD_DATE="$(date --date="@${MOD_DATE}" +'%Y-%m-%d')"
+	AUTHOR="$(get_author "${TEMP}")"
 
 	CONTENT="$(get_content "${TEMP}")"
 	CONTENT="$(echo "${CONTENT}" | ${MARKDOWN})"
@@ -21,7 +24,7 @@ function build_post {
 m4_include(include/html.m4)
 START_HTML([[${TITLE} - ${BLOG_TITLE}]])
 HEADER_HTML([[${BLOG_TITLE}]], [[${BLOG_SUBTITLE}]])
-POST_HEADER_HTML([[${TITLE}]], [[${DATE}]], [[$(whoami)]])
+POST_HEADER_HTML([[${TITLE}]], [[${DATE}]], [[${AUTHOR}]])
 ${CONTENT}
 FOOTER_HTML
 END_HTML

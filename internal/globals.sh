@@ -26,17 +26,28 @@ function get_date {
 		head -n 1
 }
 
-function get_title {
+function get_mod_date {
 	FILE="$1"
 	strip_comments "${FILE}" | \
 		head -n 2 | tail -n 1
 }
 
+function get_author {
+	FILE="$1"
+	strip_comments "${FILE}" | \
+		head -n 3 | tail -n 1
+}
+
+function get_title {
+	FILE="$1"
+	strip_comments "${FILE}" | \
+		head -n 4 | tail -n 1
+}
+
 function get_content {
 	FILE="$1"
 	strip_comments "${FILE}" | \
-		tail -n +3
-
+		tail -n +5
 }
 
 function to_lower {
