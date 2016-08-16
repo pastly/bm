@@ -1,5 +1,7 @@
 CMD_BUILD_POST=./internal/build-post.sh
-CMD_BUILD_INDEX=./internal/build-index.sh
+CMD_BUILD_POSTS_INDEX=./internal/build-posts-index.sh
+#CMD_BUILD_INDEX=./internal/build-index.sh
+CMD_BUILD_INDEX=./internal/build-posts-index.sh
 CMD_BUILD_TAGS=./internal/build-tags.sh
 
 M4=m4
@@ -38,6 +40,7 @@ BUILT_STATICS := $(notdir $(BUILT_STATICS))
 BUILT_STATICS := $(addprefix $(BUILT_STATIC_DIR)/,$(BUILT_STATICS))
 BUILT_META_FILES := \
 	$(BUILD_DIR)/index.html \
+	$(BUILT_POST_DIR)/index.html \
 	$(BUILT_TAG_DIR)/index.html
 
 all: $(BUILT_POSTS) $(BUILT_STATICS) $(BUILT_META_FILES)
@@ -47,6 +50,9 @@ $(BUILT_POSTS): $(POST_FILES) $(INCLUDE_FILES)
 
 $(BUILD_DIR)/index.html: $(POST_FILES) $(INCLUDE_FILES)
 	$(CMD_BUILD_INDEX) $@ $(POST_FILES)
+
+$(BUILT_POST_DIR)/index.html: $(POST_FILES) $(INCLUDE_FILES)
+	$(CMD_BUILD_POSTS_INDEX) $@ $(POST_FILES)
 
 $(BUILT_TAG_DIR)/index.html: $(POST_FILES) $(INCLUDE_FILES)
 	$(CMD_BUILD_TAGS) $@ $(POST_FILES)
