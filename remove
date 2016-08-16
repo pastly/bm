@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+source internal/globals.sh
+
+set_editor
+
+SEARCH_VALUE="$@"
+SEARCH_VALUE="$(echo ${SEARCH_VALUE} | to_lower | strip_punctuation | strip_space)"
+
+NUM_FOUND_FILES=$(find "${POST_DIR}" -type f -name "*${SEARCH_VALUE}*" | wc --lines)
+
+if [[ "${NUM_FOUND_FILES}" == "1" ]]
+then
+	FILE="$(find ${POST_DIR} -type f -name "*${SEARCH_VALUE}*")"
+	echo "$(get_title "${FILE}")"
+	echo "${FILE}"
+	read -p "Are you sure you want to delete the above post forever (a very long time)?" ANSWER
+	while [ 1 ]
+	do
+		case $ANSWER in
+			[Yy]* )
+				rm "${FILE}"
+				make clean
+				make
+				break;;
+			* )
+				echo "Whew. That was close."
+				break;;
+		esac
+	done
+elif [[ "${NUM_FOUND_FILES}" > "1" ]]
+then
+	echo "Ambiguous search term ${SEARCH_VALUE}"
+	find ${POST_DIR} -type f -name "*${SEARCH_VALUE}*"
+else
+	echo "Could not find posts matching ${SEARCH_VALUE}"
+fi
