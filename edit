@@ -5,7 +5,7 @@ source internal/globals.sh
 set_editor
 
 SEARCH_VALUE="$@"
-SEARCH_VALUE="$(echo ${SEARCH_VALUE} | to_lower | strip_space)"
+SEARCH_VALUE="$(echo ${SEARCH_VALUE} | to_lower | strip_punctuation | strip_space)"
 
 NUM_FOUND_FILES=$(find "${POST_DIR}" -type f -name "*${SEARCH_VALUE}*" | wc --lines)
 
