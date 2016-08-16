@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-COMMENT_CODE='##'
+COMMENT_CODE='///'
 TAG_CODE='@@'
 TITLE_SEPERATOR_CHAR='-'
 POST_EXTENSION='bbg'
@@ -71,18 +71,18 @@ function get_tags {
 	FILE="$1"
 	strip_comments "${FILE}" | \
 		grep --extended-regexp --only-matching "${TAG_CODE}[[:alnum:]]+" | \
-		sed -e 's|@@||g' | to_lower | \
+		sed -e "s|${TAG_CODE}||g" | to_lower | \
 		sort | uniq
 }
 function file_has_tag {
 	FILE="$1"
-	TAG="@@$2"
+	TAG="${TAG_CODE}2"
 	LINE_COUNT=$(grep --ignore-case "${TAG}" "$FILE" | wc -l)
 	[[ "${LINE_COUNT}" > 0 ]] && echo "foobar" || echo ""
 }
 function content_make_tag_links {
 	while read DATA
 	do
-		echo "${DATA}" | sed -e 's|@@\([[:alnum:]]\+\)|<a href=/tags/\L\1.html>\E\1</a>|g'
+		echo "${DATA}" | sed -e "s|${TAG_CODE}\([[:alnum:]]\+\)|<a href=/tags/\L\1.html>\E\1</a>|g"
 	done
 }

@@ -12,18 +12,18 @@ TITLE="My Newest Post"
 
 cat << EOF > ${TEMP}
 ${NOW}
-## Create your post below. Lines beginning with "${COMMENT_CODE}" will be stripped
-## out.
-## 
-## The first line is the timestamp of when this most is made.
-## 
-## The second line will be used as the title of the post.
-## 
-## Any remaining lines are considered the body. Any word preceeded by
-## "${TAG_CODE}" will be treated as a tag.
-##
-## Tags will have the preceeding "@@" removed and hyperlinks added. Other than,
-## these additions, use markdown to format your post.
+${COMMENT_CODE} Create your post below. Lines beginning with "${COMMENT_CODE}" will be stripped
+${COMMENT_CODE} out.
+${COMMENT_CODE}
+${COMMENT_CODE} The first line is the timestamp of when this most is made.
+${COMMENT_CODE}
+${COMMENT_CODE} The second line will be used as the title of the post.
+${COMMENT_CODE}
+${COMMENT_CODE} Any remaining lines are considered the body. Any word preceeded by
+${COMMENT_CODE} "${TAG_CODE}" will be treated as a tag. In the final HTML page, tags will have
+${COMMENT_CODE} the preceeding "${TAG_CODE} removed and hyperlinks added.
+${COMMENT_CODE}
+${COMMENT_CODE} Other than these additions, use markdown to format your post.
 ${TITLE}
 EOF
 
