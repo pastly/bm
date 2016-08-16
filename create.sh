@@ -38,7 +38,7 @@ do
 			YEAR=$(date --date=@${POST_DATE} +'%Y')
 			MONTH=$(date --date=@${POST_DATE} +'%m')
 			mkdir -p "${POST_DIR}/${YEAR}/${MONTH}"
-			TITLE=$(get_title "${TEMP}" | to_lower | strip_space)
+			TITLE=$(get_title "${TEMP}" | to_lower | strip_punctuation | strip_space)
 			FILENAME="${POST_DIR}/${YEAR}/${MONTH}/${TITLE}${TITLE_SEPERATOR_CHAR}${RANDOM}.${POST_EXTENSION}"
 			mv "${TEMP}" "${FILENAME}"
 			make

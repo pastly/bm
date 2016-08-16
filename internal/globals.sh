@@ -46,6 +46,13 @@ function to_lower {
 	done
 }
 
+function strip_punctuation {
+	while read DATA
+	do
+		tr -d '[:punct:]' <<< ${DATA}
+	done
+}
+
 function strip_space {
 	while read DATA
 	do
