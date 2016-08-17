@@ -15,14 +15,14 @@ HEADER_HTML([[${BLOG_TITLE}]], [[${BLOG_SUBTITLE}]])
 <ul>
 EOF
 
-while [ ! -z "$1" ]
+while read FILE
 do
-	TITLE=$(get_title "$1")
+	TITLE=$(get_title "$FILE")
 	cat << EOF >> "${TEMP}"
-<li><a href='/posts/$(basename "$1" .${POST_EXTENSION}).html'>${TITLE}</a></li>
+<li><a href='/posts/$(basename "$FILE" .${POST_EXTENSION}).html'>${TITLE}</a></li>
 EOF
 	shift
-done
+done < <(sort_by_date "$@" | tac)
 
 cat << EOF >> "${TEMP}"
 </ul>

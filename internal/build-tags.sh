@@ -3,11 +3,11 @@
 source internal/globals.sh
 
 INDEX_FILE="$1"
+shift
 TEMP_INDEX_FILE=$(mktemp)
 TEMP_TAG_FILE=$(mktemp)
 OUT_DIR=$(dirname "${INDEX_FILE}")
 mkdir -p "${OUT_DIR}"
-shift
 
 FILES_WITH_TAGS=""
 FWT_I=0
@@ -51,7 +51,7 @@ HEADER_HTML([[${BLOG_TITLE}]], [[${BLOG_SUBTITLE}]])
 EOF
 	echo "<h2>${TAG}</h2>" >> "${TEMP_INDEX_FILE}"
 	echo "<ul>" >> "${TEMP_INDEX_FILE}"
-	for FILE in ${FILES_WITH_TAGS[@]}
+	for FILE in $(sort_by_date "${FILES_WITH_TAGS[@]}" | tac)
 	do
 		FILE_HAS_TAG=$(file_has_tag "${FILE}" "${TAG}")
 		if [ ! -z "$FILE_HAS_TAG" ]

@@ -97,15 +97,34 @@ function get_tags {
 		sed -e "s|${TAG_CODE}||g" | to_lower | \
 		sort | uniq
 }
+
 function file_has_tag {
 	FILE="$1"
 	TAG="${TAG_CODE}$2"
 	LINE_COUNT=$(grep --ignore-case "${TAG}" "$FILE" | wc -l)
 	[[ "${LINE_COUNT}" > 0 ]] && echo "foobar" || echo ""
 }
+
 function content_make_tag_links {
 	while read DATA
 	do
 		echo "${DATA}" | sed -e "s|${TAG_CODE}\([[:alnum:]]\+\)|<a href=/tags/\L\1.html>\E\1</a>|g"
+	done
+}
+
+function sort_by_date {
+	ARRAY=( )
+	FILE="$1"
+	shift
+	while [[ "${FILE}" != "" ]]
+	do
+		DATE="$(get_date "${FILE}")"
+		ARRAY["${DATE}"]="${FILE}"
+		FILE="$1"
+		shift
+	done
+	for I in "${!ARRAY[@]}"
+	do
+		echo "${ARRAY[$I]}"
 	done
 }
