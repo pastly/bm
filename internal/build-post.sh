@@ -11,9 +11,9 @@ function build_post {
 
 	TITLE="$(get_title "${TEMP}")"
 	DATE="$(get_date "${TEMP}")"
-	DATE="$(date --date="@${DATE}" +'%Y-%m-%d')"
+	DATE="$(ts_to_date "${DATE}")"
 	MOD_DATE="$(get_mod_date "${TEMP}")"
-	MOD_DATE="$(date --date="@${MOD_DATE}" +'%Y-%m-%d')"
+	MOD_DATE="$(ts_to_date "${MOD_DATE}")"
 	AUTHOR="$(get_author "${TEMP}")"
 
 	CONTENT="$(get_content "${TEMP}")"

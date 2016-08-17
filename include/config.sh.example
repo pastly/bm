@@ -5,3 +5,4 @@
 BLOG_TITLE="My Super Awesome Blog"
 BLOG_SUBTITLE="Where super awesome things happen"
 DEFAULT_AUTHOR="$(whoami)"
+DATE_FRMT="%d %b %Y"

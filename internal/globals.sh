@@ -85,6 +85,11 @@ function set_editor {
 	fi
 }
 
+function ts_to_date {
+	TS="$1"
+	date --date="@${TS}" +"${DATE_FRMT}"
+}
+
 function get_tags {
 	FILE="$1"
 	strip_comments "${FILE}" | \
