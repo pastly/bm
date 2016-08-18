@@ -52,7 +52,8 @@ do
 			rm "${TEMP}"
 			break;;
 		* )
-			echo "Please answer yes or no";;
+			echo "Please answer yes or no"
+			read -p "Would you like to save this post? " ANSWER;;
 	esac
 done
 
