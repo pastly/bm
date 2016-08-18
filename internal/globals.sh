@@ -113,16 +113,27 @@ function content_make_tag_links {
 }
 
 function sort_by_date {
+	# If sending file names in via stdin,
+	# they must be \0 delimited
 	ARRAY=( )
-	FILE="$1"
-	shift
-	while [[ "${FILE}" != "" ]]
-	do
-		DATE="$(get_date "${FILE}")"
-		ARRAY["${DATE}"]="${FILE}"
+	if [ ! -z "$1" ]
+	then
 		FILE="$1"
 		shift
-	done
+		while [[ "${FILE}" != "" ]]
+		do
+			DATE="$(get_date "${FILE}")"
+			ARRAY["${DATE}"]="${FILE}"
+			FILE="$1"
+			shift
+		done
+	else
+		while read -d '' FILE
+		do
+			DATE="$(get_date "${FILE}")"
+			ARRAY["${DATE}"]="${FILE}"
+		done
+	fi
 	for I in "${!ARRAY[@]}"
 	do
 		echo "${ARRAY[$I]}"
