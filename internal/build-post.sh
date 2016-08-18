@@ -17,7 +17,7 @@ function build_post {
 	AUTHOR="$(get_author "${TEMP}")"
 
 	CONTENT="$(get_content "${TEMP}")"
-	CONTENT="$(echo "${CONTENT}" | ${MARKDOWN})"
+	CONTENT="$(echo "${CONTENT}" | ${MARKDOWN} | content_make_tag_links)"
 	CONTENT="$(echo "${CONTENT}" | content_make_tag_links)"
 
 	"${M4}" ${M4_FLAGS} > ${OUT} << EOF

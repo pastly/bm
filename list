@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+source internal/globals.sh
+
+SEARCH_VALUE="$@"
+SEARCH_VALUE="$(echo ${SEARCH_VALUE} | to_lower | strip_punctuation | strip_space)"
+
+find "${POST_DIR}" -type f -name "*${SEARCH_VALUE}*.${POST_EXTENSION}" -print0 |\
+sort_by_date |\
+while read FILE
+do
+	get_title "${FILE}"
+	echo "    ${FILE}"
+done
+
+exit 0
+

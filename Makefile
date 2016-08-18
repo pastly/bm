@@ -1,7 +1,6 @@
 CMD_BUILD_POST=./internal/build-post.sh
 CMD_BUILD_POSTS_INDEX=./internal/build-posts-index.sh
-#CMD_BUILD_INDEX=./internal/build-index.sh
-CMD_BUILD_INDEX=./internal/build-posts-index.sh
+CMD_BUILD_INDEX=./internal/build-index.sh
 CMD_BUILD_TAGS=./internal/build-tags.sh
 
 M4=m4
