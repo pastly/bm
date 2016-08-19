@@ -1,9 +1,13 @@
 ##
-## All options must be specified
-## Even if they are defined to be empty
+## All options must be defined unless otherwise specified.
 ##
 BLOG_TITLE="My Super Awesome Blog"
 BLOG_SUBTITLE="Where super awesome things happen"
 DEFAULT_AUTHOR="$(whoami)"
 DATE_FRMT="%d %b %Y"
 POSTS_ON_HOMEPAGE="5"
+# Your desired text editor, must be able to
+# take a filename as the only argument.
+# Can be commented out if you would like to default to the EDITOR environment
+# variable.
+ED="nano"

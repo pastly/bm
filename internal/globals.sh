@@ -74,14 +74,19 @@ function strip_space {
 }
 
 function set_editor {
-	if [[ -z ${EDITOR} ]]
+	if [[ -z ${ED} ]]
 	then
-		echo "\$EDITOR not set."
-		read -p "Enter name of desired text editor: " ED
-		which "${ED}" &> /dev/null
-		[[ $? != 0 ]] && exit
-	else
-		ED="$(which ${EDITOR})"
+		echo "\$ED not set."
+		while read -p "Enter name of desired text editor: " ED
+		do
+			which "${ED}" &> /dev/null
+			if [[ $? != 0 ]]
+			then
+				echo "That doesn't seem to be a valid editor."
+			else
+				break
+			fi
+		done
 	fi
 }
 
