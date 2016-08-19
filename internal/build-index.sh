@@ -20,12 +20,19 @@ do
 	DATE="$(ts_to_date "$(get_date "${FILE}")")"
 	AUTHOR="$(get_author "${FILE}")"
 	CONTENT="$(get_content "${FILE}")"
-	CONTENT="$(echo "${CONTENT}" | "${MARKDOWN}" | content_make_tag_links)"
+	CONTENT_IS_TRIMMED="$(echo "${CONTENT}" | content_will_be_trimmed)"
+	CONTENT="$(echo "${CONTENT}" | content_trim_for_preview | "${MARKDOWN}" | content_make_tag_links } )"
 	cat << EOF >> "${TEMP}"
 POST_HEADER_HTML([[<a href='${POST_LINK}'>${TITLE}</a>]], [[${DATE}]], [[${AUTHOR}]])
 ${CONTENT}
-<hr>
 EOF
+	if [[ "${CONTENT_IS_TRIMMED}" != "" ]]
+	then
+		cat << EOF >> "${TEMP}"
+<a href='${POST_LINK}'><em>Read the entire post</em></a>
+EOF
+	fi
+	echo "<hr>" >> "${TEMP}"
 	shift
 done < <(sort_by_date "$@" | tac | head -n "${POSTS_ON_HOMEPAGE}")
 

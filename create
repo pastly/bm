@@ -29,7 +29,11 @@ ${COMMENT_CODE} Any remaining lines are considered the body. Any word
 ${COMMENT_CODE} preceeded by "${TAG_CODE}" will be treated as a tag. In the final HTML page,
 ${COMMENT_CODE} tags will have the preceeding "${TAG_CODE}" removed and hyperlinks added.
 ${COMMENT_CODE}
-${COMMENT_CODE} Other than these special lines, use markdown to format your post.
+${COMMENT_CODE} You may manually specify where to end the homepage preview of this post by
+${COMMENT_CODE} placing "${PREVIEW_STOP_CODE}" once somewhere. Otherwise, ${PREVIEW_MAX_WORDS} words will
+${COMMENT_CODE} be used.
+${COMMENT_CODE}
+${COMMENT_CODE} Other than these special rules, use markdown to format your post.
 EOF
 
 "${ED}" "${TEMP}"

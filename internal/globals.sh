@@ -2,6 +2,7 @@
 
 COMMENT_CODE='///'
 TAG_CODE='@@'
+PREVIEW_STOP_CODE='{preview-stop}'
 TITLE_SEPERATOR_CHAR='-'
 POST_EXTENSION='bbg'
 POST_DIR='posts'
@@ -128,6 +129,44 @@ function content_make_tag_links {
 	done
 }
 
+function content_will_be_trimmed {
+	WORD_COUNT=0
+	while read DATA
+	do
+		WORD_COUNT=$((WORD_COUNT+$(echo "${DATA}" | wc -w)))
+		COPY_OF_DATA="${DATA//${PREVIEW_STOP_CODE}}"
+		if [[ "${COPY_OF_DATA}" != "${DATA}" ]]
+		then
+			echo "foobar"
+			break
+		fi
+		if [ "${WORD_COUNT}" -ge "${PREVIEW_MAX_WORDS}" ]
+		then
+			echo "foobar"
+		fi
+	done
+}
+
+function content_trim_for_preview {
+	WORD_COUNT=0
+	while read DATA
+	do
+		WORD_COUNT=$((WORD_COUNT+$(echo "${DATA}" | wc -w)))
+		COPY_OF_DATA="${DATA//${PREVIEW_STOP_CODE}}"
+		if [[ "${COPY_OF_DATA}" != "${DATA}" ]]
+		then
+			echo "${COPY_OF_DATA}"
+			break
+		else
+			echo "${DATA}"
+		fi
+		if [ "${WORD_COUNT}" -ge "${PREVIEW_MAX_WORDS}" ]
+		then
+			break
+		fi
+	done
+}
+
 function sort_by_date {
 	# If sending file names in via stdin,
 	# they must be \0 delimited
@@ -153,5 +192,12 @@ function sort_by_date {
 	for I in "${!ARRAY[@]}"
 	do
 		echo "${ARRAY[$I]}"
+	done
+}
+
+function parse_out_our_macros {
+	while read DATA
+	do
+		echo "${DATA}" | sed -e "s|${PREVIEW_STOP_CODE}||g"
 	done
 }
