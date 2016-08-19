@@ -5,7 +5,6 @@ TAG_CODE='@@'
 TITLE_SEPERATOR_CHAR='-'
 POST_EXTENSION='bbg'
 POST_DIR='posts'
-ED="${EDITOR}"
 MARKDOWN="$(which Markdown.pl)"
 M4="$(which m4)"
 M4_FLAGS="--prefix-builtins"
