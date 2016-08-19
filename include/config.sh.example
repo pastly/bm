@@ -8,6 +8,6 @@ DATE_FRMT="%d %b %Y"
 POSTS_ON_HOMEPAGE="5"
 # Your desired text editor, must be able to
 # take a filename as the only argument.
-# Can be commented out if you would like to default to the EDITOR environment
-# variable.
-ED="nano"
+# Defaults to the EDITOR environment variable, but
+# can be replaced with "vim", "nano", etc.
+ED="${EDITOR}"
