@@ -5,13 +5,25 @@ TAG_CODE='@@'
 TITLE_SEPERATOR_CHAR='-'
 POST_EXTENSION='bbg'
 POST_DIR='posts'
-MARKDOWN="$(which Markdown.pl)"
 M4="$(which m4)"
 M4_FLAGS="--prefix-builtins"
 
 source include/config.sh
 
-[ ! -x "${MARKDOWN}" ] && echo "Markdown.pl not found" && exit 1
+which "Markdown.pl" &> /dev/null
+if [[ $? != 0 ]]
+then
+	MARKDOWN="./internal/Markdown.pl"
+	if [ ! -x "${MARKDOWN}" ]
+	then
+		echo "Markdown.pl not found"
+		exit 1
+	fi
+else
+	MARKDOWN="$(which "Markdown.pl")"
+fi
+
+[ ! -x "${MARKDOWN}" ] && [ ! -x "internal/Markdown.pl" ] && echo "Markdown.pl not found" && exit 1
 [ ! -x "${M4}" ] && echo "m4 not found" && exit 1
 
 function strip_comments {
