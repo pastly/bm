@@ -27,7 +27,7 @@ BUILT_STATIC_DIR=$(BUILD_DIR)/static
 # AKA source files
 POST_FILES := $(shell find $(POST_DIR) -name '*.bm')
 CSS_FILES := $(shell find $(INCLUDE_DIR) -name '*.css.in')
-INCLUDE_FILES := $(shell find $(INCLUDE_DIR) -name '*.html' -or -name '*.m4' -or -name 'config.sh')
+INCLUDE_FILES := $(shell find $(INCLUDE_DIR) -name '*.html' -or -name '*.m4' -or -name '*.conf*')
 
 # These are the targets. These files don't exist
 # until after a successful build

@@ -9,7 +9,8 @@ POST_DIR='posts'
 M4="$(which m4)"
 M4_FLAGS="--prefix-builtins"
 
-source include/config.sh
+source include/bm.conf.example
+source include/bm.conf
 
 which "Markdown.pl" &> /dev/null
 if [[ $? != 0 ]]
