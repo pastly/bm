@@ -25,13 +25,13 @@ BUILT_STATIC_DIR=$(BUILD_DIR)/static
 
 # These are the files that always exist
 # AKA source files
-POST_FILES := $(shell find $(POST_DIR) -name '*.bbg')
+POST_FILES := $(shell find $(POST_DIR) -name '*.bm')
 CSS_FILES := $(shell find $(INCLUDE_DIR) -name '*.css.in')
 INCLUDE_FILES := $(shell find $(INCLUDE_DIR) -name '*.html' -or -name '*.m4' -or -name 'config.sh')
 
 # These are the targets. These files don't exist
 # until after a successful build
-BUILT_POSTS := $(POST_FILES:.bbg=.html) # posts/year/month/post-title-123.{bbg,html}
+BUILT_POSTS := $(POST_FILES:.bm=.html) # posts/year/month/post-title-123.{bm,html}
 BUILT_POSTS := $(notdir $(BUILT_POSTS)) # post-title-123.html
 BUILT_POSTS := $(addprefix $(BUILT_POST_DIR)/,$(BUILT_POSTS)) # build/posts/post-title-123.html
 BUILT_STATICS := $(CSS_FILES:.css.in=.css)
