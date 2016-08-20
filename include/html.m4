@@ -34,6 +34,14 @@ m4_define([[POST_HEADER_HTML]],
 m4_include(include/post.header.html)
 )
 
+m4_define([[START_HOMEPAGE_PREVIEW_HTML]],
+<div class='postpreview'>
+)
+
+m4_define([[END_HOMEPAGE_PREVIEW_HTML]],
+</div> <!-- postpreview -->
+)
+
 m4_define([[FOOTER_HTML]],
 </div> <!-- divbody -->
 <div id='footerholder'>

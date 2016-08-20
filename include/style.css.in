@@ -41,6 +41,11 @@ body {
 	font-size:small;
 	font-family:"Courier New","Courier",monospace;
 }
+div.postpreview {
+	padding-bottom: 20px;
+	margin-bottom: 20px;
+	border-bottom: 3px solid BORDER_COLOR;
+}
 a { 
 	text-decoration:none;
 	color:A_COLOR;

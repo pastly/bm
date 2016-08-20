@@ -23,6 +23,7 @@ do
 	CONTENT_IS_TRIMMED="$(echo "${CONTENT}" | content_will_be_trimmed)"
 	CONTENT="$(echo "${CONTENT}" | content_trim_for_preview | "${MARKDOWN}" | content_make_tag_links } )"
 	cat << EOF >> "${TEMP}"
+START_HOMEPAGE_PREVIEW_HTML
 POST_HEADER_HTML([[<a href='${POST_LINK}'>${TITLE}</a>]], [[${DATE}]], [[${AUTHOR}]])
 ${CONTENT}
 EOF
@@ -32,7 +33,9 @@ EOF
 <a href='${POST_LINK}'><em>Read the entire post</em></a>
 EOF
 	fi
-	echo "<hr>" >> "${TEMP}"
+	cat << EOF >> "${TEMP}"
+END_HOMEPAGE_PREVIEW_HTML
+EOF
 	shift
 done < <(sort_by_date "$@" | tac | head -n "${POSTS_ON_HOMEPAGE}")
 
