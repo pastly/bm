@@ -29,7 +29,7 @@ done < <(sort_by_date "$@" | tac)
 cat << EOF >> "${TEMP}"
 </ul>
 <a href='/tags/index.html'>Posts by tag</a>
-FOOTER_HTML
+FOOTER_HTML([[${VERSION}]])
 END_HTML
 EOF
 

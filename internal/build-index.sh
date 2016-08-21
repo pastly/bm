@@ -55,7 +55,7 @@ done < <(sort_by_date "$@" | tac | head -n "${POSTS_ON_HOMEPAGE}")
 cat << EOF >> "${TEMP}"
 <a href='/tags/index.html'>Posts by tag</a><br/>
 <a href='/posts/index.html'>All posts</a>
-FOOTER_HTML
+FOOTER_HTML([[${VERSION}]])
 END_HTML
 EOF
 

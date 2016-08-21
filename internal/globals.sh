@@ -8,7 +8,7 @@ POST_EXTENSION='bm'
 POST_DIR='posts'
 M4="$(which m4)"
 M4_FLAGS="--prefix-builtins"
-VERSION="alpha"
+VERSION="alpha-$(git rev-parse --short HEAD)"
 
 source include/bm.conf.example
 source include/bm.conf

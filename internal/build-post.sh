@@ -37,7 +37,7 @@ EOF
 	"${M4}" ${M4_FLAGS} >> ${OUT} << EOF
 m4_include(include/html.m4)
 ${CONTENT}
-FOOTER_HTML
+FOOTER_HTML([[${VERSION}]])
 END_HTML
 EOF
 	rm "${TEMP}"

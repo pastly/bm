@@ -66,14 +66,14 @@ EOF
 	done
 	cat << EOF >> "${TEMP_TAG_FILE}"
 </ul>
-FOOTER_HTML
+FOOTER_HTML([[${VERSION}]])
 END_HTML
 EOF
 	"${M4}" ${M4_FLAGS} "${TEMP_TAG_FILE}" > "${TAG_FILE}"
 	echo "</ul>" >> "${TEMP_INDEX_FILE}"
 done
 cat << EOF >> "${TEMP_INDEX_FILE}"
-FOOTER_HTML
+FOOTER_HTML([[${VERSION}]])
 END_HTML
 EOF
 
