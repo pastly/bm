@@ -16,7 +16,7 @@ then
 	cp "${FILE}" "${TEMP}"
 	OLD_MOD_DATE="$(get_mod_date "${TEMP}")"
 	${ED} "${TEMP}"
-	sed -i "2,2{s/${OLD_MOD_DATE}/$(date +'%s')/;}" "${TEMP}"
+	sed -i "2,2{s/^${OLD_MOD_DATE}$/$(date +'%s')/;}" "${TEMP}"
 	cp "${TEMP}" "${FILE}"
 	rm "${TEMP}"
 	make
