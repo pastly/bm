@@ -11,9 +11,11 @@ function build_post {
 
 	TITLE="$(get_title "${TEMP}")"
 	DATE="$(get_date "${TEMP}")"
-	DATE="$(ts_to_date "${DATE}")"
 	MOD_DATE="$(get_mod_date "${TEMP}")"
-	MOD_DATE="$(ts_to_date "${MOD_DATE}")"
+	MODIFIED=""
+	[[ "${DATE}" != "${MOD_DATE}" ]] && MODIFIED="foobar"
+	DATE="$(ts_to_date "${DATE_FRMT}" "${DATE}")"
+	MOD_DATE="$(ts_to_date "${LONG_DATE_FRMT}" "${MOD_DATE}")"
 	AUTHOR="$(get_author "${TEMP}")"
 
 	CONTENT="$(get_content "${TEMP}")"
@@ -24,6 +26,16 @@ m4_include(include/html.m4)
 START_HTML([[${TITLE} - ${BLOG_TITLE}]])
 HEADER_HTML([[${BLOG_TITLE}]], [[${BLOG_SUBTITLE}]])
 POST_HEADER_HTML([[${TITLE}]], [[${DATE}]], [[${AUTHOR}]])
+EOF
+	if [[ "${MODIFIED}" != "" ]]
+	then
+		"${M4}" ${M4_FLAGS} >> ${OUT} << EOF
+m4_include(include/html.m4)
+POST_HEADER_MOD_DATE_HTML([[${MOD_DATE}]])
+EOF
+	fi
+	"${M4}" ${M4_FLAGS} >> ${OUT} << EOF
+m4_include(include/html.m4)
 ${CONTENT}
 FOOTER_HTML
 END_HTML

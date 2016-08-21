@@ -104,8 +104,16 @@ function set_editor {
 }
 
 function ts_to_date {
-	TS="$1"
-	date --date="@${TS}" +"${DATE_FRMT}"
+	FRMT="$1"
+	shift
+	if [ ! -z "$1" ]
+	then
+		TS="$1"
+		shift
+	else
+		read TS
+	fi
+	date --date="@${TS}" +"${FRMT}"
 }
 
 function get_tags {

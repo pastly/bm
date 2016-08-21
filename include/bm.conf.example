@@ -7,6 +7,7 @@ BLOG_TITLE="My Super Awesome Blog"
 BLOG_SUBTITLE="Where super awesome things happen"
 DEFAULT_AUTHOR="$(whoami)"
 DATE_FRMT="%d %b %Y"
+LONG_DATE_FRMT="%d %b %Y at %l:%M %P"
 POSTS_ON_HOMEPAGE="5"
 # Your desired text editor, must be able to
 # take a filename as the only argument.

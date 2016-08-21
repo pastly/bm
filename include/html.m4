@@ -34,6 +34,10 @@ m4_define([[POST_HEADER_HTML]],
 m4_include(include/post.header.html)
 )
 
+m4_define([[POST_HEADER_MOD_DATE_HTML]],
+m4_include(include/post.header.mod.date.html)
+)
+
 m4_define([[START_HOMEPAGE_PREVIEW_HTML]],
 <div class='postpreview'>
 )

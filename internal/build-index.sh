@@ -17,7 +17,12 @@ while read FILE
 do
 	POST_LINK="/posts/$(basename "${FILE}" ".${POST_EXTENSION}").html"
 	TITLE="$(get_title "${FILE}")"
-	DATE="$(ts_to_date "$(get_date "${FILE}")")"
+	DATE="$(get_date "${FILE}")"
+	MOD_DATE="$(get_mod_date "${FILE}")"
+	MODIFIED=""
+	[[ "${DATE}" != "${MOD_DATE}" ]] && MODIFIED="foobar"
+	DATE="$(ts_to_date "${DATE_FRMT}" "${DATE}")"
+	MOD_DATE="$(ts_to_date "${LONG_DATE_FRMT}" "${MOD_DATE}")"
 	AUTHOR="$(get_author "${FILE}")"
 	CONTENT="$(get_content "${FILE}")"
 	CONTENT_IS_TRIMMED="$(echo "${CONTENT}" | content_will_be_trimmed)"
@@ -25,6 +30,14 @@ do
 	cat << EOF >> "${TEMP}"
 START_HOMEPAGE_PREVIEW_HTML
 POST_HEADER_HTML([[<a href='${POST_LINK}'>${TITLE}</a>]], [[${DATE}]], [[${AUTHOR}]])
+EOF
+	if [[ "${MODIFIED}" != "" ]]
+	then
+		cat << EOF >> "${TEMP}"
+POST_HEADER_MOD_DATE_HTML([[${MOD_DATE}]])
+EOF
+	fi
+	cat << EOF >> "${TEMP}"
 ${CONTENT}
 EOF
 	if [[ "${CONTENT_IS_TRIMMED}" != "" ]]

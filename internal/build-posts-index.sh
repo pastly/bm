@@ -17,9 +17,11 @@ EOF
 
 while read FILE
 do
-	TITLE=$(get_title "$FILE")
+	TITLE="$(get_title "${FILE}")"
+	AUTHOR="$(get_author "${FILE}")"
+	DATE="$(get_date "${FILE}" | ts_to_date "${DATE_FRMT}")"
 	cat << EOF >> "${TEMP}"
-<li><a href='/posts/$(basename "$FILE" .${POST_EXTENSION}).html'>${TITLE}</a></li>
+<li><a href='/posts/$(basename "$FILE" .${POST_EXTENSION}).html'>${TITLE}</a> by ${AUTHOR} on ${DATE}</li>
 EOF
 	shift
 done < <(sort_by_date "$@" | tac)

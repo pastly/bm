@@ -57,9 +57,11 @@ EOF
 		if [ ! -z "$FILE_HAS_TAG" ]
 		then
 			TITLE="$(get_title "${FILE}")"
+			AUTHOR="$(get_author "${FILE}")"
+			DATE="$(get_date "${FILE}" | ts_to_date "${DATE_FRMT}")"
 			FILE_NAME_PART="$(basename "${FILE}" ".${POST_EXTENSION}").html"
-			echo "<li><a href='/posts/${FILE_NAME_PART}'>${TITLE}</a></li>" >> "${TEMP_TAG_FILE}"
-			echo "<li><a href='/posts/${FILE_NAME_PART}'>${TITLE}</a></li>" >> "${TEMP_INDEX_FILE}"
+			echo "<li><a href='/posts/${FILE_NAME_PART}'>${TITLE}</a> by ${AUTHOR} on ${DATE}</li>" >> "${TEMP_TAG_FILE}"
+			echo "<li><a href='/posts/${FILE_NAME_PART}'>${TITLE}</a> by ${AUTHOR} on ${DATE}</li>" >> "${TEMP_INDEX_FILE}"
 		fi
 	done
 	cat << EOF >> "${TEMP_TAG_FILE}"
