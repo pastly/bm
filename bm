@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+COMMAND="$1"
+shift
+
+VALID_COMMANDS=( create edit list remove )
+
+if [[ " ${VALID_COMMANDS[@]} " =~ " ${COMMAND} " ]]
+then
+	"./internal/${COMMAND}" "$@"
+else
+	echo "valid commands are ${VALID_COMMANDS[@]}"
+	exit 1
+fi
+
