@@ -6,13 +6,14 @@ set_editor
 
 TEMP="$(mktemp)"
 NOW=$(date +'%s')
-
+ID=$(generate_id)
 TITLE="My Newest Post"
 [[ "$@" != "" ]] && TITLE="$@"
 
 cat << EOF > ${TEMP}
 ${NOW}
 ${NOW}
+${ID}
 ${DEFAULT_AUTHOR}
 ${TITLE}
 ${COMMENT_CODE} Create your post below. Lines beginning with "${COMMENT_CODE}"
