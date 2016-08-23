@@ -64,14 +64,12 @@ h2#blogsubtitle {
 h1#posttitle {
 	margin-bottom:5px;
 }
-p#postsubtitle1 {
+p.postsubtitle {
 	margin-top:5px;
 	margin-bottom:0px;
 }
-p#postsubtitle2 {
-	margin-top:5px;
+p.postsubtitle:last-child {
 	margin-bottom:40px;
-	font-size:small;
 }
 blockquote { 
 	background-color:BQ_BG_COLOR;

@@ -29,12 +29,15 @@ do
 	CONTENT="$(echo "${CONTENT}" | content_trim_for_preview | "${MARKDOWN}" | content_make_tag_links } )"
 	cat << EOF >> "${TEMP}"
 START_HOMEPAGE_PREVIEW_HTML
-POST_HEADER_HTML([[<a href='${POST_LINK}'>${TITLE}</a>]], [[${DATE}]], [[${AUTHOR}]])
 EOF
 	if [[ "${MODIFIED}" != "" ]]
 	then
 		cat << EOF >> "${TEMP}"
-POST_HEADER_MOD_DATE_HTML([[${MOD_DATE}]])
+POST_HEADER_MOD_DATE_HTML([[<a href='${POST_LINK}'>${TITLE}</a>]], [[${DATE}]], [[${AUTHOR}]], [[${MOD_DATE}]])
+EOF
+	else
+		cat << EOF >> "${TEMP}"
+POST_HEADER_HTML([[<a href='${POST_LINK}'>${TITLE}</a>]], [[${DATE}]], [[${AUTHOR}]])
 EOF
 	fi
 	cat << EOF >> "${TEMP}"
