@@ -4,47 +4,46 @@ source internal/globals.sh
 
 function build_post {
 	IN="$1"
-	TEMP=$(mktemp)
+	IN_TEMP=$(mktemp)
 	OUT="$2"
+	OUT_TEMP=$(mktemp)
 
-	strip_comments "${IN}" > "${TEMP}"
+	strip_comments "${IN}" > "${IN_TEMP}"
 
-	TITLE="$(get_title "${TEMP}")"
-	DATE="$(get_date "${TEMP}")"
-	MOD_DATE="$(get_mod_date "${TEMP}")"
+	TITLE="$(get_title "${IN_TEMP}")"
+	DATE="$(get_date "${IN_TEMP}")"
+	MOD_DATE="$(get_mod_date "${IN_TEMP}")"
 	MODIFIED=""
 	[[ "${DATE}" != "${MOD_DATE}" ]] && MODIFIED="foobar"
 	DATE="$(ts_to_date "${DATE_FRMT}" "${DATE}")"
 	MOD_DATE="$(ts_to_date "${LONG_DATE_FRMT}" "${MOD_DATE}")"
-	AUTHOR="$(get_author "${TEMP}")"
+	AUTHOR="$(get_author "${IN_TEMP}")"
 
-	CONTENT="$(get_content "${TEMP}")"
+	CONTENT="$(get_content "${IN_TEMP}")"
 	CONTENT="$(echo "${CONTENT}" | ${MARKDOWN} | content_make_tag_links | parse_out_our_macros)"
 
-	"${M4}" ${M4_FLAGS} > ${OUT} << EOF
+	cat > ${OUT_TEMP} << EOF
 m4_include(include/html.m4)
 START_HTML([[${TITLE} - ${BLOG_TITLE}]])
 HEADER_HTML([[${BLOG_TITLE}]], [[${BLOG_SUBTITLE}]])
 EOF
 	if [[ "${MODIFIED}" != "" ]]
 	then
-		"${M4}" ${M4_FLAGS} >> ${OUT} << EOF
-m4_include(include/html.m4)
+		cat >> ${OUT_TEMP} << EOF
 POST_HEADER_MOD_DATE_HTML([[${TITLE}]], [[${DATE}]], [[${AUTHOR}]], [[${MOD_DATE}]])
 EOF
 	else
-		"${M4}" ${M4_FLAGS} >> ${OUT} << EOF
-m4_include(include/html.m4)
+		cat >> ${OUT_TEMP} << EOF
 POST_HEADER_HTML([[${TITLE}]], [[${DATE}]], [[${AUTHOR}]])
 EOF
 	fi
-	"${M4}" ${M4_FLAGS} >> ${OUT} << EOF
-m4_include(include/html.m4)
+	cat >> ${OUT_TEMP} << EOF
 ${CONTENT}
 FOOTER_HTML([[${VERSION}]])
 END_HTML
 EOF
-	rm "${TEMP}"
+	"${M4}" ${M4_FLAGS} "${OUT_TEMP}" > "${OUT}"
+	rm "${IN_TEMP}" "${OUT_TEMP}"
 }
 
 OUT_DIR="$(dirname $1)"
