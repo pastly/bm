@@ -5,10 +5,6 @@ m4_define([[START_HTML]],
 <head>
   <title>$1</title>
   <link href="/static/style.css" rel="stylesheet" type="text/css" />
-  <!-- <link href="/common/font.css" rel="stylesheet" type="text/css">
-  <link rel="shortcut icon" href="/common/favicon.ico" type="image/x-icon">
-  <link rel="icon" href="/common/favicon.ico" type="image/x-icon">
-  -->
   <meta charset="utf-8"/>
 </head>
 <body>
