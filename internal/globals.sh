@@ -146,41 +146,66 @@ function content_make_tag_links {
 }
 
 function content_will_be_trimmed {
-	WORD_COUNT=0
-	while read DATA
-	do
-		WORD_COUNT=$((WORD_COUNT+$(echo "${DATA}" | wc -w)))
-		COPY_OF_DATA="${DATA//${PREVIEW_STOP_CODE}}"
-		if [[ "${COPY_OF_DATA}" != "${DATA}" ]]
-		then
-			echo "foobar"
-			break
-		fi
-		if [ "${WORD_COUNT}" -ge "${PREVIEW_MAX_WORDS}" ]
-		then
-			echo "foobar"
-		fi
-	done
+	# while this function takes a file for an argument, it should *not*
+	# be a full post file. It should be a temporary file containing only
+	# the content.
+	FILE="$1"
+	PREVIEW_STOP_LINE="$(grep --fixed-strings --line-number "${PREVIEW_STOP_CODE}" "${FILE}")"
+	if [[ "${PREVIEW_STOP_LINE}" != "" ]]
+	then
+		echo "foobar"
+	else
+		WORD_COUNT=0
+		while IFS= read DATA
+		do
+			WORD_COUNT=$((WORD_COUNT+$(echo "${DATA}" | wc -w)))
+			if [ "${WORD_COUNT}" -ge "${PREVIEW_MAX_WORDS}" ]
+			then
+				echo "foobar"
+				break
+			fi
+		done < "${FILE}"
+	fi
 }
 
-function content_trim_for_preview {
-	WORD_COUNT=0
-	while read DATA
-	do
-		WORD_COUNT=$((WORD_COUNT+$(echo "${DATA}" | wc -w)))
-		COPY_OF_DATA="${DATA//${PREVIEW_STOP_CODE}}"
-		if [[ "${COPY_OF_DATA}" != "${DATA}" ]]
-		then
-			echo "${COPY_OF_DATA}"
-			break
-		else
+function trim_content {
+	# while this function takes a file for an argument, it should *not*
+	# be a full post file. It should be a temporary file containing only
+	# the content.
+	FILE="$1"
+	PREVIEW_STOP_LINE="$(grep --fixed-strings --line-number "${PREVIEW_STOP_CODE}" "${FILE}")"
+	if [[ "${PREVIEW_STOP_LINE}" != "" ]]
+	then
+		PREVIEW_STOP_LINE="$(echo "${PREVIEW_STOP_LINE}" | head -n 1 | sed -E 's|^([0-9]+):.*|\1|')"
+		head -n "${PREVIEW_STOP_LINE}" "${FILE}"
+	else
+		WORD_COUNT=0
+		while IFS= read DATA
+		do
 			echo "${DATA}"
-		fi
-		if [ "${WORD_COUNT}" -ge "${PREVIEW_MAX_WORDS}" ]
-		then
-			break
-		fi
-	done
+			WORD_COUNT=$((WORD_COUNT+$(echo "${DATA}" | wc -w)))
+			if [ "${WORD_COUNT}" -ge "${PREVIEW_MAX_WORDS}" ]
+			then
+				break
+			fi
+		done < "${FILE}"
+	fi
+}
+
+function get_and_parse_content {
+	FILE="$1"
+	shift
+	DO_TRIM="$1"
+	shift
+	if [[ "${DO_TRIM}" != "" ]]
+	then
+		TEMP="$(mktemp)"
+		get_content "${FILE}" > "${TEMP}"
+		trim_content "${TEMP}" | ${MARKDOWN} | content_make_tag_links | parse_out_our_macros
+		rm "${TEMP}"
+	else
+		get_content "${FILE}" | ${MARKDOWN} | content_make_tag_links | parse_out_our_macros
+	fi
 }
 
 function sort_by_date {

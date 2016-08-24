@@ -19,8 +19,7 @@ function build_post {
 	MOD_DATE="$(ts_to_date "${LONG_DATE_FRMT}" "${MOD_DATE}")"
 	AUTHOR="$(get_author "${IN_TEMP}")"
 
-	CONTENT="$(get_content "${IN_TEMP}")"
-	CONTENT="$(echo "${CONTENT}" | ${MARKDOWN} | content_make_tag_links | parse_out_our_macros)"
+	CONTENT="$(get_and_parse_content "${IN_TEMP}")"
 
 	cat > ${OUT_TEMP} << EOF
 m4_include(include/html.m4)
