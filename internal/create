@@ -19,13 +19,14 @@ ${TITLE}
 ${COMMENT_CODE} Create your post below. Lines beginning with "${COMMENT_CODE}"
 ${COMMENT_CODE} will be stripped out.
 ${COMMENT_CODE}
-${COMMENT_CODE} Do not add any comments above the first four lines. The first four lines
+${COMMENT_CODE} Do not add any comments above the first five lines. The first five lines
 ${COMMENT_CODE} are special.
 ${COMMENT_CODE}
 ${COMMENT_CODE} 1. The initial posting timestamp
 ${COMMENT_CODE} 2. The last modified date
-${COMMENT_CODE} 3. The author (feel free to change)
-${COMMENT_CODE} 4. The title (feel free to change)
+${COMMENT_CODE} 3. The post id
+${COMMENT_CODE} 4. The author (feel free to change)
+${COMMENT_CODE} 5. The title (feel free to change)
 ${COMMENT_CODE}
 ${COMMENT_CODE} Any remaining lines are considered the body. Any word
 ${COMMENT_CODE} preceeded by "${TAG_CODE}" will be treated as a tag. In the final HTML page,
