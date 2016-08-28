@@ -16,6 +16,9 @@ You also need a web server such as nginx to serve up the generated files.
 
 Clone the repository and `cd` into the repo directory.
 
+Take a look at the `include/bm.conf.example` file. You will want to copy it to
+`include/bm.conf` and edit it to your liking.
+
 run `./bm create Your Title Here` to begin written your first post. If you have
 your `EDITOR` environment variable set, it will be respected.
 
@@ -30,7 +33,7 @@ identify the post's file name.
 
 If you would like to list all your posts and their file names, run `./bm list`.
 
-You may delete a post with `./bm remove Title`, where "title" uniquely
+You may delete a post with `./bm remove Title`, where "Title" uniquely
 identifies a single post's file name.
 
 # Features
