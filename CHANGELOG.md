@@ -13,4 +13,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - author, date, mod date metadata
 - post id (unused)
 
-[v1.0.0]: src/v1.0.0
+[v1.0.0]: https://gogs.system33.pw/mello/bm/src/v1.0.0
