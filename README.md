@@ -40,3 +40,6 @@ identifies a single post's file name.
 * Creates tag pages to list all posts which contain a given tag.
 * Generates post previews of dynamic length for the homepage.
 * Automatically regenerates blog after every post edit.
+
+# Issues
+Please report issues via the [issue tracker](issues)
