@@ -52,6 +52,9 @@ a:hover {
 h1#blogtitle {
 	margin-bottom:5px;
 }
+h1#blogtitle a {
+	color:initial;
+}
 h2#blogsubtitle {
 	margin-top:0px;
 	font-size:medium;
