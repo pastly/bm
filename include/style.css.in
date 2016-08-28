@@ -13,7 +13,8 @@ body {
 	max-width:874px;
 	margin:24px auto;
 }
-#divbody { 
+#divbody,
+div.postpreview {
 	border:solid 1px BORDER_COLOR;
 	background-color:BODY_BG_COLOR;
 	padding:0px 48px 24px 48px;
@@ -40,11 +41,6 @@ body {
 	text-align:center;
 	font-size:small;
 	font-family:"Courier New","Courier",monospace;
-}
-div.postpreview {
-	padding-bottom: 20px;
-	margin-bottom: 20px;
-	border-bottom: 3px solid BORDER_COLOR;
 }
 a { 
 	text-decoration:none;

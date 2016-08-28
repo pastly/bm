@@ -11,7 +11,7 @@ CONTENT_FILE="$(mktemp)"
 cat << EOF > "${TEMP}"
 m4_include(include/html.m4)
 START_HTML([[${BLOG_TITLE} - Home]])
-HEADER_HTML([[${BLOG_TITLE}]], [[${BLOG_SUBTITLE}]])
+HOMEPAGE_HEADER_HTML([[${BLOG_TITLE}]], [[${BLOG_SUBTITLE}]])
 EOF
 
 while read FILE
@@ -59,9 +59,7 @@ EOF
 done < <(sort_by_date "$@" | tac | head -n "${POSTS_ON_HOMEPAGE}")
 
 cat << EOF >> "${TEMP}"
-<a href='/tags/index.html'>Posts by tag</a><br/>
-<a href='/posts/index.html'>All posts</a>
-FOOTER_HTML([[${VERSION}]])
+HOMEPAGE_FOOTER_HTML([[${VERSION}]])
 END_HTML
 EOF
 

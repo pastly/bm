@@ -36,7 +36,7 @@ done
 cat << EOF > "${TEMP_INDEX_FILE}"
 m4_include(include/html.m4)
 START_HTML([[Tags - ${BLOG_TITLE}]])
-HEADER_HTML([[${BLOG_TITLE}]], [[${BLOG_SUBTITLE}]])
+CONTENT_PAGE_HEADER_HTML([[${BLOG_TITLE}]], [[${BLOG_SUBTITLE}]])
 <h1>Tags</h1>
 EOF
 for TAG in ${ALL_TAGS[@]}
@@ -45,7 +45,7 @@ do
 	cat << EOF > "${TEMP_TAG_FILE}"
 m4_include(include/html.m4)
 START_HTML([[$TAG - ${BLOG_TITLE}]])
-HEADER_HTML([[${BLOG_TITLE}]], [[${BLOG_SUBTITLE}]])
+CONTENT_PAGE_HEADER_HTML([[${BLOG_TITLE}]], [[${BLOG_SUBTITLE}]])
 <h2>$TAG</h2>
 <ul>
 EOF
@@ -66,14 +66,14 @@ EOF
 	done
 	cat << EOF >> "${TEMP_TAG_FILE}"
 </ul>
-FOOTER_HTML([[${VERSION}]])
+CONTENT_PAGE_FOOTER_HTML([[${VERSION}]])
 END_HTML
 EOF
 	"${M4}" ${M4_FLAGS} "${TEMP_TAG_FILE}" > "${TAG_FILE}"
 	echo "</ul>" >> "${TEMP_INDEX_FILE}"
 done
 cat << EOF >> "${TEMP_INDEX_FILE}"
-FOOTER_HTML([[${VERSION}]])
+CONTENT_PAGE_FOOTER_HTML([[${VERSION}]])
 END_HTML
 EOF
 
