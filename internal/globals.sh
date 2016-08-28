@@ -55,19 +55,19 @@ function get_id {
 function get_author {
 	FILE="$1"
 	strip_comments "${FILE}" | \
-		head -n 4 | tail -n 1
+		head -n 6 | tail -n 1
 }
 
 function get_title {
 	FILE="$1"
 	strip_comments "${FILE}" | \
-		head -n 5 | tail -n 1
+		head -n 7 | tail -n 1
 }
 
 function get_content {
 	FILE="$1"
 	strip_comments "${FILE}" | \
-		tail -n +6
+		tail -n +8
 }
 
 function to_lower {
