@@ -1,4 +1,4 @@
-build/
-posts/
+build
+posts
 *.swp
 bm.conf

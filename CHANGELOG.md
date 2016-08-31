@@ -4,7 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.0.0]
+## [Unreleased]
+## Changed
+- remove '/' from .gitignore build and post lines
+
+## [v1.0.0] - 2016-08-28
 ### Added
 - post generation
 - tag pages generation
