@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.1.0]
+## [v1.1.0] - 2016-08-31
 ### Added
 - MULTI_MATCH_STRAT for determining what to do in case of ambiguous search
   term in edit and remove (#46)
