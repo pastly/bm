@@ -5,8 +5,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
-## Changed
+### Added
+- MULTI_MATCH_STRAT for determining what to do in case of ambiguous search
+  term in edit and remove (#46)
+
+### Changed
 - remove '/' from .gitignore build and post lines
+- refactored out post listing to global function pretty_print_post_info
+- minor grammar changes in edit/list/remove output
+- output actual search terms instead of what they were converted to in edit
+  and remove
+
 
 ## [v1.0.0] - 2016-08-28
 ### Added

@@ -9,8 +9,7 @@ find "${POST_DIR}" -type f -name "*${SEARCH_VALUE}*.${POST_EXTENSION}" -print0 |
 sort_by_date |\
 while read FILE
 do
-	get_title "${FILE}"
-	echo "    ${FILE}"
+	pretty_print_post_info "${FILE}"
 done
 
 exit 0

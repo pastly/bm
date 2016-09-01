@@ -29,6 +29,8 @@ fi
 [ ! -x "${MARKDOWN}" ] && [ ! -x "internal/Markdown.pl" ] && echo "Markdown.pl not found" && exit 1
 [ ! -x "${M4}" ] && echo "m4 not found" && exit 1
 
+[[ "${MULTI_MATCH_STRAT}" == "" ]] && MULTI_MATCH_STRAT="simple"
+
 function strip_comments {
 	FILE="$1"
 	grep --invert-match "^${COMMENT_CODE}" "${FILE}"
@@ -245,4 +247,9 @@ function parse_out_our_macros {
 
 function generate_id {
 	cat /dev/urandom | tr -cd '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz' | head -c 16
+}
+
+function pretty_print_post_info {
+	FILE="$1"
+	echo "$(get_title "${FILE}") ($(get_date "${FILE}" | ts_to_date "${DATE_FRMT}" ))"
 }

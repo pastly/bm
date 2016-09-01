@@ -9,21 +9,35 @@ SEARCH_VALUE="$(echo ${SEARCH_VALUE} | to_lower | strip_punctuation | strip_spac
 
 NUM_FOUND_FILES=$(find "${POST_DIR}" -type f -name "*${SEARCH_VALUE}*.${POST_EXTENSION}" | wc --lines)
 
-if [[ "${NUM_FOUND_FILES}" == "1" ]]
+if [[ "${NUM_FOUND_FILES}" < "1" ]]
 then
-	TEMP="$(mktemp)"
+	echo "Could not find posts matching: $@"
+	exit 0
+elif [[ "${NUM_FOUND_FILES}" == "1" ]]
+then
 	FILE="$(find ${POST_DIR} -type f -name "*${SEARCH_VALUE}*.${POST_EXTENSION}")"
-	cp "${FILE}" "${TEMP}"
-	OLD_MOD_DATE="$(get_mod_date "${TEMP}")"
-	${ED} "${TEMP}"
-	sed -i "2,2{s/^${OLD_MOD_DATE}$/$(date +'%s')/;}" "${TEMP}"
-	cp "${TEMP}" "${FILE}"
-	rm "${TEMP}"
-	make
-elif [[ "${NUM_FOUND_FILES}" > "1" ]]
+elif [[ "${MULTI_MATCH_STRAT}" == "simple" ]]
 then
-	echo "Ambiguous search term ${SEARCH_VALUE}"
-	find ${POST_DIR} -type f -name "*${SEARCH_VALUE}*.${POST_EXTENSION}" -print0 | sort_by_date
+	echo "Ambiguous search term: $@"
+	while read FILE
+	do
+		pretty_print_post_info "${FILE}"
+	done < <(find ${POST_DIR} -type f -name "*${SEARCH_VALUE}*.${POST_EXTENSION}" -print0 | sort_by_date)
+	exit 0
+elif [[ "${MULTI_MATCH_STRAT}" == "newest" ]]
+then
+	FILE="$(find ${POST_DIR} -type f -name "*${SEARCH_VALUE}*.${POST_EXTENSION}" -print0 | sort_by_date | tail -n 1)"
 else
-	echo "Could not find posts matching ${SEARCH_VALUE}"
+	FILE="$(find ${POST_DIR} -type f -name "*${SEARCH_VALUE}*.${POST_EXTENSION}" -print0 | sort_by_date | head -n 1)"
 fi
+
+[[ "${FILE}" == "" ]] && exit 0
+
+TEMP="$(mktemp)"
+cp "${FILE}" "${TEMP}"
+OLD_MOD_DATE="$(get_mod_date "${TEMP}")"
+${ED} "${TEMP}"
+sed -i "2,2{s/^${OLD_MOD_DATE}$/$(date +'%s')/;}" "${TEMP}"
+cp "${TEMP}" "${FILE}"
+rm "${TEMP}"
+make

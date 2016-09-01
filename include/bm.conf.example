@@ -19,3 +19,8 @@ ED="${EDITOR}"
 # this limit.
 # Manual placement of the preview stopping macro takes precedence.
 PREVIEW_MAX_WORDS="300"
+# Strategy to use when editing or removing a file and there are multiple
+# matched filenames.
+# valid values: 'simple', 'newest', 'oldest'
+# default if not specified: 'simple'
+MULTI_MATCH_STRAT="simple"
