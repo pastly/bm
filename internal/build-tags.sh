@@ -35,8 +35,8 @@ do
 done
 cat << EOF > "${TEMP_INDEX_FILE}"
 m4_include(include/html.m4)
-START_HTML([[Tags - ${BLOG_TITLE}]])
-CONTENT_PAGE_HEADER_HTML([[${BLOG_TITLE}]], [[${BLOG_SUBTITLE}]])
+START_HTML([[${ROOT_URL}]], [[Tags - ${BLOG_TITLE}]])
+CONTENT_PAGE_HEADER_HTML([[${ROOT_URL}]], [[${BLOG_TITLE}]], [[${BLOG_SUBTITLE}]])
 <h1>Tags</h1>
 EOF
 for TAG in ${ALL_TAGS[@]}
@@ -44,8 +44,8 @@ do
 	TAG_FILE="${OUT_DIR}/${TAG}.html"
 	cat << EOF > "${TEMP_TAG_FILE}"
 m4_include(include/html.m4)
-START_HTML([[$TAG - ${BLOG_TITLE}]])
-CONTENT_PAGE_HEADER_HTML([[${BLOG_TITLE}]], [[${BLOG_SUBTITLE}]])
+START_HTML([[${ROOT_URL}]], [[$TAG - ${BLOG_TITLE}]])
+CONTENT_PAGE_HEADER_HTML([[${ROOT_URL}]], [[${BLOG_TITLE}]], [[${BLOG_SUBTITLE}]])
 <h2>$TAG</h2>
 <ul>
 EOF
@@ -60,20 +60,20 @@ EOF
 			AUTHOR="$(get_author "${FILE}")"
 			DATE="$(get_date "${FILE}" | ts_to_date "${DATE_FRMT}")"
 			FILE_NAME_PART="$(basename "${FILE}" ".${POST_EXTENSION}").html"
-			echo "<li><a href='/posts/${FILE_NAME_PART}'>${TITLE}</a> by ${AUTHOR} on ${DATE}</li>" >> "${TEMP_TAG_FILE}"
-			echo "<li><a href='/posts/${FILE_NAME_PART}'>${TITLE}</a> by ${AUTHOR} on ${DATE}</li>" >> "${TEMP_INDEX_FILE}"
+			echo "<li><a href='${ROOT_URL}/posts/${FILE_NAME_PART}'>${TITLE}</a> by ${AUTHOR} on ${DATE}</li>" >> "${TEMP_TAG_FILE}"
+			echo "<li><a href='${ROOT_URL}/posts/${FILE_NAME_PART}'>${TITLE}</a> by ${AUTHOR} on ${DATE}</li>" >> "${TEMP_INDEX_FILE}"
 		fi
 	done
 	cat << EOF >> "${TEMP_TAG_FILE}"
 </ul>
-CONTENT_PAGE_FOOTER_HTML([[${VERSION}]])
+CONTENT_PAGE_FOOTER_HTML([[${ROOT_URL}]], [[${VERSION}]])
 END_HTML
 EOF
 	"${M4}" ${M4_FLAGS} "${TEMP_TAG_FILE}" > "${TAG_FILE}"
 	echo "</ul>" >> "${TEMP_INDEX_FILE}"
 done
 cat << EOF >> "${TEMP_INDEX_FILE}"
-CONTENT_PAGE_FOOTER_HTML([[${VERSION}]])
+CONTENT_PAGE_FOOTER_HTML([[${ROOT_URL}]], [[${VERSION}]])
 END_HTML
 EOF
 

@@ -10,13 +10,13 @@ CONTENT_FILE="$(mktemp)"
 
 cat << EOF > "${TEMP}"
 m4_include(include/html.m4)
-START_HTML([[${BLOG_TITLE} - Home]])
-HOMEPAGE_HEADER_HTML([[${BLOG_TITLE}]], [[${BLOG_SUBTITLE}]])
+START_HTML([[${ROOT_URL}]], [[${BLOG_TITLE} - Home]])
+HOMEPAGE_HEADER_HTML([[${ROOT_URL}]], [[${BLOG_TITLE}]], [[${BLOG_SUBTITLE}]])
 EOF
 
 while read FILE
 do
-	POST_LINK="/posts/$(basename "${FILE}" ".${POST_EXTENSION}").html"
+	POST_LINK="${ROOT_URL}/posts/$(basename "${FILE}" ".${POST_EXTENSION}").html"
 	TITLE="$(get_title "${FILE}")"
 	DATE="$(get_date "${FILE}")"
 	MOD_DATE="$(get_mod_date "${FILE}")"
@@ -59,7 +59,7 @@ EOF
 done < <(sort_by_date "$@" | tac | head -n "${POSTS_ON_HOMEPAGE}")
 
 cat << EOF >> "${TEMP}"
-HOMEPAGE_FOOTER_HTML([[${VERSION}]])
+HOMEPAGE_FOOTER_HTML([[${ROOT_URL}]], [[${VERSION}]])
 END_HTML
 EOF
 

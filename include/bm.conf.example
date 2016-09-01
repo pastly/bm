@@ -24,3 +24,8 @@ PREVIEW_MAX_WORDS="300"
 # valid values: 'simple', 'newest', 'oldest'
 # default if not specified: 'simple'
 MULTI_MATCH_STRAT="simple"
+# Root of the URL the blog should reside in. For example, if your blog homepage
+# should be example.com, set the following to "". If it should be
+# example.com/blog, set the following to "/blog".
+# Do NOT include a trailing slash in any situation.
+ROOT_URL=""

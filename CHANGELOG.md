@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - MULTI_MATCH_STRAT for determining what to do in case of ambiguous search
   term in edit and remove (#46)
+- root url config option so blog doesn't have to reside at root of website
 
 ### Changed
 - remove '/' from .gitignore build and post lines

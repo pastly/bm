@@ -3,8 +3,8 @@ m4_define([[START_HTML]],
 <!DOCTYPE html>
 <html>
 <head>
-  <title>$1</title>
-  <link href="/static/style.css" rel="stylesheet" type="text/css" />
+  <title>$2</title>
+  <link href="$1/static/style.css" rel="stylesheet" type="text/css" />
   <meta charset="utf-8"/>
 </head>
 <body>
@@ -23,11 +23,11 @@ m4_include(include/header.html)
 </div> <!-- headerholder -->
 )
 m4_define([[HOMEPAGE_HEADER_HTML]],
-HEADER_HTML($1, $2)
+HEADER_HTML($1, $2, $3)
 )
 
 m4_define([[CONTENT_PAGE_HEADER_HTML]],
-HEADER_HTML($1, $2)
+HEADER_HTML($1, $2, $3)
 <div id='divbody'>
 )
 m4_define([[POST_HEADER_HTML]],
@@ -55,9 +55,9 @@ m4_include(include/footer.html)
 </div> <!-- footerholder -->
 )
 m4_define([[HOMEPAGE_FOOTER_HTML]],
-FOOTER_HTML($1)
+FOOTER_HTML($1, $2)
 )
 m4_define([[CONTENT_PAGE_FOOTER_HTML]],
 </div> <!-- divbody -->
-FOOTER_HTML($1)
+FOOTER_HTML($1, $2)
 )

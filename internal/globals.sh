@@ -143,7 +143,7 @@ function file_has_tag {
 function content_make_tag_links {
 	while read DATA
 	do
-		echo "${DATA}" | sed -e "s|${TAG_CODE}\([[:alnum:]]\+\)|<a href=/tags/\L\1.html>\E\1</a>|g"
+		echo "${DATA}" | sed -e "s|${TAG_CODE}\([[:alnum:]]\+\)|<a href='${ROOT_URL}/tags/\L\1.html'>\E\1</a>|g"
 	done
 }
 
