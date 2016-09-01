@@ -2,7 +2,7 @@
 
 Blog Maker - Build a blog with bash, make, and other GNU shell utilities. 
 
-![example blog image](http://i.imgur.com/6chb1CG.png)
+![example blog image](https://i.imgur.com/6chb1CG.png)
 
 # Requirements
 
