@@ -5,7 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
-## Changed
+### Added
+- root url config option so blog doesn't have to reside at root of website
+
+### Changed
 - remove '/' from .gitignore build and post lines
 
 ## [v1.0.0] - 2016-08-28

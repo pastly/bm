@@ -23,8 +23,8 @@ function build_post {
 
 	cat > ${OUT_TEMP} << EOF
 m4_include(include/html.m4)
-START_HTML([[${TITLE} - ${BLOG_TITLE}]])
-CONTENT_PAGE_HEADER_HTML([[${BLOG_TITLE}]], [[${BLOG_SUBTITLE}]])
+START_HTML([[${ROOT_URL}]], [[${TITLE} - ${BLOG_TITLE}]])
+CONTENT_PAGE_HEADER_HTML([[${ROOT_URL}]], [[${BLOG_TITLE}]], [[${BLOG_SUBTITLE}]])
 EOF
 	if [[ "${MODIFIED}" != "" ]]
 	then
@@ -38,7 +38,7 @@ EOF
 	fi
 	cat >> ${OUT_TEMP} << EOF
 ${CONTENT}
-CONTENT_PAGE_FOOTER_HTML([[${VERSION}]])
+CONTENT_PAGE_FOOTER_HTML([[${ROOT_URL}]], [[${VERSION}]])
 END_HTML
 EOF
 	"${M4}" ${M4_FLAGS} "${OUT_TEMP}" > "${OUT}"
