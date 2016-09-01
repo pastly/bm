@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Changed
+- `make clean` only removes build/ if not a symlink.
+
+### Fixed
+- `make clean` harmless error message if build/ did not exist
+
 ## [v1.1.0] - 2016-08-31
 ### Added
 - MULTI_MATCH_STRAT for determining what to do in case of ambiguous search
@@ -27,5 +34,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - author, date, mod date metadata
 - post id (unused)
 
+[Unreleased]: https://gogs.system33.pw/mello/bm
 [v1.1.0]: https://gogs.system33.pw/mello/bm/src/v1.1.0
 [v1.0.0]: https://gogs.system33.pw/mello/bm/src/v1.0.0

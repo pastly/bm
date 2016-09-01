@@ -10,7 +10,7 @@ MKDIR=mkdir
 MKDIR_FLAGS=-p
 
 RM=rm
-RM_FLAGS=-r
+RM_FLAGS=-fr
 
 .SUFFIXES:
 
@@ -61,4 +61,5 @@ $(BUILT_STATIC_DIR)/%.css: $(INCLUDE_DIR)/%.css.in $(INCLUDE_FILES)
 	$(M4) $(M4_FLAGS) $< > $@
 
 clean:
-	$(RM) $(RM_FLAGS) -- $(BUILD_DIR)
+	$(RM) $(RM_FLAGS) -- $(BUILD_DIR)/*
+	[ -d $(BUILD_DIR) ] && [ ! -L $(BUILD_DIR) ] && rmdir $(BUILD_DIR) || exit 0
