@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [v1.1.0]
 ### Added
 - MULTI_MATCH_STRAT for determining what to do in case of ambiguous search
   term in edit and remove (#46)
@@ -27,4 +27,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - author, date, mod date metadata
 - post id (unused)
 
+[v1.1.0]: https://gogs.system33.pw/mello/bm/src/v1.1.0
 [v1.0.0]: https://gogs.system33.pw/mello/bm/src/v1.0.0

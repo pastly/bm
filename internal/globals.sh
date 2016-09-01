@@ -8,7 +8,7 @@ POST_EXTENSION='bm'
 POST_DIR='posts'
 M4="$(which m4)"
 M4_FLAGS="--prefix-builtins"
-VERSION="v1.0.0"
+VERSION="v1.1.0"
 
 source include/bm.conf.example
 source include/bm.conf
