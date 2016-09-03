@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - rebuilding when edit made no changes
+- allow '-' in tag names
 
 ## [v1.1.0] - 2016-08-31
 ### Added
