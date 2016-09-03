@@ -5,11 +5,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [v1.2.0] - 2016-09-02
 ### Added
 - `HASH_PROGRAM` option which should be left blank
 
 ### Fixed
 - rebuilding when edit made no changes
+
+### Changed
 - allow '-' in tag names
 
 ## [v1.1.0] - 2016-08-31
@@ -35,5 +39,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - author, date, mod date metadata
 - post id (unused)
 
+[v1.2.0]: https://gogs.system33.pw/mello/bm/src/v1.2.0
 [v1.1.0]: https://gogs.system33.pw/mello/bm/src/v1.1.0
 [v1.0.0]: https://gogs.system33.pw/mello/bm/src/v1.0.0
+[Unreleased]: https://gogs.system33.pw/mello/bm
