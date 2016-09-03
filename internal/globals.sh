@@ -9,6 +9,7 @@ POST_DIR='posts'
 M4="$(which m4)"
 M4_FLAGS="--prefix-builtins"
 VERSION="v1.1.0"
+TAG_ALPHABET="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-"
 
 source include/bm.conf.example
 source include/bm.conf
@@ -128,7 +129,7 @@ function ts_to_date {
 function get_tags {
 	FILE="$1"
 	strip_comments "${FILE}" | \
-		grep --extended-regexp --only-matching "${TAG_CODE}[[:alnum:]]+" | \
+		grep --extended-regexp --only-matching "${TAG_CODE}[${TAG_ALPHABET}]+" | \
 		sed -e "s|${TAG_CODE}||g" | to_lower | \
 		sort | uniq
 }
@@ -143,7 +144,7 @@ function file_has_tag {
 function content_make_tag_links {
 	while read DATA
 	do
-		echo "${DATA}" | sed -e "s|${TAG_CODE}\([[:alnum:]]\+\)|<a href='${ROOT_URL}/tags/\L\1.html'>\E\1</a>|g"
+		echo "${DATA}" | sed -e "s|${TAG_CODE}\([${TAG_ALPHABET}]\+\)|<a href='${ROOT_URL}/tags/\L\1.html'>\E\1</a>|g"
 	done
 }
 
