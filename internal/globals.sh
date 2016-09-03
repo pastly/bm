@@ -144,10 +144,7 @@ function file_has_tag {
 }
 
 function content_make_tag_links {
-	while read DATA
-	do
-		echo "${DATA}" | sed -e "s|${TAG_CODE}\([${TAG_ALPHABET}]\+\)|<a href='${ROOT_URL}/tags/\L\1.html'>\E\1</a>|g"
-	done
+	sed -e "s|${TAG_CODE}\([${TAG_ALPHABET}]\+\)|<a href='${ROOT_URL}/tags/\L\1.html'>\E\1</a>|g"
 }
 
 function content_will_be_trimmed {
@@ -269,10 +266,7 @@ function hash_data {
 }
 
 function parse_out_our_macros {
-	while read DATA
-	do
-		echo "${DATA}" | sed -e "s|${PREVIEW_STOP_CODE}||g"
-	done
+	sed -e "s|${PREVIEW_STOP_CODE}||g"
 }
 
 function generate_id {
