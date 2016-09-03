@@ -76,26 +76,16 @@ function get_content {
 }
 
 function to_lower {
-	while read DATA
-	do
-		tr '[:upper:]' '[:lower:]' <<< ${DATA}
-	done
+	tr '[:upper:]' '[:lower:]'
 }
 
 function strip_punctuation {
-	while read DATA
-	do
-		tr -d '[:punct:]' <<< ${DATA}
-	done
+	tr -d '[:punct:]'
 }
 
 function strip_space {
-	while read DATA
-	do
-		sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' | \
-			tr --squeeze-repeats '[:blank:]' "${TITLE_SEPERATOR_CHAR}" \
-			<<< ${DATA}
-	done
+	sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' | \
+		tr --squeeze-repeats '[:blank:]' "${TITLE_SEPERATOR_CHAR}"
 }
 
 function set_editor {

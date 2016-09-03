@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Changed
+- remove some unecessary line-based looping
+
 ### Fixed
 - leading spaces stripped from markdown code (#44)
 
