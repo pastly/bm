@@ -29,3 +29,9 @@ MULTI_MATCH_STRAT="simple"
 # example.com/blog, set the following to "/blog".
 # Do NOT include a trailing slash in any situation.
 ROOT_URL=""
+# Hash program. LEAVE THIS BLANK for reliable autodetection of one of
+# many commonly-installed hashing programs. If you must set it because bm does
+# not already know about your preferred hashing program, open an issue, and in
+# the mean time, set this value. The program must be able to take data on stdin.
+# See globals.sh for the list of currently searched-for programs.
+HASH_PROGRAM=""

@@ -10,6 +10,8 @@ M4="$(which m4)"
 M4_FLAGS="--prefix-builtins"
 VERSION="v1.1.0"
 
+KNOWN_HASH_PROGRAMS="sha1sum sha1 sha256sum sha256 md5sum md5"
+
 source include/bm.conf.example
 source include/bm.conf
 
@@ -236,6 +238,33 @@ function sort_by_date {
 	do
 		echo "${ARRAY[$I]}"
 	done
+}
+
+function get_hash_program {
+	for PROGRAM in ${KNOWN_HASH_PROGRAMS} # No quotes on purpose
+	do
+		which ${PROGRAM} &> /dev/null
+		if [[ "$?" == "0" ]]
+		then
+			echo "${PROGRAM}"
+			break
+		fi
+	done
+}
+
+function hash_data {
+	if [[ "${HASH_PROGRAM}" == "" ]]
+	then
+		HASH_PROGRAM=$(get_hash_program)
+		if [[ "${HASH_PROGRAM}" == "" ]]
+		then
+			echo "Couldn't find any of: ${KNOWN_HASH_PROGRAMS}"
+			echo "You need one, or to set HASH_PROGRAM to something which can"
+			echo "hash data given on stdin for bm to work."
+			exit 1
+		fi
+	fi
+	${HASH_PROGRAM}
 }
 
 function parse_out_our_macros {
