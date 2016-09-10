@@ -5,9 +5,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- global post search function that searches titles/ids instead of filenames
+- post format conversion script in `tools/`
+
 ### Changed
 - IDs from 16 to 8 chars (backwards compatable because IDs unused so far)
-- End of filename from $RANDOM to post id
+- end of filename from $RANDOM to post id
+- pretty print post list format is now `date (id=foobarr): Post Title`
+- `edit`, `list`, and `remove` now use a global search function
 
 ### Fixed
 - filename changes when title/id changes (#3)
