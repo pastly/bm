@@ -5,7 +5,7 @@ source internal/globals.sh
 SEARCH_VALUE="$@"
 SEARCH_VALUE="$(echo ${SEARCH_VALUE} | to_lower | strip_punctuation | strip_space)"
 
-NUM_FOUND_FILES=$(find "${POST_DIR}" -type f -name "*${SEARCH_VALUE}*.${POST_EXTENSION}" | wc --lines)
+NUM_FOUND_FILES=$(search_posts "$@" | wc --lines)
 
 if [[ "${NUM_FOUND_FILES}" < "1" ]]
 then
@@ -14,20 +14,20 @@ then
 
 elif [[ "${NUM_FOUND_FILES}" == "1" ]]
 then
-	FILE="$(find ${POST_DIR} -type f -name "*${SEARCH_VALUE}*.${POST_EXTENSION}")"
+	FILE="$(search_posts "$@")"
 elif [[ "${MULTI_MATCH_STRAT}" == "newest" ]]
 then
-	FILE="$(find ${POST_DIR} -type f -name "*${SEARCH_VALUE}*.${POST_EXTENSION}" -print0 | sort_by_date | tail -n 1)"
+	FILE="$(search_posts "$@" | tail -n 1)"
 
 elif [[ "${MULTI_MATCH_STRAT}" == "oldest" ]]
 then
-	FILE="$(find ${POST_DIR} -type f -name "*${SEARCH_VALUE}*.${POST_EXTENSION}" -print0 | sort_by_date | head -n 1)"
+	FILE="$(search_posts "$@" | head -n 1)"
 else
 	echo "Ambiguous search term: ${SEARCH_VALUE}"
 	while read FILE
 	do
 		pretty_print_post_info "${FILE}"
-	done < <(find ${POST_DIR} -type f -name "*${SEARCH_VALUE}*.${POST_EXTENSION}" -print0 | sort_by_date)
+	done < <(search_posts "$@")
 	exit 0
 fi
 

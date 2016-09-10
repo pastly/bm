@@ -2,15 +2,19 @@
 
 source internal/globals.sh
 
-SEARCH_VALUE="$@"
-SEARCH_VALUE="$(echo ${SEARCH_VALUE} | to_lower | strip_punctuation | strip_space)"
-
-find "${POST_DIR}" -type f -name "*${SEARCH_VALUE}*.${POST_EXTENSION}" -print0 |\
-sort_by_date |\
-while read FILE
-do
-	pretty_print_post_info "${FILE}"
-done
-
+if [[ "$@" != "" ]]
+then
+	search_posts "$@" |\
+	while read FILE
+	do
+		pretty_print_post_info "${FILE}"
+	done
+else
+	find "${POST_DIR}" -type f -name "*${SEARCH_VALUE}*.${POST_EXTENSION}" -print0 |\
+	sort_by_date |\
+	while read FILE
+	do
+		pretty_print_post_info "${FILE}"
+	done
+fi
 exit 0
-
