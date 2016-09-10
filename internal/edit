@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+[[ "$1" == "" ]] && ./internal/list && exit 0
+
 source internal/globals.sh
 
 set_editor

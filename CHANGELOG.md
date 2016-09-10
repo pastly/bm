@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - pretty print post list format is now `date (id=foobarr): Post Title`
 - `edit`, `list`, and `remove` now use a global search function
 - make `make` less noisy
+- `edit` with no args calls `list`
 
 ### Fixed
 - filename changes when title/id changes (#3)
