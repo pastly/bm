@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Changed
+- IDs from 16 to 8 chars (backwards compatable because IDs unused so far)
+- End of filename from $RANDOM to post id
+
+### Fixed
+- filename changes when title/id changes (#3)
 
 ## [v1.2.1] - 2016-09-02
 ### Changed
