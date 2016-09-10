@@ -43,7 +43,7 @@ do
 		[Yy]* )
 			rm "${FILE}"
 			make clean
-			make
+			make -s
 			break;;
 		* )
 			echo "Whew. That was close."

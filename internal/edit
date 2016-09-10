@@ -51,4 +51,4 @@ then
 	cp "${TEMP}" "${FILE}"
 fi
 rm "${TEMP}"
-make
+make -s
