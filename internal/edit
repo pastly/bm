@@ -41,6 +41,15 @@ OLD_HASH="$(cat "${FILE}" | hash_data)"
 NEW_HASH="$(cat "${TEMP}" | hash_data)"
 if [[ "${OLD_HASH}" != "${NEW_HASH}" ]]
 then
+	NEW_TITLE="$(get_title "${TEMP}" | to_lower | strip_punctuation | strip_space)"
+	NEW_ID="$(get_id "${TEMP}")"
+	NEW_FILE="$(dirname "${FILE}")/${NEW_TITLE}${TITLE_SEPERATOR_CHAR}${NEW_ID}.${POST_EXTENSION}"
+	if [[ "${FILE}" != "${NEW_FILE}" ]]
+	then
+		echo "Warning: ${FILE} moving to ${NEW_FILE}"
+		rm "${FILE}"
+		FILE="${NEW_FILE}"
+	fi
 	sed -i "2,2{s/^${OLD_MOD_DATE}$/$(date +'%s')/;}" "${TEMP}"
 	cp "${TEMP}" "${FILE}"
 fi
