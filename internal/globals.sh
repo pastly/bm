@@ -265,5 +265,5 @@ function generate_id {
 
 function pretty_print_post_info {
 	FILE="$1"
-	echo "$(get_title "${FILE}") ($(get_date "${FILE}" | ts_to_date "${DATE_FRMT}" ))"
+	echo "$(get_date "${FILE}" | ts_to_date "${DATE_FRMT}") (id=$(get_id "${FILE}")): $(get_title "${FILE}")"
 }
