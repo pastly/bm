@@ -260,7 +260,7 @@ function parse_out_our_macros {
 }
 
 function generate_id {
-	cat /dev/urandom | tr -cd '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz' | head -c 16
+	cat /dev/urandom | tr -cd '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz' | head -c 8
 }
 
 function pretty_print_post_info {
