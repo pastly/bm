@@ -9,6 +9,10 @@ DEFAULT_AUTHOR="$(whoami)"
 DATE_FRMT="%d %b %Y"
 LONG_DATE_FRMT="%d %b %Y at %l:%M %P"
 POSTS_ON_HOMEPAGE="5"
+# Format for when dividing posts by month on an index page
+MONTHLY_INDEX_DATE_FRMT="%b %Y"
+# Format for when dividing posts by year on an index page
+YEARLY_INDEX_DATE_FRMT="%Y"
 # Your desired text editor, must be able to
 # take a filename as the only argument.
 # Defaults to the EDITOR environment variable, but
@@ -21,11 +25,26 @@ ED="${EDITOR}"
 PREVIEW_MAX_WORDS="300"
 # Strategy to use when editing or removing a file and there are multiple
 # matched filenames.
-# valid values: 'simple', 'newest', 'oldest'
-# default if not specified: 'simple'
+# valid values: "simple", "newest", "oldest"
+# default if not specified: "simple"
 MULTI_MATCH_STRAT="simple"
 # Root of the URL the blog should reside in. For example, if your blog homepage
 # should be example.com, set the following to "". If it should be
 # example.com/blog, set the following to "/blog".
 # Do NOT include a trailing slash in any situation.
 ROOT_URL=""
+# Hash program. LEAVE THIS BLANK for reliable autodetection of one of
+# many commonly-installed hashing programs. If you must set it because bm does
+# not already know about your preferred hashing program, open an issue, and in
+# the mean time, set this value. The program must be able to take data on stdin.
+# See globals.sh for the list of currently searched-for programs.
+HASH_PROGRAM=""
+# Timespan for grouping of posts on certain types of index pages
+# Valid values are "month", "year", and "none"
+# POST_INDEX_BY and TAG_INDEX_BY default to DEFAULT_INDEX_BY if they are unset
+# IF DEFAULT_INDEX_BY is unset, default is "none"
+# Recommended changes from default:
+# POST_INDEX_BY="month"
+DEFAULT_INDEX_BY="none"
+POST_INDEX_BY="${DEFAULT_INDEX_BY}"
+TAG_INDEX_BY="${DEFAULT_INDEX_BY}"

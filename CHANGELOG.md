@@ -5,11 +5,35 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- post indexing by month/year on post/tag index.html pages (#49)
+
 ### Changed
 - `make clean` only removes build/ if not a symlink.
+- minor quoting fix in `bm.conf.example`
 
 ### Fixed
 - `make clean` harmless error message if build/ did not exist
+
+### Removed
+- "Tags" h1 at the top of `tags/index.html`
+
+## [v1.2.1] - 2016-09-02
+### Changed
+- remove some unecessary line-based looping
+
+### Fixed
+- leading spaces stripped from markdown code (#44)
+
+## [v1.2.0] - 2016-09-02
+### Added
+- `HASH_PROGRAM` option which should be left blank
+
+### Fixed
+- rebuilding when edit made no changes
+
+### Changed
+- allow '-' in tag names
 
 ## [v1.1.0] - 2016-08-31
 ### Added
@@ -35,5 +59,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - post id (unused)
 
 [Unreleased]: https://gogs.system33.pw/mello/bm
+[v1.2.1]: https://gogs.system33.pw/mello/bm/src/v1.2.1
+[v1.2.0]: https://gogs.system33.pw/mello/bm/src/v1.2.0
 [v1.1.0]: https://gogs.system33.pw/mello/bm/src/v1.1.0
 [v1.0.0]: https://gogs.system33.pw/mello/bm/src/v1.0.0
+[Unreleased]: https://gogs.system33.pw/mello/bm

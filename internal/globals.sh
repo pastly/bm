@@ -8,7 +8,10 @@ POST_EXTENSION='bm'
 POST_DIR='posts'
 M4="$(which m4)"
 M4_FLAGS="--prefix-builtins"
-VERSION="v1.1.0"
+VERSION="v1.2.1"
+TAG_ALPHABET="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-"
+
+KNOWN_HASH_PROGRAMS="sha1sum sha1 sha256sum sha256 md5sum md5"
 
 source include/bm.conf.example
 source include/bm.conf
@@ -30,6 +33,9 @@ fi
 [ ! -x "${M4}" ] && echo "m4 not found" && exit 1
 
 [[ "${MULTI_MATCH_STRAT}" == "" ]] && MULTI_MATCH_STRAT="simple"
+[[ "${DEFAULT_INDEX_BY}" == "" ]] && DEFAULT_INDEX_BY="none"
+[[ "${POST_INDEX_BY}" == "" ]] && POST_INDEX_BY="${DEFAULT_INDEX_BY}"
+[[ "${TAG_INDEX_BY}" == "" ]] && TAG_INDEX_BY="${DEFAULT_INDEX_BY}"
 
 function strip_comments {
 	FILE="$1"
@@ -73,26 +79,16 @@ function get_content {
 }
 
 function to_lower {
-	while read DATA
-	do
-		tr '[:upper:]' '[:lower:]' <<< ${DATA}
-	done
+	tr '[:upper:]' '[:lower:]'
 }
 
 function strip_punctuation {
-	while read DATA
-	do
-		tr -d '[:punct:]' <<< ${DATA}
-	done
+	tr -d '[:punct:]'
 }
 
 function strip_space {
-	while read DATA
-	do
-		sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' | \
-			tr --squeeze-repeats '[:blank:]' "${TITLE_SEPERATOR_CHAR}" \
-			<<< ${DATA}
-	done
+	sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' | \
+		tr --squeeze-repeats '[:blank:]' "${TITLE_SEPERATOR_CHAR}"
 }
 
 function set_editor {
@@ -128,7 +124,7 @@ function ts_to_date {
 function get_tags {
 	FILE="$1"
 	strip_comments "${FILE}" | \
-		grep --extended-regexp --only-matching "${TAG_CODE}[[:alnum:]]+" | \
+		grep --extended-regexp --only-matching "${TAG_CODE}[${TAG_ALPHABET}]+" | \
 		sed -e "s|${TAG_CODE}||g" | to_lower | \
 		sort | uniq
 }
@@ -141,10 +137,7 @@ function file_has_tag {
 }
 
 function content_make_tag_links {
-	while read DATA
-	do
-		echo "${DATA}" | sed -e "s|${TAG_CODE}\([[:alnum:]]\+\)|<a href='${ROOT_URL}/tags/\L\1.html'>\E\1</a>|g"
-	done
+	sed -e "s|${TAG_CODE}\([${TAG_ALPHABET}]\+\)|<a href='${ROOT_URL}/tags/\L\1.html'>\E\1</a>|g"
 }
 
 function content_will_be_trimmed {
@@ -238,11 +231,35 @@ function sort_by_date {
 	done
 }
 
-function parse_out_our_macros {
-	while read DATA
+function get_hash_program {
+	for PROGRAM in ${KNOWN_HASH_PROGRAMS} # No quotes on purpose
 	do
-		echo "${DATA}" | sed -e "s|${PREVIEW_STOP_CODE}||g"
+		which ${PROGRAM} &> /dev/null
+		if [[ "$?" == "0" ]]
+		then
+			echo "${PROGRAM}"
+			break
+		fi
 	done
+}
+
+function hash_data {
+	if [[ "${HASH_PROGRAM}" == "" ]]
+	then
+		HASH_PROGRAM=$(get_hash_program)
+		if [[ "${HASH_PROGRAM}" == "" ]]
+		then
+			echo "Couldn't find any of: ${KNOWN_HASH_PROGRAMS}"
+			echo "You need one, or to set HASH_PROGRAM to something which can"
+			echo "hash data given on stdin for bm to work."
+			exit 1
+		fi
+	fi
+	${HASH_PROGRAM}
+}
+
+function parse_out_our_macros {
+	sed -e "s|${PREVIEW_STOP_CODE}||g"
 }
 
 function generate_id {
