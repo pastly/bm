@@ -16,8 +16,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - IDs from 16 to 8 chars (backwards compatable because IDs unused so far)
 - end of filename from $RANDOM to post id
 - pretty print post list format is now `date (id=foobarr): Post Title`
-- `edit`, `list`, and `remove` now use a global search function
-- make `make` less noisy
+- `edit`, `list`, and `remove` now use the new global search function
+- make `make` less noisy when run from inside our scripts
 - `edit` with no args calls `list`
 
 ### Fixed
