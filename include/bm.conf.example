@@ -21,8 +21,8 @@ ED="${EDITOR}"
 PREVIEW_MAX_WORDS="300"
 # Strategy to use when editing or removing a file and there are multiple
 # matched filenames.
-# valid values: 'simple', 'newest', 'oldest'
-# default if not specified: 'simple'
+# valid values: "simple", "newest", "oldest"
+# default if not specified: "simple"
 MULTI_MATCH_STRAT="simple"
 # Root of the URL the blog should reside in. For example, if your blog homepage
 # should be example.com, set the following to "". If it should be
