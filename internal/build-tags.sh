@@ -37,7 +37,6 @@ cat << EOF > "${TEMP_INDEX_FILE}"
 m4_include(include/html.m4)
 START_HTML([[${ROOT_URL}]], [[Tags - ${BLOG_TITLE}]])
 CONTENT_PAGE_HEADER_HTML([[${ROOT_URL}]], [[${BLOG_TITLE}]], [[${BLOG_SUBTITLE}]])
-<h1>Tags</h1>
 EOF
 for TAG in ${ALL_TAGS[@]}
 do
@@ -46,11 +45,14 @@ do
 m4_include(include/html.m4)
 START_HTML([[${ROOT_URL}]], [[$TAG - ${BLOG_TITLE}]])
 CONTENT_PAGE_HEADER_HTML([[${ROOT_URL}]], [[${BLOG_TITLE}]], [[${BLOG_SUBTITLE}]])
-<h2>$TAG</h2>
+<h1>$TAG</h1>
 <ul>
 EOF
-	echo "<h2>${TAG}</h2>" >> "${TEMP_INDEX_FILE}"
-	echo "<ul>" >> "${TEMP_INDEX_FILE}"
+	cat << EOF >> "${TEMP_INDEX_FILE}"
+<h1>${TAG}</h1>
+<ul>
+EOF
+	CURRENT_EPOCH=""
 	for FILE in $(sort_by_date "${FILES_WITH_TAGS[@]}" | tac)
 	do
 		FILE_HAS_TAG=$(file_has_tag "${FILE}" "${TAG}")
@@ -58,10 +60,35 @@ EOF
 		then
 			TITLE="$(get_title "${FILE}")"
 			AUTHOR="$(get_author "${FILE}")"
-			DATE="$(get_date "${FILE}" | ts_to_date "${DATE_FRMT}")"
+			DATE="$(get_date "${FILE}")"
+			DATE_PRETTY="$(get_date "${FILE}" | ts_to_date "${DATE_FRMT}")"
+			if [[ "${TAG_INDEX_BY}" == "month" ]] && [[ "$(ts_to_date "${MONTHLY_INDEX_DATE_FRMT}" "${DATE}")" != "${CURRENT_EPOCH}" ]]
+			then
+				CURRENT_EPOCH="$(ts_to_date "${MONTHLY_INDEX_DATE_FRMT}" "${DATE}")"
+				EPOCH_CHANGED="foobar"
+			elif [[ "${TAG_INDEX_BY}" == "year" ]] && [[ "$(ts_to_date "${YEARLY_INDEX_DATE_FRMT}" "${DATE}")" != "${CURRENT_EPOCH}" ]]
+			then
+				CURRENT_EPOCH="$(ts_to_date "${YEARLY_INDEX_DATE_FRMT}" "${DATE}")"
+				EPOCH_CHANGED="foobar"
+			fi
+			if [[ "${EPOCH_CHANGED}" != "" ]]
+			then
+				EPOCH_CHANGED=""
+				cat << EOF >> "${TEMP_TAG_FILE}"
+
+</ul>
+<h2>${CURRENT_EPOCH}</h2>
+<ul>
+EOF
+				cat << EOF >> "${TEMP_INDEX_FILE}"
+</ul>
+<h2>${CURRENT_EPOCH}</h2>
+<ul>
+EOF
+			fi
 			FILE_NAME_PART="$(basename "${FILE}" ".${POST_EXTENSION}").html"
-			echo "<li><a href='${ROOT_URL}/posts/${FILE_NAME_PART}'>${TITLE}</a> by ${AUTHOR} on ${DATE}</li>" >> "${TEMP_TAG_FILE}"
-			echo "<li><a href='${ROOT_URL}/posts/${FILE_NAME_PART}'>${TITLE}</a> by ${AUTHOR} on ${DATE}</li>" >> "${TEMP_INDEX_FILE}"
+			echo "<li><a href='${ROOT_URL}/posts/${FILE_NAME_PART}'>${TITLE}</a> by ${AUTHOR} on ${DATE_PRETTY}</li>" >> "${TEMP_TAG_FILE}"
+			echo "<li><a href='${ROOT_URL}/posts/${FILE_NAME_PART}'>${TITLE}</a> by ${AUTHOR} on ${DATE_PRETTY}</li>" >> "${TEMP_INDEX_FILE}"
 		fi
 	done
 	cat << EOF >> "${TEMP_TAG_FILE}"

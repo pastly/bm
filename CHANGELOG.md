@@ -5,8 +5,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- post indexing by month/year on post/tag index.html pages (#49)
+
 ### Changed
 - minor quoting fix in `bm.conf.example`
+
+### Removed
+- "Tags" h1 at the top of `tags/index.html`
 
 ## [v1.2.1] - 2016-09-02
 ### Changed
