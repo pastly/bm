@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [v2.0.0] - 2016-09-11
 ### Added
 - post indexing by month/year on post/tag index.html pages (#49)
 - global post search function that searches titles/ids instead of filenames
@@ -67,7 +69,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - author, date, mod date metadata
 - post id (unused)
 
-[Unreleased]: https://gogs.system33.pw/mello/bm
+[v2.0.0]: https://gogs.system33.pw/mello/bm/src/v2.0.0
 [v1.2.1]: https://gogs.system33.pw/mello/bm/src/v1.2.1
 [v1.2.0]: https://gogs.system33.pw/mello/bm/src/v1.2.0
 [v1.1.0]: https://gogs.system33.pw/mello/bm/src/v1.1.0
