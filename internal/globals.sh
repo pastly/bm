@@ -263,10 +263,64 @@ function parse_out_our_macros {
 }
 
 function generate_id {
-	cat /dev/urandom | tr -cd '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz' | head -c 16
+	cat /dev/urandom | tr -cd '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz' | head -c 8
 }
 
 function pretty_print_post_info {
 	FILE="$1"
-	echo "$(get_title "${FILE}") ($(get_date "${FILE}" | ts_to_date "${DATE_FRMT}" ))"
+	echo "$(get_date "${FILE}" | ts_to_date "${DATE_FRMT}") (id=$(get_id "${FILE}")): $(get_title "${FILE}")"
+}
+
+# args: search terms
+# returns 0 or more matched post file names
+function search_posts {
+	# valid TYPEs are 'both' and 'title'
+	# where 'both' means title and post id
+	[[ "$1" == "$@" ]] && TYPE="both" || TYPE="title"
+	if [[ "${TYPE}" == "both" ]]
+	then
+		POSTS="$(search_posts_by_id "$@")"
+		[[ "${POSTS}" != "" ]] && echo "${POSTS}" && return
+		POSTS="$(search_posts_by_title "$@")"
+		[[ "${POSTS}" != "" ]] && echo "${POSTS}" && return
+	else
+		POSTS="$(search_posts_by_title "$@")"
+		[[ "${POSTS}" != "" ]] && echo "${POSTS}" && return
+	fi
+}
+
+# args: search term
+# returns 0 or 1 matched post file names
+function search_posts_by_id {
+	[[ "$1" != "$@" ]] && return
+	[[ "$1" == "" ]] && return
+	while read FILE
+	do
+		ID="$(get_id "${FILE}")"
+		if [[ $ID =~ ^.*$1.*$ ]]
+		then
+			[[ "${POSTS}" != "" ]] && POSTS="${POSTS} ${FILE}" || POSTS="${FILE}"
+		fi
+	done < <(find "${POST_DIR}" -type f -name "*.${POST_EXTENSION}")
+	COUNT="$(echo "${POSTS}" | wc -w)"
+	[[ "${COUNT}" != "1" ]] && return
+	echo "${POSTS}"
+}
+
+# args: search terms
+# returns 0 or more matched post file names sorted by date
+function search_posts_by_title {
+	[[ "$1" == "" ]] && return
+	while read FILE
+	do
+		TERMS="$(echo "$@" | to_lower | strip_punctuation | strip_space)"
+		TITLE="$(get_title "${FILE}" | to_lower | strip_punctuation | strip_space)"
+		if [[ $TITLE =~ ^.*${TERMS}.*$ ]]
+		then
+			[[ "${POSTS}" != "" ]] && POSTS="${POSTS} ${FILE}" || POSTS="${FILE}"
+		fi
+	done < <(find "${POST_DIR}" -type f -name "*.${POST_EXTENSION}")
+	COUNT="$(echo "${POSTS}" | wc -w)"
+	[[ "${COUNT}" < "1" ]] && return
+	sort_by_date ${POSTS}
 }

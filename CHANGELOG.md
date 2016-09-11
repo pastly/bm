@@ -7,13 +7,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - post indexing by month/year on post/tag index.html pages (#49)
+- global post search function that searches titles/ids instead of filenames
+- post format conversion script in `tools/`
 
 ### Changed
 - `make clean` only removes build/ if not a symlink.
 - minor quoting fix in `bm.conf.example`
+- IDs from 16 to 8 chars (backwards compatable because IDs unused so far)
+- end of filename from $RANDOM to post id
+- pretty print post list format is now `date (id=foobarr): Post Title`
+- `edit`, `list`, and `remove` now use a global search function
+- make `make` less noisy
+- `edit` with no args calls `list`
 
 ### Fixed
 - `make clean` harmless error message if build/ did not exist
+- filename changes when title/id changes (#3)
 
 ### Removed
 - "Tags" h1 at the top of `tags/index.html`

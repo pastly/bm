@@ -1,13 +1,12 @@
 #!/usr/bin/env bash
 
+[[ "$1" == "" ]] && ./internal/list && exit 0
+
 source internal/globals.sh
 
 set_editor
 
-SEARCH_VALUE="$@"
-SEARCH_VALUE="$(echo ${SEARCH_VALUE} | to_lower | strip_punctuation | strip_space)"
-
-NUM_FOUND_FILES=$(find "${POST_DIR}" -type f -name "*${SEARCH_VALUE}*.${POST_EXTENSION}" | wc --lines)
+NUM_FOUND_FILES=$(search_posts "$@" | wc --lines)
 
 if [[ "${NUM_FOUND_FILES}" < "1" ]]
 then
@@ -15,20 +14,20 @@ then
 	exit 0
 elif [[ "${NUM_FOUND_FILES}" == "1" ]]
 then
-	FILE="$(find ${POST_DIR} -type f -name "*${SEARCH_VALUE}*.${POST_EXTENSION}")"
+	FILE="$(search_posts "$@")"
 elif [[ "${MULTI_MATCH_STRAT}" == "simple" ]]
 then
 	echo "Ambiguous search term: $@"
 	while read FILE
 	do
 		pretty_print_post_info "${FILE}"
-	done < <(find ${POST_DIR} -type f -name "*${SEARCH_VALUE}*.${POST_EXTENSION}" -print0 | sort_by_date)
+	done < <(search_posts "$@")
 	exit 0
 elif [[ "${MULTI_MATCH_STRAT}" == "newest" ]]
 then
-	FILE="$(find ${POST_DIR} -type f -name "*${SEARCH_VALUE}*.${POST_EXTENSION}" -print0 | sort_by_date | tail -n 1)"
+	FILE="$(search_posts "$@" | tail -n 1)"
 else
-	FILE="$(find ${POST_DIR} -type f -name "*${SEARCH_VALUE}*.${POST_EXTENSION}" -print0 | sort_by_date | head -n 1)"
+	FILE="$(search_posts "$@" | head -n 1)"
 fi
 
 [[ "${FILE}" == "" ]] && exit 0
@@ -41,8 +40,17 @@ OLD_HASH="$(cat "${FILE}" | hash_data)"
 NEW_HASH="$(cat "${TEMP}" | hash_data)"
 if [[ "${OLD_HASH}" != "${NEW_HASH}" ]]
 then
+	NEW_TITLE="$(get_title "${TEMP}" | to_lower | strip_punctuation | strip_space)"
+	NEW_ID="$(get_id "${TEMP}")"
+	NEW_FILE="$(dirname "${FILE}")/${NEW_TITLE}${TITLE_SEPERATOR_CHAR}${NEW_ID}.${POST_EXTENSION}"
+	if [[ "${FILE}" != "${NEW_FILE}" ]]
+	then
+		echo "Warning: ${FILE} moving to ${NEW_FILE}"
+		rm "${FILE}"
+		FILE="${NEW_FILE}"
+	fi
 	sed -i "2,2{s/^${OLD_MOD_DATE}$/$(date +'%s')/;}" "${TEMP}"
 	cp "${TEMP}" "${FILE}"
 fi
 rm "${TEMP}"
-make
+make -s
