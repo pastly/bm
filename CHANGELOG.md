@@ -4,13 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [v2.0.1] - 2016-09-17
 ### Added
 - more comments in makefile
 
 ### Changed
 - only call `build-post.sh` for changed post. Introduces backwards incompatable
   change. See #45. Closes #45.
+- minor markdown changes in old changelog entries
 
 ### Fixed
 - make CSS files dependencies for everything
@@ -60,13 +61,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [v1.1.0] - 2016-08-31
 ### Added
-- MULTI_MATCH_STRAT for determining what to do in case of ambiguous search
+- `MULTI_MATCH_STRAT` for determining what to do in case of ambiguous search
   term in edit and remove (#46)
 - root url config option so blog doesn't have to reside at root of website
 
 ### Changed
 - remove '/' from .gitignore build and post lines
-- refactored out post listing to global function pretty_print_post_info
+- refactored out post listing to global function `pretty_print_post_info`
 - minor grammar changes in edit/list/remove output
 - output actual search terms instead of what they were converted to in edit
   and remove
@@ -81,6 +82,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - author, date, mod date metadata
 - post id (unused)
 
+[v2.0.1]: https://gogs.system33.pw/mello/bm/src/v2.0.1
 [v2.0.0]: https://gogs.system33.pw/mello/bm/src/v2.0.0
 [v1.2.1]: https://gogs.system33.pw/mello/bm/src/v1.2.1
 [v1.2.0]: https://gogs.system33.pw/mello/bm/src/v1.2.0
