@@ -8,7 +8,7 @@ POST_EXTENSION='bm'
 POST_DIR='posts'
 M4="$(which m4)"
 M4_FLAGS="--prefix-builtins"
-VERSION="v2.0.1"
+VERSION="v2.l.0"
 TAG_ALPHABET="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-"
 
 KNOWN_HASH_PROGRAMS="sha1sum sha1 sha256sum sha256 md5sum md5"
