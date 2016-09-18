@@ -14,7 +14,7 @@ function build_post {
 	DATE="$(get_date "${IN_TEMP}")"
 	MOD_DATE="$(get_mod_date "${IN_TEMP}")"
 	MODIFIED=""
-	[[ "${DATE}" != "${MOD_DATE}" ]] && MODIFIED="foobar"
+	(( "$((${MOD_DATE}-${DATE}))" > "${SIGNIFICANT_MOD_AFTER}" )) && MODIFIED="foobar" || MODIFIED=""
 	DATE="$(ts_to_date "${DATE_FRMT}" "${DATE}")"
 	MOD_DATE="$(ts_to_date "${LONG_DATE_FRMT}" "${MOD_DATE}")"
 	AUTHOR="$(get_author "${IN_TEMP}")"

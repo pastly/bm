@@ -48,3 +48,8 @@ HASH_PROGRAM=""
 DEFAULT_INDEX_BY="none"
 POST_INDEX_BY="${DEFAULT_INDEX_BY}"
 TAG_INDEX_BY="${DEFAULT_INDEX_BY}"
+# Period of time (in seconds) after which a modification to a post is considered
+# significant, and therefore the modification time should be displayed on the
+# built post. This value can have basic arithmatic in it. Default is "1"
+# Suggested values: "60*60" (1 hour), "60*60*24" (1 day)
+SIGNIFICANT_MOD_AFTER="1"

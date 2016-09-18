@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v2.1.0] - 2016-09-17
+### Added
+- `SIGNIFICANT_MOD_AFTER` option: only display mod time after this number of
+  seconds
+
 ## [v2.0.1] - 2016-09-17
 ### Added
 - more comments in makefile

@@ -36,6 +36,8 @@ fi
 [[ "${DEFAULT_INDEX_BY}" == "" ]] && DEFAULT_INDEX_BY="none"
 [[ "${POST_INDEX_BY}" == "" ]] && POST_INDEX_BY="${DEFAULT_INDEX_BY}"
 [[ "${TAG_INDEX_BY}" == "" ]] && TAG_INDEX_BY="${DEFAULT_INDEX_BY}"
+[[ "${SIGNIFICANT_MOD_AFTER}" == "" ]] && SIGNIFICANT_MOD_AFTER="1" || \
+	SIGNIFICANT_MOD_AFTER="$((${SIGNIFICANT_MOD_AFTER}))"
 
 function strip_comments {
 	FILE="$1"

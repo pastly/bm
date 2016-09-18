@@ -21,7 +21,7 @@ do
 	DATE="$(get_date "${FILE}")"
 	MOD_DATE="$(get_mod_date "${FILE}")"
 	MODIFIED=""
-	[[ "${DATE}" != "${MOD_DATE}" ]] && MODIFIED="foobar"
+	(( "$((${MOD_DATE}-${DATE}))" > "${SIGNIFICANT_MOD_AFTER}" )) && MODIFIED="foobar" || MODIFIED=""
 	DATE="$(ts_to_date "${DATE_FRMT}" "${DATE}")"
 	MOD_DATE="$(ts_to_date "${LONG_DATE_FRMT}" "${MOD_DATE}")"
 	AUTHOR="$(get_author "${FILE}")"
