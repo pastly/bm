@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v2.1.1] - 2016-09-17
+### Fixed
+- bash number comparisons
+
 ## [v2.1.0] - 2016-09-17
 ### Added
 - `SIGNIFICANT_MOD_AFTER` option: only display mod time after this number of
@@ -87,6 +91,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - author, date, mod date metadata
 - post id (unused)
 
+[v2.1.1]: https://gogs.system33.pw/mello/bm/src/v2.1.1
 [v2.1.0]: https://gogs.system33.pw/mello/bm/src/v2.1.0
 [v2.0.1]: https://gogs.system33.pw/mello/bm/src/v2.0.1
 [v2.0.0]: https://gogs.system33.pw/mello/bm/src/v2.0.0

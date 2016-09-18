@@ -8,7 +8,7 @@ POST_EXTENSION='bm'
 POST_DIR='posts'
 M4="$(which m4)"
 M4_FLAGS="--prefix-builtins"
-VERSION="v2.l.0"
+VERSION="v2.l.1"
 TAG_ALPHABET="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-"
 
 KNOWN_HASH_PROGRAMS="sha1sum sha1 sha256sum sha256 md5sum md5"
@@ -323,6 +323,6 @@ function search_posts_by_title {
 		fi
 	done < <(find "${POST_DIR}" -type f -name "*.${POST_EXTENSION}")
 	COUNT="$(echo "${POSTS}" | wc -w)"
-	[[ "${COUNT}" < "1" ]] && return
+	(( "${COUNT}" < "1" )) && return
 	sort_by_date ${POSTS}
 }

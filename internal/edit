@@ -8,7 +8,7 @@ set_editor
 
 NUM_FOUND_FILES=$(search_posts "$@" | wc --lines)
 
-if [[ "${NUM_FOUND_FILES}" < "1" ]]
+if (( "${NUM_FOUND_FILES}" < "1" ))
 then
 	echo "Could not find posts matching: $@"
 	exit 0

@@ -7,7 +7,7 @@ SEARCH_VALUE="$(echo ${SEARCH_VALUE} | to_lower | strip_punctuation | strip_spac
 
 NUM_FOUND_FILES=$(search_posts "$@" | wc --lines)
 
-if [[ "${NUM_FOUND_FILES}" < "1" ]]
+if (( "${NUM_FOUND_FILES}" < "1" ))
 then
 	echo "Could not find post matching: $@"
 	exit 0
