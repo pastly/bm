@@ -45,22 +45,22 @@ all: $(BUILT_POSTS) $(BUILT_STATICS) $(BUILT_META_FILES)
 # Target for posts
 # ** If directory structure of POST_DIR every changes, this will need updating
 # ** as it is not generalized anymore
-$(BUILT_POST_DIR)/%.html: $(POST_DIR)/*/*/%.bm $(INCLUDE_FILES)
+$(BUILT_POST_DIR)/%.html: $(POST_DIR)/*/*/%.bm $(INCLUDE_FILES) $(CSS_FILES)
 	@echo $@
 	$(CMD_BUILD_POST) $@ $<
 
 # Target for homepage
-$(BUILD_DIR)/index.html: $(POST_FILES) $(INCLUDE_FILES)
+$(BUILD_DIR)/index.html: $(POST_FILES) $(INCLUDE_FILES) $(CSS_FILES)
 	@echo $@
 	$(CMD_BUILD_INDEX) $@ $(POST_FILES)
 
 # Target for posts index
-$(BUILT_POST_DIR)/index.html: $(POST_FILES) $(INCLUDE_FILES)
+$(BUILT_POST_DIR)/index.html: $(POST_FILES) $(INCLUDE_FILES) $(CSS_FILES)
 	@echo $@
 	$(CMD_BUILD_POSTS_INDEX) $@ $(POST_FILES)
 
 # Target for tags index
-$(BUILT_TAG_DIR)/index.html: $(POST_FILES) $(INCLUDE_FILES)
+$(BUILT_TAG_DIR)/index.html: $(POST_FILES) $(INCLUDE_FILES) $(CSS_FILES)
 	@echo $@
 	$(CMD_BUILD_TAGS) $@ $(POST_FILES)
 
