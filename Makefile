@@ -12,8 +12,6 @@ MKDIR_FLAGS=-p
 RM=rm
 RM_FLAGS=-fr
 
-.SUFFIXES:
-
 .PHONY: all clean
 
 POST_DIR=posts
@@ -45,21 +43,29 @@ BUILT_META_FILES := \
 all: $(BUILT_POSTS) $(BUILT_STATICS) $(BUILT_META_FILES)
 
 $(BUILT_POSTS): $(POST_FILES) $(INCLUDE_FILES)
+# Target for posts
+# ** If directory structure of POST_DIR every changes, this will need updating
+# ** as it is not generalized anymore
+$(BUILT_POST_DIR)/%.html: $(POST_DIR)/*/*/%.bm $(INCLUDE_FILES)
 	@echo $@
 	$(CMD_BUILD_POST) $@ $(POST_FILES)
 
+# Target for homepage
 $(BUILD_DIR)/index.html: $(POST_FILES) $(INCLUDE_FILES)
 	@echo $@
 	$(CMD_BUILD_INDEX) $@ $(POST_FILES)
 
+# Target for posts index
 $(BUILT_POST_DIR)/index.html: $(POST_FILES) $(INCLUDE_FILES)
 	@echo $@
 	$(CMD_BUILD_POSTS_INDEX) $@ $(POST_FILES)
 
+# Target for tags index
 $(BUILT_TAG_DIR)/index.html: $(POST_FILES) $(INCLUDE_FILES)
 	@echo $@
 	$(CMD_BUILD_TAGS) $@ $(POST_FILES)
 
+# Target for all CSS
 $(BUILT_STATIC_DIR)/%.css: $(INCLUDE_DIR)/%.css.in $(INCLUDE_FILES)
 	@echo $@
 	$(MKDIR) $(MKDIR_FLAGS) $(BUILT_STATIC_DIR)
