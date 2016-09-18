@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - more comments in makefile
 
+### Changed
+- only call `build-post.sh` for changed post. Introduces backwards incompatable
+  change. See #45. Closes #45.
+
 ### Removed
 - uneeded `.SUFFIXES` in makefile
 

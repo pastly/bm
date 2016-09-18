@@ -42,13 +42,12 @@ BUILT_META_FILES := \
 
 all: $(BUILT_POSTS) $(BUILT_STATICS) $(BUILT_META_FILES)
 
-$(BUILT_POSTS): $(POST_FILES) $(INCLUDE_FILES)
 # Target for posts
 # ** If directory structure of POST_DIR every changes, this will need updating
 # ** as it is not generalized anymore
 $(BUILT_POST_DIR)/%.html: $(POST_DIR)/*/*/%.bm $(INCLUDE_FILES)
 	@echo $@
-	$(CMD_BUILD_POST) $@ $(POST_FILES)
+	$(CMD_BUILD_POST) $@ $<
 
 # Target for homepage
 $(BUILD_DIR)/index.html: $(POST_FILES) $(INCLUDE_FILES)
