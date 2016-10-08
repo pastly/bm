@@ -18,6 +18,10 @@ ${ID}
 
 ${DEFAULT_AUTHOR}
 ${TITLE}
+EOF
+if [[ "${CREATE_HELP_VERBOSITY}" == "long" ]]
+then
+	cat << EOF >> ${TEMP}
 ${COMMENT_CODE} Create your post below. Lines beginning with "${COMMENT_CODE}"
 ${COMMENT_CODE} will be stripped out.
 ${COMMENT_CODE}
@@ -42,6 +46,16 @@ ${COMMENT_CODE} be used.
 ${COMMENT_CODE}
 ${COMMENT_CODE} Other than these special rules, use markdown to format your post.
 EOF
+elif [[ "${CREATE_HELP_VERBOSITY}" == "short" ]]
+then
+	cat << EOF >> ${TEMP}
+${COMMENT_CODE} Lines beginning with ${COMMENT_CODE} are comments and ignored.
+${COMMENT_CODE} ${TAG_CODE}foo-bar is a tag named foo-bar.
+${COMMENT_CODE} ${PREVIEW_STOP_CODE} to stop post preview instead of at ${PREVIEW_MAX_WORDS} words.
+EOF
+fi
+
+echo "" >> ${TEMP}
 
 "${ED}" "${TEMP}"
 

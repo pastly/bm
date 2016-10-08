@@ -4,7 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [v2.2.0] - 2016-10-08
+### Added
+- option for shortening/removing help comments in new posts (#22)
 ### Fixed
 - harmless errors when `bm.conf` or `posts/` doesn't eixst (#57)
 
@@ -95,6 +97,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - author, date, mod date metadata
 - post id (unused)
 
+[v2.2.0]: https://gogs.system33.pw/mello/bm/src/v2.2.0
 [v2.1.1]: https://gogs.system33.pw/mello/bm/src/v2.1.1
 [v2.1.0]: https://gogs.system33.pw/mello/bm/src/v2.1.0
 [v2.0.1]: https://gogs.system33.pw/mello/bm/src/v2.0.1
