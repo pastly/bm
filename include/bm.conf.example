@@ -9,6 +9,10 @@ DEFAULT_AUTHOR="$(whoami)"
 DATE_FRMT="%d %b %Y"
 LONG_DATE_FRMT="%d %b %Y at %l:%M %P"
 POSTS_ON_HOMEPAGE="5"
+# Verbosity of helpful comments in new posts
+# valid values: "long", "short", "off"
+# default if not specified: "long"
+CREATE_HELP_VERBOSITY="long"
 # Format for when dividing posts by month on an index page
 MONTHLY_INDEX_DATE_FRMT="%b %Y"
 # Format for when dividing posts by year on an index page

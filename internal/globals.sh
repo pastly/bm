@@ -38,6 +38,7 @@ fi
 [[ "${TAG_INDEX_BY}" == "" ]] && TAG_INDEX_BY="${DEFAULT_INDEX_BY}"
 [[ "${SIGNIFICANT_MOD_AFTER}" == "" ]] && SIGNIFICANT_MOD_AFTER="1" || \
 	SIGNIFICANT_MOD_AFTER="$((${SIGNIFICANT_MOD_AFTER}))"
+[[ "${CREATE_HELP_VERBOSITY}" == "" ]] && CREATE_HELP_VERBOSITY="long"
 
 function strip_comments {
 	FILE="$1"
