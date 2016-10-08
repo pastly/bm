@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Fixed
+- harmless errors when `bm.conf` or `posts/` doesn't eixst (#57)
+
 ## [v2.1.1] - 2016-09-17
 ### Fixed
 - bash number comparisons

@@ -14,7 +14,7 @@ TAG_ALPHABET="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-"
 KNOWN_HASH_PROGRAMS="sha1sum sha1 sha256sum sha256 md5sum md5"
 
 source include/bm.conf.example
-source include/bm.conf
+[[ -f include/bm.conf ]] && source include/bm.conf
 
 which "Markdown.pl" &> /dev/null
 if [[ $? != 0 ]]
@@ -276,6 +276,7 @@ function pretty_print_post_info {
 # args: search terms
 # returns 0 or more matched post file names
 function search_posts {
+	[[ ! -d "${POST_DIR}" ]] && return
 	# valid TYPEs are 'both' and 'title'
 	# where 'both' means title and post id
 	[[ "$1" == "$@" ]] && TYPE="both" || TYPE="title"
