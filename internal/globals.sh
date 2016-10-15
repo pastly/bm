@@ -13,7 +13,7 @@ MAKE_FLAGS="-s"
 VERSION="v2.3.0"
 TAG_ALPHABET="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-"
 
-KNOWN_HASH_PROGRAMS="sha1sum sha1 sha256sum sha256 md5sum md5"
+KNOWN_HASH_PROGRAMS="sha1sum sha1 sha256sum sha256 md5sum md5 cat"
 
 source include/bm.conf.example
 [[ -f include/bm.conf ]] && source include/bm.conf
