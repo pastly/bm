@@ -57,3 +57,7 @@ TAG_INDEX_BY="${DEFAULT_INDEX_BY}"
 # built post. This value can have basic arithmatic in it. Default is "1"
 # Suggested values: "60*60" (1 hour), "60*60*24" (1 day)
 SIGNIFICANT_MOD_AFTER="1"
+# When to run the make command.
+# valid values: "asap", "manual"
+# default if not specified: "asap"
+REBUILD_POLICY="asap"

@@ -8,7 +8,7 @@ POST_EXTENSION='bm'
 POST_DIR='posts'
 M4="$(which m4)"
 M4_FLAGS="--prefix-builtins"
-MAKE="$(which make)"
+MAKE="make"
 MAKE_FLAGS="-s"
 VERSION="v2.2.0"
 TAG_ALPHABET="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-"
@@ -31,6 +31,9 @@ else
 	MARKDOWN="$(which "Markdown.pl")"
 fi
 
+which "${MAKE}" &> /dev/null
+[[ $? != 0 ]] && echo "make not found" && exit 1
+
 [ ! -x "${MARKDOWN}" ] && echo "Markdown.pl not found" && exit 1
 [ ! -x "${M4}" ] && echo "m4 not found" && exit 1
 
@@ -41,6 +44,7 @@ fi
 [[ "${SIGNIFICANT_MOD_AFTER}" == "" ]] && SIGNIFICANT_MOD_AFTER="1" || \
 	SIGNIFICANT_MOD_AFTER="$((${SIGNIFICANT_MOD_AFTER}))"
 [[ "${CREATE_HELP_VERBOSITY}" == "" ]] && CREATE_HELP_VERBOSITY="long"
+[[ "${REBUILD_POLICY}" == "" ]] && REBUILD_POLICY="asap"
 
 function strip_comments {
 	FILE="$1"

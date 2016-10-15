@@ -42,8 +42,15 @@ do
 	case $ANSWER in
 		[Yy]* )
 			rm "${FILE}"
-			${MAKE} ${MAKE_FLAGS} clean
-			${MAKE} ${MAKE_FLAGS}
+			if [[ "${REBUILD_POLICY}" != "manual" ]]
+			then
+				${MAKE} ${MAKE_FLAGS} clean
+				${MAKE} ${MAKE_FLAGS}
+			else
+				echo "You must now run the following commands to update the build"
+				echo "${MAKE} ${MAKE_FLAGS} clean"
+				echo "${MAKE} ${MAKE_FLAGS}"
+			fi
 			break;;
 		* )
 			echo "Whew. That was close."

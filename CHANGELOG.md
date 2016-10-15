@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- option to make automatic rebuilds optional (#52)
 ### Changed
 - standardize `make` calls with $MAKE vars
 ### Removed

@@ -71,7 +71,13 @@ do
 			TITLE=$(get_title "${TEMP}" | to_lower | strip_punctuation | strip_space)
 			FILENAME="${POST_DIR}/${YEAR}/${MONTH}/${TITLE}${TITLE_SEPERATOR_CHAR}${ID}.${POST_EXTENSION}"
 			mv "${TEMP}" "${FILENAME}"
-			${MAKE} ${MAKE_FLAGS}
+			if [[ "${REBUILD_POLICY}" != "manual" ]]
+			then
+				${MAKE} ${MAKE_FLAGS}
+			else
+				echo "You must now run the following command to update the build"
+				echo "${MAKE} ${MAKE_FLAGS}"
+			fi
 			break;;
 		[Nn]* )
 			rm "${TEMP}"
