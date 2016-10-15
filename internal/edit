@@ -53,4 +53,4 @@ then
 	cp "${TEMP}" "${FILE}"
 fi
 rm "${TEMP}"
-make -s
+${MAKE} ${MAKE_FLAGS}

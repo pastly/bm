@@ -42,8 +42,8 @@ do
 	case $ANSWER in
 		[Yy]* )
 			rm "${FILE}"
-			make clean
-			make -s
+			${MAKE} ${MAKE_FLAGS} clean
+			${MAKE} ${MAKE_FLAGS}
 			break;;
 		* )
 			echo "Whew. That was close."
