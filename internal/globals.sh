@@ -29,7 +29,7 @@ else
 	MARKDOWN="$(which "Markdown.pl")"
 fi
 
-[ ! -x "${MARKDOWN}" ] && [ ! -x "internal/Markdown.pl" ] && echo "Markdown.pl not found" && exit 1
+[ ! -x "${MARKDOWN}" ] && echo "Markdown.pl not found" && exit 1
 [ ! -x "${M4}" ] && echo "m4 not found" && exit 1
 
 [[ "${MULTI_MATCH_STRAT}" == "" ]] && MULTI_MATCH_STRAT="simple"
