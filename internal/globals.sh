@@ -10,7 +10,7 @@ M4="$(which m4)"
 M4_FLAGS="--prefix-builtins"
 MAKE="make"
 MAKE_FLAGS="-s"
-VERSION="v2.2.0"
+VERSION="v2.3.0"
 TAG_ALPHABET="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-"
 
 KNOWN_HASH_PROGRAMS="sha1sum sha1 sha256sum sha256 md5sum md5"
