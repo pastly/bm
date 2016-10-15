@@ -10,22 +10,27 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - `make` target for nonexistant `bm.conf`
 - short commit hash to version output if git is available
 - a bunch of "help me!" options to the `bm` script
+
 ### Changed
 - moved id alphabet to a variable in `globals.sh`
+
 ### Removed
 - comments in `bm.conf.example`
 
 ## [v2.3.0] - 2016-10-15
 ### Added
 - option to make automatic rebuilds optional (#52)
+
 ### Changed
 - standardize `make` calls with $MAKE vars
+
 ### Removed
 - redundant check for `Markdown.pl`
 
 ## [v2.2.0] - 2016-10-08
 ### Added
 - option for shortening/removing help comments in new posts (#22)
+
 ### Fixed
 - harmless errors when `bm.conf` or `posts/` doesn't eixst (#57)
 
