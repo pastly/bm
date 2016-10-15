@@ -3,13 +3,23 @@
 COMMAND="$1"
 shift
 
+HELP_COMMANDS=( -? -h --help -v --version )
+
+if [[ "${COMMAND}" == "" ]] || \
+   [[ " ${HELP_COMMANDS[@]} " =~ " ${COMMAND} " ]]
+then
+	source internal/globals.sh
+	echo "BM blog maker ${VERSION}"
+	echo "Wiki at https://gogs.system33.pw/mello/bm/wiki"
+fi
+
 VALID_COMMANDS=( create edit list remove )
 
 if [[ " ${VALID_COMMANDS[@]} " =~ " ${COMMAND} " ]]
 then
 	"./internal/${COMMAND}" "$@"
 else
-	echo "valid commands are ${VALID_COMMANDS[@]}"
+	echo "Valid commands are ${VALID_COMMANDS[@]}"
 	exit 1
 fi
 
