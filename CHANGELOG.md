@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - `cat` to end of the list of hash programs
 - `make` target for nonexistant `bm.conf`
+- short commit hash to version in footer if git is available
 ### Changed
 - moved id alphabet to a variable in `globals.sh`
 ### Removed

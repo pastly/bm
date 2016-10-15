@@ -31,6 +31,14 @@ else
 	MARKDOWN="$(which "Markdown.pl")"
 fi
 
+which git &> /dev/null
+if [[ $? == 0 ]]
+then
+	VERSION="${VERSION} ($(git rev-parse --short HEAD))"
+#else
+#	VERSION="${VERSION} (release)"
+fi
+
 which "${MAKE}" &> /dev/null
 [[ $? != 0 ]] && echo "make not found" && exit 1
 
