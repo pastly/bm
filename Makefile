@@ -25,7 +25,10 @@ BUILT_STATIC_DIR=$(BUILD_DIR)/static
 # AKA source files
 POST_FILES := $(shell find $(POST_DIR) -name '*.bm')
 CSS_FILES := $(shell find $(INCLUDE_DIR) -name '*.css.in')
-INCLUDE_FILES := $(shell find $(INCLUDE_DIR) -name '*.html' -or -name '*.m4' -or -name '*.conf*')
+USER_CONF_FILE := $(INCLUDE_DIR)/bm.conf
+INCLUDE_FILES := $(shell find $(INCLUDE_DIR) -name '*.html' -or -name '*.m4' -or -name '*.conf.example') \
+	$(USER_CONF_FILE)
+
 
 # These are the targets. These files don't exist
 # until after a successful build
@@ -69,6 +72,10 @@ $(BUILT_STATIC_DIR)/%.css: $(INCLUDE_DIR)/%.css.in $(INCLUDE_FILES)
 	@echo $@
 	$(MKDIR) $(MKDIR_FLAGS) $(BUILT_STATIC_DIR)
 	$(M4) $(M4_FLAGS) $< > $@
+
+# Target to automake the config file if necessary
+$(USER_CONF_FILE): $(INCLUDE_DIR)/bm.conf.example
+	[ ! -f $@ ] && grep -vE '^#' $< > $@ || touch $@
 
 clean:
 	$(RM) $(RM_FLAGS) -- $(BUILD_DIR)/*
