@@ -12,7 +12,7 @@ MAKE="make"
 MAKE_FLAGS="-s"
 VERSION="v2.3.0"
 TAG_ALPHABET="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-"
-
+ID_ALPHABET="123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 KNOWN_HASH_PROGRAMS="sha1sum sha1 sha256sum sha256 md5sum md5 cat"
 
 source include/bm.conf.example
@@ -272,7 +272,7 @@ function parse_out_our_macros {
 }
 
 function generate_id {
-	cat /dev/urandom | tr -cd '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz' | head -c 8
+	cat /dev/urandom | tr -cd "${ID_ALPHABET}" | head -c 8
 }
 
 function pretty_print_post_info {
