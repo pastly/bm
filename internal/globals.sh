@@ -3,6 +3,7 @@
 COMMENT_CODE='///'
 TAG_CODE='@@'
 PREVIEW_STOP_CODE='{preview-stop}'
+TOC_CODE='{toc}'
 TITLE_SEPERATOR_CHAR='-'
 POST_EXTENSION='bm'
 POST_DIR='posts'
@@ -199,6 +200,12 @@ function file_has_tag {
 	[[ "${LINE_COUNT}" > 0 ]] && echo "foobar" || echo ""
 }
 
+function file_has_toc_code {
+	FILE="$1"
+	LINE_COUNT=$(grep --ignore-case "${TOC_CODE}" "${FILE}" | wc -l)
+	[[ "${LINE_COUNT}" > 0 ]] && echo "foobar" || echo ""
+}
+
 function content_make_tag_links {
 	sed -e "s|${TAG_CODE}\([${TAG_ALPHABET}]\+\)|<a href='${ROOT_URL}/tags/\L\1.html'>\E\1</a>|g"
 }
@@ -271,9 +278,12 @@ function get_and_parse_content {
 	shift
 	if [[ "${DO_TRIM}" != "" ]]
 	then
-		trim_content "${FILE}" | ${MARKDOWN} | content_make_tag_links | parse_out_our_macros
+		TEMP="$(mktemp)"
+		get_content "${FILE}" | build_toc > "${TEMP}"
+		trim_content "${TEMP}" | ${MARKDOWN} | content_make_tag_links | parse_out_our_macros
+		rm "${TEMP}"
 	else
-		get_content "${FILE}" | ${MARKDOWN} | content_make_tag_links | parse_out_our_macros
+		get_content "${FILE}" | build_toc | ${MARKDOWN} | content_make_tag_links | parse_out_our_macros
 	fi
 }
 
@@ -334,7 +344,8 @@ function hash_data {
 }
 
 function parse_out_our_macros {
-	sed -e "s|${PREVIEW_STOP_CODE}||g"
+	sed -e "s|${PREVIEW_STOP_CODE}||g" | \
+	sed -e "s|${TOC_CODE}||g" # shouldn't be necessary as it will have been replaced already
 }
 
 function generate_id {
@@ -421,4 +432,16 @@ function only_pinned_posts {
 	do
 		echo "${ARRAY[$I]}"
 	done
+}
+
+function build_toc {
+	TEMP="$(mktemp)"
+	cat > "${TEMP}"
+	if [[ "$(file_has_toc_code "${TEMP}")" != "" ]]
+	then
+		cat "${TEMP}"
+	else
+		cat "${TEMP}"
+	fi
+	rm "${TEMP}"
 }
