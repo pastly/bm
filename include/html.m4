@@ -30,15 +30,14 @@ m4_define([[CONTENT_PAGE_HEADER_HTML]],
 HEADER_HTML($1, $2, $3)
 <div id='divbody'>
 )
-m4_define([[POST_HEADER_HTML]],
+m4_define([[START_POST_HEADER_HTML]],
 <div>
 m4_include(include/post.header.html)
-</div>
 )
 m4_define([[POST_HEADER_MOD_DATE_HTML]],
-<div>
-m4_include(include/post.header.html)
 m4_include(include/post.header.mod.date.html)
+)
+m4_define([[END_POST_HEADER_HTML]],
 </div>
 )
 m4_define([[START_HOMEPAGE_PREVIEW_HTML]],

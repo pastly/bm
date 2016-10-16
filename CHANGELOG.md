@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Changed
+- `POST_HEADER_MOD_DATE_HTML` m4 macro no longer recursively calls
+  `POST_HEADER_HTML`
+
 ## [v2.5.0] - 2016-10-16
 ### Added
 - generic option parsing code

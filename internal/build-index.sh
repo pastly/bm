@@ -30,18 +30,20 @@ do
 	CONTENT="$(get_and_parse_content "${FILE}" "trimmed")"
 	cat << EOF >> "${TEMP}"
 START_HOMEPAGE_PREVIEW_HTML
+START_POST_HEADER_HTML([[<a href='${POST_LINK}'>${TITLE}</a>]], [[${DATE}]], [[${AUTHOR}]])
 EOF
 	if [[ "${MODIFIED}" != "" ]]
 	then
 		cat << EOF >> "${TEMP}"
-POST_HEADER_MOD_DATE_HTML([[<a href='${POST_LINK}'>${TITLE}</a>]], [[${DATE}]], [[${AUTHOR}]], [[${MOD_DATE}]])
+POST_HEADER_MOD_DATE_HTML([[${MOD_DATE}]])
 EOF
-	else
+	fi
 		cat << EOF >> "${TEMP}"
 POST_HEADER_HTML([[<a href='${POST_LINK}'>${TITLE}</a>]], [[${DATE}]], [[${AUTHOR}]])
 EOF
 	fi
 	cat << EOF >> "${TEMP}"
+END_POST_HEADER_HTML
 ${CONTENT}
 EOF
 	if [[ "${CONTENT_IS_TRIMMED}" != "" ]]

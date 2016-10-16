@@ -25,18 +25,16 @@ function build_post {
 m4_include(include/html.m4)
 START_HTML([[${ROOT_URL}]], [[${TITLE} - ${BLOG_TITLE}]])
 CONTENT_PAGE_HEADER_HTML([[${ROOT_URL}]], [[${BLOG_TITLE}]], [[${BLOG_SUBTITLE}]])
+START_POST_HEADER_HTML([[${TITLE}]], [[${DATE}]], [[${AUTHOR}]])
 EOF
 	if [[ "${MODIFIED}" != "" ]]
 	then
 		cat >> ${OUT_TEMP} << EOF
-POST_HEADER_MOD_DATE_HTML([[${TITLE}]], [[${DATE}]], [[${AUTHOR}]], [[${MOD_DATE}]])
-EOF
-	else
-		cat >> ${OUT_TEMP} << EOF
-POST_HEADER_HTML([[${TITLE}]], [[${DATE}]], [[${AUTHOR}]])
+POST_HEADER_MOD_DATE_HTML([[${MOD_DATE}]])
 EOF
 	fi
 	cat >> ${OUT_TEMP} << EOF
+END_POST_HEADER_HTML
 ${CONTENT}
 CONTENT_PAGE_FOOTER_HTML([[${ROOT_URL}]], [[${VERSION}]])
 END_HTML
