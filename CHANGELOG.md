@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v2.4.0] - 2013-10-15
+## [v2.4.0] - 2016-10-15
 ### Added
 - `cat` to end of the list of hash programs
 - `make` target for nonexistant `bm.conf`
