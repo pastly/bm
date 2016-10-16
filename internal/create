@@ -31,7 +31,7 @@ ${COMMENT_CODE}
 ${COMMENT_CODE} 1. The initial posting timestamp
 ${COMMENT_CODE} 2. The last modified date
 ${COMMENT_CODE} 3. The post id
-${COMMENT_CODE} 4. (Reserved for future use)
+${COMMENT_CODE} 4. Options for this post
 ${COMMENT_CODE} 5. (Reserved for future use)
 ${COMMENT_CODE} 6. The author (feel free to change)
 ${COMMENT_CODE} 7. The title (feel free to change)

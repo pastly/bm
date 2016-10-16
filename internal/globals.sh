@@ -54,6 +54,39 @@ which "${MAKE}" &> /dev/null
 [[ "${CREATE_HELP_VERBOSITY}" == "" ]] && CREATE_HELP_VERBOSITY="long"
 [[ "${REBUILD_POLICY}" == "" ]] && REBUILD_POLICY="asap"
 
+function op_get {
+	FILE="$1"
+	OP="$2"
+	grep --word-regex "${OP}" "${FILE}" | cut -f 2
+}
+
+function op_set {
+	FILE="$1"
+	OP="$2"
+	VALUE="$3"
+	sed --in-place "/^${OP}\t/d" "${FILE}"
+	echo -e "${OP}\t${VALUE}" >> "${FILE}"
+}
+
+function parse_options {
+	FILE="$1"
+	OPTIONS_IN="$(strip_comments "${FILE}" | head -n 4 | tail -n 1)"
+	OP_FILE="$(mktemp)"
+	for OP_V in $OPTIONS_IN
+	do
+		OP="$(echo "${OP_V}" | cut -d '=' -f 1)"
+		V="$(echo "${OP_V}" | cut -d '=' -f 2)"
+		[[ "${OP}" == "${V}" ]] && V="1"
+		if [[ ${OP} =~ ^no_ ]]
+		then
+			OP="${OP#no_}"
+			[[ "${V}" == "0" ]] && V="1" || V="0"
+		fi
+		op_set "${OP_FILE}" "${OP}" "${V}"
+	done
+	echo "${OP_FILE}"
+}
+
 function strip_comments {
 	FILE="$1"
 	grep --invert-match "^${COMMENT_CODE}" "${FILE}"
