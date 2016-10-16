@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - generic option parsing code
 - per-post options on 4th line of post file
 - `preview_max_words` option
+
 ### Fixed
 - `make` hanging if no more posts
 

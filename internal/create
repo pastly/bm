@@ -31,10 +31,13 @@ ${COMMENT_CODE}
 ${COMMENT_CODE} 1. The initial posting timestamp
 ${COMMENT_CODE} 2. The last modified date
 ${COMMENT_CODE} 3. The post id
-${COMMENT_CODE} 4. Options for this post
+${COMMENT_CODE} 4. Options for this post (feel free to change)
 ${COMMENT_CODE} 5. (Reserved for future use)
 ${COMMENT_CODE} 6. The author (feel free to change)
 ${COMMENT_CODE} 7. The title (feel free to change)
+${COMMENT_CODE}
+${COMMENT_CODE} See https://gogs.system33.pw/mello/bm/wiki/Options for help with valid
+${COMMENT_CODE} options for line four.
 ${COMMENT_CODE}
 ${COMMENT_CODE} Any remaining lines are considered the body. Any word
 ${COMMENT_CODE} preceeded by "${TAG_CODE}" will be treated as a tag. In the final HTML page,
@@ -52,6 +55,7 @@ then
 ${COMMENT_CODE} Lines beginning with ${COMMENT_CODE} are comments and ignored.
 ${COMMENT_CODE} ${TAG_CODE}foo-bar is a tag named foo-bar.
 ${COMMENT_CODE} ${PREVIEW_STOP_CODE} to stop post preview instead of at ${PREVIEW_MAX_WORDS} words.
+${COMMENT_CODE} Options on line four. See https://gogs.system33.pw/mello/bm/wiki/Options
 EOF
 fi
 
