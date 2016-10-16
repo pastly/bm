@@ -400,3 +400,25 @@ function search_posts_by_title {
 	(( "${COUNT}" < "1" )) && return
 	sort_by_date ${POSTS}
 }
+
+function only_pinned_posts {
+	ARRAY=( )
+	FILE="$1"
+	shift
+	while [[ "${FILE}" != "" ]]
+	do
+		OPTIONS="$(parse_options "${FILE}")"
+		PINNED="$(op_get "${OPTIONS}" "pinned")"
+		if [[ "${PINNED}" != "" ]] && (( "${PINNED}" > "0" ))
+		then
+			ARRAY["${PINNED}"]="${FILE}"
+		fi
+		rm "${OPTIONS}"
+		FILE="$1"
+		shift
+	done
+	for I in "${!ARRAY[@]}"
+	do
+		echo "${ARRAY[$I]}"
+	done
+}

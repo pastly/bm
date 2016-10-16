@@ -25,7 +25,6 @@ m4_include(include/header.html)
 m4_define([[HOMEPAGE_HEADER_HTML]],
 HEADER_HTML($1, $2, $3)
 )
-
 m4_define([[CONTENT_PAGE_HEADER_HTML]],
 HEADER_HTML($1, $2, $3)
 <div id='divbody'>
@@ -36,6 +35,9 @@ m4_include(include/post.header.html)
 )
 m4_define([[POST_HEADER_MOD_DATE_HTML]],
 m4_include(include/post.header.mod.date.html)
+)
+m4_define([[POST_HEADER_PINNED_HTML]],
+m4_include(include/post.header.pinned.html)
 )
 m4_define([[END_POST_HEADER_HTML]],
 </div>

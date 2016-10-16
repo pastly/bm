@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- pinning posts to homepage via new `pinned` option
+
 ### Changed
 - `POST_HEADER_MOD_DATE_HTML` m4 macro no longer recursively calls
   `POST_HEADER_HTML`
