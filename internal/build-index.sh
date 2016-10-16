@@ -6,7 +6,6 @@ OUT_FILE="$1"
 shift
 
 TEMP=$(mktemp)
-CONTENT_FILE="$(mktemp)"
 
 cat << EOF > "${TEMP}"
 m4_include(include/html.m4)
@@ -26,8 +25,7 @@ do
 	MOD_DATE="$(ts_to_date "${LONG_DATE_FRMT}" "${MOD_DATE}")"
 	AUTHOR="$(get_author "${FILE}")"
 
-	get_content "${FILE}" > "${CONTENT_FILE}"
-	CONTENT_IS_TRIMMED="$(content_will_be_trimmed "${CONTENT_FILE}")"
+	CONTENT_IS_TRIMMED="$(content_will_be_trimmed "${FILE}")"
 
 	CONTENT="$(get_and_parse_content "${FILE}" "trimmed")"
 	cat << EOF >> "${TEMP}"
@@ -65,4 +63,4 @@ EOF
 
 "${M4}" ${M4_FLAGS} "${TEMP}" > "${OUT_FILE}"
 
-rm "${TEMP}" "${CONTENT_FILE}"
+rm "${TEMP}"

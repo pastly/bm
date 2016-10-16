@@ -64,8 +64,21 @@ function op_set {
 	FILE="$1"
 	OP="$2"
 	VALUE="$3"
+	[[ "${VALUE}" == "" ]] && VALUE="1"
+	if [[ ${OP} =~ ^no_ ]]
+	then
+		OP="${OP#no_}"
+		[[ "${VALUE}" == "0" ]] && VALUE="1" || VALUE="0"
+	fi
 	sed --in-place "/^${OP}\t/d" "${FILE}"
 	echo -e "${OP}\t${VALUE}" >> "${FILE}"
+}
+
+function op_is_set {
+	FILE="$1"
+	OP="$2"
+	IS_SET="$(op_get "${FILE}" "${OP}")"
+	[[ "${IS_SET}" == "" ]] && echo "" || echo "foobar"
 }
 
 function parse_options {
@@ -191,50 +204,64 @@ function content_make_tag_links {
 }
 
 function content_will_be_trimmed {
-	# while this function takes a file for an argument, it should *not*
-	# be a full post file. It should be a temporary file containing only
-	# the content.
 	FILE="$1"
-	PREVIEW_STOP_LINE="$(grep --fixed-strings --line-number "${PREVIEW_STOP_CODE}" "${FILE}")"
+	CONTENT="$(mktemp)"
+	get_content "${FILE}" > "${CONTENT}"
+	OPTIONS="$(parse_options "${FILE}")"
+	PREVIEW_STOP_LINE="$(grep --fixed-strings --line-number "${PREVIEW_STOP_CODE}" "${CONTENT}")"
 	if [[ "${PREVIEW_STOP_LINE}" != "" ]]
 	then
 		echo "foobar"
 	else
+		local PREVIEW_MAX_WORDS="${PREVIEW_MAX_WORDS}"
+		if [[ "$(op_is_set "${OPTIONS}" preview_max_words)" != "" ]]
+		then
+			PREVIEW_MAX_WORDS="$(op_get "${OPTIONS}" preview_max_words)"
+		fi
 		WORD_COUNT=0
 		while IFS= read DATA
 		do
 			WORD_COUNT=$((WORD_COUNT+$(echo "${DATA}" | wc -w)))
-			if [ "${WORD_COUNT}" -ge "${PREVIEW_MAX_WORDS}" ]
+			if (( "${WORD_COUNT}" >= "${PREVIEW_MAX_WORDS}" ))
 			then
 				echo "foobar"
 				break
 			fi
-		done < "${FILE}"
+		done < "${CONTENT}"
 	fi
+	rm "${CONTENT}"
+	rm "${OPTIONS}"
 }
 
 function trim_content {
-	# while this function takes a file for an argument, it should *not*
-	# be a full post file. It should be a temporary file containing only
-	# the content.
 	FILE="$1"
-	PREVIEW_STOP_LINE="$(grep --fixed-strings --line-number "${PREVIEW_STOP_CODE}" "${FILE}")"
+	CONTENT="$(mktemp)"
+	get_content "${FILE}" > "${CONTENT}"
+	OPTIONS="$(parse_options "${FILE}")"
+	PREVIEW_STOP_LINE="$(grep --fixed-strings --line-number "${PREVIEW_STOP_CODE}" "${CONTENT}")"
 	if [[ "${PREVIEW_STOP_LINE}" != "" ]]
 	then
 		PREVIEW_STOP_LINE="$(echo "${PREVIEW_STOP_LINE}" | head -n 1 | sed -E 's|^([0-9]+):.*|\1|')"
-		head -n "${PREVIEW_STOP_LINE}" "${FILE}"
+		head -n "${PREVIEW_STOP_LINE}" "${CONTENT}"
 	else
+		local PREVIEW_MAX_WORDS="${PREVIEW_MAX_WORDS}"
+		if [[ "$(op_is_set "${OPTIONS}" preview_max_words)" != "" ]]
+		then
+			PREVIEW_MAX_WORDS="$(op_get "${OPTIONS}" preview_max_words)"
+		fi
 		WORD_COUNT=0
 		while IFS= read DATA
 		do
 			echo "${DATA}"
 			WORD_COUNT=$((WORD_COUNT+$(echo "${DATA}" | wc -w)))
-			if [ "${WORD_COUNT}" -ge "${PREVIEW_MAX_WORDS}" ]
+			if (( "${WORD_COUNT}" >= "${PREVIEW_MAX_WORDS}" ))
 			then
 				break
 			fi
-		done < "${FILE}"
+		done < "${CONTENT}"
 	fi
+	rm "${CONTENT}"
+	rm "${OPTIONS}"
 }
 
 function get_and_parse_content {
@@ -244,10 +271,7 @@ function get_and_parse_content {
 	shift
 	if [[ "${DO_TRIM}" != "" ]]
 	then
-		TEMP="$(mktemp)"
-		get_content "${FILE}" > "${TEMP}"
-		trim_content "${TEMP}" | ${MARKDOWN} | content_make_tag_links | parse_out_our_macros
-		rm "${TEMP}"
+		trim_content "${FILE}" | ${MARKDOWN} | content_make_tag_links | parse_out_our_macros
 	else
 		get_content "${FILE}" | ${MARKDOWN} | content_make_tag_links | parse_out_our_macros
 	fi
