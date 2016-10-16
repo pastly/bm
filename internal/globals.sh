@@ -235,7 +235,8 @@ function sort_by_date {
 			FILE="$1"
 			shift
 		done
-	else
+	elif [ -p /dev/stdin ]
+	then
 		while read -d '' FILE
 		do
 			DATE="$(get_date "${FILE}")"

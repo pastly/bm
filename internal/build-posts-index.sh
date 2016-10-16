@@ -51,6 +51,8 @@ CONTENT_PAGE_FOOTER_HTML([[${ROOT_URL}]], [[${VERSION}]])
 END_HTML
 EOF
 
+OUT_DIR="$(dirname "${OUT_FILE}")"
+mkdir -p "${OUT_DIR}"
 "${M4}" ${M4_FLAGS} "${TEMP}" > "${OUT_FILE}"
 
 rm "${TEMP}"
