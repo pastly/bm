@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [v2.5.0] - 2016-10-16
 ### Added
 - generic option parsing code
 - per-post options on 4th line of post file
@@ -130,6 +130,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - author, date, mod date metadata
 - post id (unused)
 
+[v2.5.0]: https://gogs.system33.pw/mello/bm/src/v2.5.0
 [v2.4.0]: https://gogs.system33.pw/mello/bm/src/v2.4.0
 [v2.3.0]: https://gogs.system33.pw/mello/bm/src/v2.3.0
 [v2.2.0]: https://gogs.system33.pw/mello/bm/src/v2.2.0
