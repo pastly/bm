@@ -272,8 +272,7 @@ function trim_content {
 			fi
 		done < "${CONTENT}"
 	fi
-	rm "${CONTENT}"
-	rm "${OPTIONS}"
+	rm "${CONTENT}" "${OPTIONS}"
 }
 
 function get_and_parse_content {
@@ -284,7 +283,8 @@ function get_and_parse_content {
 	if [[ "${DO_TRIM}" != "" ]]
 	then
 		TEMP="$(mktemp)"
-		get_content "${FILE}" | build_toc > "${TEMP}"
+		get_headers "${FILE}" > "${TEMP}"
+		get_content "${FILE}" | build_toc "${FILE}" >> "${TEMP}"
 		trim_content "${TEMP}" | ${MARKDOWN} | content_make_tag_links | parse_out_our_macros
 		rm "${TEMP}"
 	else
@@ -440,13 +440,62 @@ function only_pinned_posts {
 }
 
 function build_toc {
-	TEMP="$(mktemp)"
-	cat > "${TEMP}"
-	if [[ "$(file_has_toc_code "${TEMP}")" != "" ]]
+	IN_FILE="$(mktemp)"
+	FILENAME="$1"
+	[[ "${FILENAME}" != "" ]] && FILENAME="${ROOT_URL}/posts/$(basename "${FILENAME}" ".${POST_EXTENSION}").html"
+	cat > "${IN_FILE}"
+	if [[ "$(file_has_toc_code "${IN_FILE}")" != "" ]]
 	then
-		cat "${TEMP}"
+		TEMP_HTML="$(mktemp)"
+		cat "${IN_FILE}" | "${MARKDOWN}" > "${TEMP_HTML}"
+		HEADINGS=( )
+		LINE_NUMBERS=( )
+		while read -r LINE
+		do
+			LINE_NUMBERS+=("$(echo ${LINE} | cut -d ':' -f 1)")
+			HEADING="$(echo ${LINE} | cut -d ':' -f 2- | sed 's|<h[[:digit:]]>\(.*\)</h[[:digit:]]>|\1|')"
+			HEADING="$(echo "${HEADING}" | to_lower | strip_punctuation | strip_space)"
+			WORKING_HEADING="#${HEADING}"
+			I="0"
+			while [[ " ${HEADINGS[@]} " =~ " ${WORKING_HEADING} " ]]
+			do
+				I=$((I+1))
+				WORKING_HEADING="#${HEADING}-${I}"
+			done
+			HEADINGS+=(${WORKING_HEADING})
+			echo ${HEADINGS[@]} >> output.asdf
+			echo ${LINE_NUMBERS[@]} >> output.asdf
+		done < <(grep --line-number "<h[[:digit:]]>" "${TEMP_HTML}")
+		I="0"
+		for HEADING in ${HEADINGS[@]}
+		do
+			LINE_NUM="${LINE_NUMBERS["${I}"]}"
+			echo $LINE_NUM >> output.asdf
+			sed --in-place \
+				-e "${LINE_NUM}s|<h\([[:digit:]]\)>|<h\1><a href=\'${FILENAME}${HEADING}\'>|" \
+				-e "${LINE_NUM}s|</h\([[:digit:]]\)>|</a></h\1>|" \
+				"${TEMP_HTML}"
+			I=$((I+1))
+			#(( "${I}" > "2" )) && break
+		done
+		cat $TEMP_HTML >> output.asdf
+		TOC="$(grep "<h[[:digit:]]>" "${TEMP_HTML}" |\
+			sed 's|<h1>|- |' |\
+			sed 's|<h2>|   - |' |\
+			sed 's|<h3>|      - |' |\
+			sed 's|<h4>|         - |' |\
+			sed 's|<h5>|            - |' |\
+			sed 's|<h6>|               - |' |\
+			sed 's|<h7>|                  - |' |\
+			sed 's|<h8>|                     - |' |\
+			sed 's|<h9>|                        - |' |\
+			sed 's|</h[[:digit:]]>||')"
+		TOC_ESCAPED="$(printf '%s\n' "${TOC}" | sed 's|[\/&]|\\&|g;s|$|\\|')"
+		TOC_ESCAPED="${TOC_ESCAPED%?}"
+		sed "s|${TOC_CODE}|\\n${TOC_ESCAPED}\\n|" "${IN_FILE}"
+		rm "${TEMP_HTML}"
 	else
-		cat "${TEMP}"
+		cat "${IN_FILE}"
 	fi
-	rm "${TEMP}"
+	rm "${IN_FILE}"
 }
