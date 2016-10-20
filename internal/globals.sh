@@ -106,6 +106,11 @@ function strip_comments {
 	grep --invert-match "^${COMMENT_CODE}" "${FILE}"
 }
 
+function get_headers {
+	FILE="$1"
+	head -n 7 "${FILE}"
+}
+
 function get_date {
 	FILE="$1"
 	strip_comments "${FILE}" | \
