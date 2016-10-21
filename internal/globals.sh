@@ -463,14 +463,11 @@ function build_toc {
 				WORKING_HEADING="#${HEADING}-${I}"
 			done
 			HEADINGS+=(${WORKING_HEADING})
-			echo ${HEADINGS[@]} >> output.asdf
-			echo ${LINE_NUMBERS[@]} >> output.asdf
 		done < <(grep --line-number "<h[[:digit:]]>" "${TEMP_HTML}")
 		I="0"
 		for HEADING in ${HEADINGS[@]}
 		do
 			LINE_NUM="${LINE_NUMBERS["${I}"]}"
-			echo $LINE_NUM >> output.asdf
 			sed --in-place \
 				-e "${LINE_NUM}s|<h\([[:digit:]]\)>|<h\1><a href=\'${FILENAME}${HEADING}\'>|" \
 				-e "${LINE_NUM}s|</h\([[:digit:]]\)>|</a></h\1>|" \
@@ -478,7 +475,6 @@ function build_toc {
 			I=$((I+1))
 			#(( "${I}" > "2" )) && break
 		done
-		cat $TEMP_HTML >> output.asdf
 		TOC="$(grep "<h[[:digit:]]>" "${TEMP_HTML}" |\
 			sed 's|<h1>|- |' |\
 			sed 's|<h2>|   - |' |\
