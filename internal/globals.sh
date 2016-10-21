@@ -56,13 +56,13 @@ which "${MAKE}" &> /dev/null
 [[ "${REBUILD_POLICY}" == "" ]] && REBUILD_POLICY="asap"
 
 function op_get {
-	FILE="$1"
+	OPTION_FILE="$1"
 	OP="$2"
-	grep --word-regex "${OP}" "${FILE}" | cut -f 2
+	grep --word-regex "${OP}" "${OPTION_FILE}" | cut -f 2
 }
 
 function op_set {
-	FILE="$1"
+	OPTIONS_FILE="$1"
 	OP="$2"
 	VALUE="$3"
 	[[ "${VALUE}" == "" ]] && VALUE="1"
@@ -71,14 +71,14 @@ function op_set {
 		OP="${OP#no_}"
 		[[ "${VALUE}" == "0" ]] && VALUE="1" || VALUE="0"
 	fi
-	sed --in-place "/^${OP}\t/d" "${FILE}"
-	echo -e "${OP}\t${VALUE}" >> "${FILE}"
+	sed --in-place "/^${OP}\t/d" "${OPTIONS_FILE}"
+	echo -e "${OP}\t${VALUE}" >> "${OPTIONS_FILE}"
 }
 
 function op_is_set {
-	FILE="$1"
+	OPTION_FILE="$1"
 	OP="$2"
-	IS_SET="$(op_get "${FILE}" "${OP}")"
+	IS_SET="$(op_get "${OPTION_FILE}" "${OP}")"
 	[[ "${IS_SET}" == "" ]] && echo "" || echo "foobar"
 }
 
