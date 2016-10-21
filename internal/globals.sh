@@ -192,7 +192,7 @@ function strip_space {
 }
 
 function set_editor {
-	if [[ -z ${ED} ]]
+	if [[ "${ED}" == "" ]]
 	then
 		echo "\$ED not set."
 		while read -p "Enter name of desired text editor: " ED
