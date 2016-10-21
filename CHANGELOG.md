@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Changed
+- Modify README with better links, especially towards the wiki
+
 ## [v2.6.0] - 2016-10-16
 ### Added
 - pinning posts to homepage via new `pinned` option

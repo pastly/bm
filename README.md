@@ -12,37 +12,26 @@ assumes they are the GNU variety.
 
 You also need a web server such as nginx to serve up the generated files.
 
-# Usage
-
-Clone the repository and `cd` into the repo directory.
-
-Take a look at the `include/bm.conf.example` file. You will want to copy it to
-`include/bm.conf` and edit it to your liking.
-
-run `./bm create Your Title Here` to begin written your first post. If you have
-your `EDITOR` environment variable set, it will be respected.
-
-Read the comments in the new text file for help. Most notably, you should
-format your post using Markdown.
-
-When you are done writing your post, exit your editor cleanly and BM will ask
-if you would like to save this post. 
-
-To edit a post, run `./bm edit Title`. "Title" must be enough to uniquely
-identify the post's file name.
-
-If you would like to list all your posts and their file names, run `./bm list`.
-
-You may delete a post with `./bm remove Title`, where "Title" uniquely
-identifies a single post's file name.
-
 # Features
 
-* Keeps track of post time, post modification time, and post author.
-* Uses Markdown to format post content.
-* Creates tag pages to list all posts which contain a given tag.
-* Generates post previews of dynamic length for the homepage.
-* Automatically regenerates blog after every post edit.
+- Uses Markdown to format post content.
+- Creates tag pages to list all posts which contain a given tag.
+- Generates post previews of dynamic length for the homepage.
+- Automatically regenerates blog after every post edit.
+- Optionally pin one or more posts to the top of the homepage.
+- Optionally autocreate a table of contents for a post.
+- Keeps track of post time, post modification time, and post author.
+
+# Help
+
+See [the Wiki] for more usage information. You may also enjoy the
+[configuration] and [options] pages.
 
 # Issues
-Please report issues via the [issue tracker](issues)
+
+Please report issues via the [issue tracker]
+
+[the Wiki]: https://gogs.system33.pw/mello/bm/wiki
+[configuration]: https://gogs.system33.pw/mello/bm/wiki/Configuration
+[options]: https://gogs.system33.pw/mello/bm/wiki/Options
+[issue tracker]: https://gogs.system33.pw/mello/bm/issues
