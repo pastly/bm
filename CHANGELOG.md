@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Add
+- `{toc}` macro
+- `heading_ids` option
+
 ## [v2.6.0] - 2016-10-16
 ### Added
 - pinning posts to homepage via new `pinned` option
