@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+source internal/globals.sh
+
+COMMAND="$@"
+
+# also, no command which just calls make
+VALID_COMMANDS=( all clean rebuild )
+
+if [[ " ${VALID_COMMANDS[@]} " =~ " ${COMMAND} " ]]
+then
+	if [[ "${COMMAND}" == "rebuild" ]]
+	then
+		"${MAKE}" ${MAKE_FLAGS} clean
+		"${MAKE}" ${MAKE_FLAGS}
+	elif [[ "${COMMAND}" == "clean" ]]
+	then
+		"${MAKE}" ${MAKE_FLAGS} clean
+	else
+		"${MAKE}" ${MAKE_FLAGS}
+	fi
+elif [[ "${COMMAND}" == "" ]]
+then
+	"${MAKE}" ${MAKE_FLAGS}
+else
+	echo "Valid commands are ${VALID_COMMANDS[@]}"
+	exit 1
+fi

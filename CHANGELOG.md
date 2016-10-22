@@ -5,8 +5,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- `./bm build` script as a wrapper to `make` (#60).
+
 ### Changed
 - Modify README with better links, especially towards the wiki
+- all internal scripts use `./bm build` instead of `$MAKE` calls
 
 ## [v2.6.0] - 2016-10-16
 ### Added

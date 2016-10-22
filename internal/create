@@ -77,10 +77,10 @@ do
 			mv "${TEMP}" "${FILENAME}"
 			if [[ "${REBUILD_POLICY}" != "manual" ]]
 			then
-				${MAKE} ${MAKE_FLAGS}
+				./bm build all
 			else
 				echo "You must now run the following command to update the build"
-				echo "${MAKE} ${MAKE_FLAGS}"
+				echo "./bm build all"
 			fi
 			break;;
 		[Nn]* )
