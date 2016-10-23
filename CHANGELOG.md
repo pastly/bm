@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [v2.7.0] - 2016-10-22
 ### Added
 - `./bm build` script as a wrapper to `make` (#60)
 - `{toc}` macro (#40)
@@ -148,6 +148,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - author, date, mod date metadata
 - post id (unused)
 
+[v2.6.0]: https://gogs.system33.pw/mello/bm/src/v2.7.0
 [v2.6.0]: https://gogs.system33.pw/mello/bm/src/v2.6.0
 [v2.5.0]: https://gogs.system33.pw/mello/bm/src/v2.5.0
 [v2.4.0]: https://gogs.system33.pw/mello/bm/src/v2.4.0
