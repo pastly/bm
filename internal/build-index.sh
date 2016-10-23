@@ -5,7 +5,8 @@ source internal/globals.sh
 OUT_FILE="$1"
 shift
 
-TEMP=$(mktemp)
+TEMP="$(mktemp)"
+ERROR_FILE="$(mktemp)"
 
 function do_file {
 	FILE="$1"
@@ -25,7 +26,14 @@ function do_file {
 	IS_PINNED="$(op_get "${OPTIONS}" pinned)"
 	rm "${OPTIONS}"
 
-	CONTENT="$(get_and_parse_content "${FILE}" "trimmed")"
+	CONTENT="$(get_and_parse_content "${FILE}" "trimmed" "${ERROR_FILE}")"
+	if [[ "$(cat "${ERROR_FILE}")" != "" ]]
+	then
+		cat "${ERROR_FILE}"
+		rm "${TEMP}" "${ERROR_FILE}"
+		exit 1
+	fi
+
 	cat << EOF >> "${TEMP}"
 START_HOMEPAGE_PREVIEW_HTML
 START_POST_HEADER_HTML([[<a href='${POST_LINK}'>${TITLE}</a>]], [[${DATE}]], [[${AUTHOR}]])
@@ -90,4 +98,4 @@ EOF
 
 "${M4}" ${M4_FLAGS} "${TEMP}" > "${OUT_FILE}"
 
-rm "${TEMP}"
+rm "${TEMP}" "${ERROR_FILE}"

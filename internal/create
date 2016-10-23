@@ -45,7 +45,8 @@ ${COMMENT_CODE} tags will have the preceeding "${TAG_CODE}" removed and hyperlin
 ${COMMENT_CODE}
 ${COMMENT_CODE} You may manually specify where to end the homepage preview of this post by
 ${COMMENT_CODE} placing "${PREVIEW_STOP_CODE}" once somewhere. Otherwise, ${PREVIEW_MAX_WORDS} words will
-${COMMENT_CODE} be used.
+${COMMENT_CODE} be used. Place "${TOC_CODE}" somewhere to have BM automatically generate a table of
+${COMMENT_CODE} contents for you.
 ${COMMENT_CODE}
 ${COMMENT_CODE} Other than these special rules, use markdown to format your post.
 EOF
@@ -55,6 +56,7 @@ then
 ${COMMENT_CODE} Lines beginning with ${COMMENT_CODE} are comments and ignored.
 ${COMMENT_CODE} ${TAG_CODE}foo-bar is a tag named foo-bar.
 ${COMMENT_CODE} ${PREVIEW_STOP_CODE} to stop post preview instead of at ${PREVIEW_MAX_WORDS} words.
+${COMMENT_CODE} ${TOC_CODE} to generate a table of contents
 ${COMMENT_CODE} Options on line four. See https://gogs.system33.pw/mello/bm/wiki/Options
 EOF
 fi

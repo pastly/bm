@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
-- `./bm build` script as a wrapper to `make` (#60).
+- `./bm build` script as a wrapper to `make` (#60)
+- `{toc}` macro (#40)
+- `heading_ids` option
 
 ### Changed
 - Modify README with better links, especially towards the wiki

@@ -3,6 +3,7 @@
 COMMENT_CODE='///'
 TAG_CODE='@@'
 PREVIEW_STOP_CODE='{preview-stop}'
+TOC_CODE='{toc}'
 TITLE_SEPERATOR_CHAR='-'
 POST_EXTENSION='bm'
 POST_DIR='posts'
@@ -55,13 +56,13 @@ which "${MAKE}" &> /dev/null
 [[ "${REBUILD_POLICY}" == "" ]] && REBUILD_POLICY="asap"
 
 function op_get {
-	FILE="$1"
+	OPTION_FILE="$1"
 	OP="$2"
-	grep --word-regex "${OP}" "${FILE}" | cut -f 2
+	grep --word-regex "${OP}" "${OPTION_FILE}" | cut -f 2
 }
 
 function op_set {
-	FILE="$1"
+	OPTIONS_FILE="$1"
 	OP="$2"
 	VALUE="$3"
 	[[ "${VALUE}" == "" ]] && VALUE="1"
@@ -70,17 +71,20 @@ function op_set {
 		OP="${OP#no_}"
 		[[ "${VALUE}" == "0" ]] && VALUE="1" || VALUE="0"
 	fi
-	sed --in-place "/^${OP}\t/d" "${FILE}"
-	echo -e "${OP}\t${VALUE}" >> "${FILE}"
+	sed --in-place "/^${OP}\t/d" "${OPTIONS_FILE}"
+	echo -e "${OP}\t${VALUE}" >> "${OPTIONS_FILE}"
 }
 
 function op_is_set {
-	FILE="$1"
+	OPTION_FILE="$1"
 	OP="$2"
-	IS_SET="$(op_get "${FILE}" "${OP}")"
+	IS_SET="$(op_get "${OPTION_FILE}" "${OP}")"
 	[[ "${IS_SET}" == "" ]] && echo "" || echo "foobar"
 }
 
+# Parses the options in FILE into OP_FILE and returns the name of OP_FILE.
+# FILE must be an original post file. It cannot be temporary, even if it has
+# full headers and content
 function parse_options {
 	FILE="$1"
 	OPTIONS_IN="$(strip_comments "${FILE}" | head -n 4 | tail -n 1)"
@@ -97,12 +101,45 @@ function parse_options {
 		fi
 		op_set "${OP_FILE}" "${OP}" "${V}"
 	done
+	# Set post_file_name to FILE
+	# post_file_name should never be set as an option, this is just to
+	# make it easier to keep track of the original file name when we're
+	# many temporary files deep
+	op_set "${OP_FILE}" post_file_name "${FILE}"
 	echo "${OP_FILE}"
+}
+
+# checks that the combination of options is valid for the given file.
+# FILE is a full post file. It cannot be a temporary file, even if the
+# temporary file has headers in addition to content.
+# Also sets any options in the OPTIONS file that need setting
+# For example, if heading_ids is __unset__ coming in but FILE has a {toc}
+# then heading_ids will be set to true here
+function validate_options {
+	FILE="$1"
+	OPTIONS="$2"
+	if [[ "${FILE}" == "" ]] || [[ "${OPTIONS}" == "" ]]
+	then
+		echo "missing file or options file"
+		return
+	fi
+	# If user wants a TOC, then heading_ids must be unset or set to on.
+	# Set it to true if unset
+	[[ "$(file_has_toc_code "${FILE}")" != "" ]] && \
+		[[ "$(op_is_set "${OPTIONS}" heading_ids)" != "" ]] && \
+		[[ "$(op_get "${OPTIONS}" heading_ids)" == "0" ]] && \
+		echo "table of contents requested but heading_ids is off" && return
+	[[ "$(file_has_toc_code "${FILE}")" != "" ]] && op_set "${OPTIONS}" heading_ids
 }
 
 function strip_comments {
 	FILE="$1"
 	grep --invert-match "^${COMMENT_CODE}" "${FILE}"
+}
+
+function get_headers {
+	FILE="$1"
+	head -n 7 "${FILE}"
 }
 
 function get_date {
@@ -155,7 +192,7 @@ function strip_space {
 }
 
 function set_editor {
-	if [[ -z ${ED} ]]
+	if [[ "${ED}" == "" ]]
 	then
 		echo "\$ED not set."
 		while read -p "Enter name of desired text editor: " ED
@@ -199,6 +236,12 @@ function file_has_tag {
 	[[ "${LINE_COUNT}" > 0 ]] && echo "foobar" || echo ""
 }
 
+function file_has_toc_code {
+	FILE="$1"
+	LINE_COUNT=$(grep --ignore-case "${TOC_CODE}" "${FILE}" | wc -l)
+	[[ "${LINE_COUNT}" > 0 ]] && echo "foobar" || echo ""
+}
+
 function content_make_tag_links {
 	sed -e "s|${TAG_CODE}\([${TAG_ALPHABET}]\+\)|<a href='${ROOT_URL}/tags/\L\1.html'>\E\1</a>|g"
 }
@@ -229,39 +272,7 @@ function content_will_be_trimmed {
 			fi
 		done < "${CONTENT}"
 	fi
-	rm "${CONTENT}"
-	rm "${OPTIONS}"
-}
-
-function trim_content {
-	FILE="$1"
-	CONTENT="$(mktemp)"
-	get_content "${FILE}" > "${CONTENT}"
-	OPTIONS="$(parse_options "${FILE}")"
-	PREVIEW_STOP_LINE="$(grep --fixed-strings --line-number "${PREVIEW_STOP_CODE}" "${CONTENT}")"
-	if [[ "${PREVIEW_STOP_LINE}" != "" ]]
-	then
-		PREVIEW_STOP_LINE="$(echo "${PREVIEW_STOP_LINE}" | head -n 1 | sed -E 's|^([0-9]+):.*|\1|')"
-		head -n "${PREVIEW_STOP_LINE}" "${CONTENT}"
-	else
-		local PREVIEW_MAX_WORDS="${PREVIEW_MAX_WORDS}"
-		if [[ "$(op_is_set "${OPTIONS}" preview_max_words)" != "" ]]
-		then
-			PREVIEW_MAX_WORDS="$(op_get "${OPTIONS}" preview_max_words)"
-		fi
-		WORD_COUNT=0
-		while IFS= read DATA
-		do
-			echo "${DATA}"
-			WORD_COUNT=$((WORD_COUNT+$(echo "${DATA}" | wc -w)))
-			if (( "${WORD_COUNT}" >= "${PREVIEW_MAX_WORDS}" ))
-			then
-				break
-			fi
-		done < "${CONTENT}"
-	fi
-	rm "${CONTENT}"
-	rm "${OPTIONS}"
+	rm "${CONTENT}" "${OPTIONS}"
 }
 
 function get_and_parse_content {
@@ -269,12 +280,25 @@ function get_and_parse_content {
 	shift
 	DO_TRIM="$1"
 	shift
-	if [[ "${DO_TRIM}" != "" ]]
+	ERROR_FILE="$1"
+	shift
+	OPTIONS="$(parse_options "${FILE}")"
+	RET="$(validate_options "${FILE}" "${OPTIONS}")"
+	if [[ "${RET}" != "" ]]
 	then
-		trim_content "${FILE}" | ${MARKDOWN} | content_make_tag_links | parse_out_our_macros
-	else
-		get_content "${FILE}" | ${MARKDOWN} | content_make_tag_links | parse_out_our_macros
+		echo "BM: Error parsing options: ${RET}" >> "${ERROR_FILE}"
+		rm "${OPTIONS}"
+		exit 1
 	fi
+
+	get_content "${FILE}" | \
+	pre_markdown "${DO_TRIM}" "${OPTIONS}" | \
+	${MARKDOWN} | \
+	post_markdown "${OPTIONS}" | \
+	content_make_tag_links | \
+	parse_out_our_macros
+
+	rm "${OPTIONS}"
 }
 
 function sort_by_date {
@@ -334,7 +358,8 @@ function hash_data {
 }
 
 function parse_out_our_macros {
-	sed -e "s|${PREVIEW_STOP_CODE}||g"
+	sed -e "s|${PREVIEW_STOP_CODE}||g" | \
+	sed -e "s|${TOC_CODE}||g" # shouldn't be necessary as it will have been replaced already
 }
 
 function generate_id {
@@ -421,4 +446,164 @@ function only_pinned_posts {
 	do
 		echo "${ARRAY[$I]}"
 	done
+}
+
+# options must be validated before running this
+function pre_markdown {
+	DO_TRIM="$1"
+	shift
+	OPTIONS="$1"
+	shift
+	TEMP_IN="$(mktemp)"
+	TEMP_OUT="$(mktemp)"
+	cat > "${TEMP_IN}"
+	if [[ "$(file_has_toc_code "${TEMP_IN}")" != "" ]]
+	then
+		pre_markdown_build_toc "${TEMP_IN}" "${OPTIONS}" > "${TEMP_OUT}"
+		cp "${TEMP_OUT}" "${TEMP_IN}"
+	fi
+	if [[ "${DO_TRIM}" != "" ]]
+	then
+		pre_markdown_trim_content "${TEMP_IN}" "${OPTIONS}" > "${TEMP_OUT}"
+		cp "${TEMP_OUT}" "${TEMP_IN}"
+	fi
+	cat "${TEMP_IN}"
+	rm "${TEMP_IN}" "${TEMP_OUT}"
+}
+
+# options must be validated before running this
+function pre_markdown_trim_content {
+	CONTENT="$1"
+	shift
+	OPTIONS="$1"
+	shift
+	PREVIEW_STOP_LINE="$(grep --fixed-strings --line-number "${PREVIEW_STOP_CODE}" "${CONTENT}")"
+	if [[ "${PREVIEW_STOP_LINE}" != "" ]]
+	then
+		PREVIEW_STOP_LINE="$(echo "${PREVIEW_STOP_LINE}" | head -n 1 | sed -E 's|^([0-9]+):.*|\1|')"
+		head -n "${PREVIEW_STOP_LINE}" "${CONTENT}"
+	else
+		local PREVIEW_MAX_WORDS="${PREVIEW_MAX_WORDS}"
+		if [[ "$(op_is_set "${OPTIONS}" preview_max_words)" != "" ]]
+		then
+			PREVIEW_MAX_WORDS="$(op_get "${OPTIONS}" preview_max_words)"
+		fi
+		WORD_COUNT=0
+		while IFS= read DATA
+		do
+			echo "${DATA}"
+			WORD_COUNT=$((WORD_COUNT+$(echo "${DATA}" | wc -w)))
+			if (( "${WORD_COUNT}" >= "${PREVIEW_MAX_WORDS}" ))
+			then
+				break
+			fi
+		done < "${CONTENT}"
+	fi
+}
+
+
+# options must be validated before running this
+function pre_markdown_build_toc {
+	IN_FILE="$1"
+	shift
+	OPTIONS="$1"
+	shift
+	HTML_URL="$(op_get "${OPTIONS}" post_file_name)"
+	HTML_URL="${ROOT_URL}/posts/$(basename "${HTML_URL}" ".${POST_EXTENSION}").html"
+	if [[ "$(file_has_toc_code "${IN_FILE}")" != "" ]]
+	then
+		TEMP_HTML="$(mktemp)"
+		cat "${IN_FILE}" | "${MARKDOWN}" > "${TEMP_HTML}"
+		HEADINGS=( )
+		LINE_NUMBERS=( )
+		while read -r LINE
+		do
+			LINE_NUMBERS+=("$(echo ${LINE} | cut -d ':' -f 1)")
+			HEADING="$(echo ${LINE} | cut -d ':' -f 2- | sed 's|<h[[:digit:]]>\(.*\)</h[[:digit:]]>|\1|')"
+			HEADING="$(echo "${HEADING}" | to_lower | strip_punctuation | strip_space)"
+			WORKING_HEADING="#${HEADING}"
+			I="0"
+			while [[ " ${HEADINGS[@]} " =~ " ${WORKING_HEADING} " ]]
+			do
+				I=$((I+1))
+				WORKING_HEADING="#${HEADING}-${I}"
+			done
+			HEADINGS+=(${WORKING_HEADING})
+		done < <(grep --line-number "<h[[:digit:]]>" "${TEMP_HTML}")
+		I="0"
+		for HEADING in ${HEADINGS[@]}
+		do
+			LINE_NUM="${LINE_NUMBERS["${I}"]}"
+			sed --in-place \
+				-e "${LINE_NUM}s|<h\([[:digit:]]\)>|<h\1><a href=\'${HTML_URL}${HEADING}\'>|" \
+				-e "${LINE_NUM}s|</h\([[:digit:]]\)>|</a></h\1>|" \
+				"${TEMP_HTML}"
+			I=$((I+1))
+			#(( "${I}" > "2" )) && break
+		done
+		TOC="$(grep "<h[[:digit:]]>" "${TEMP_HTML}" |\
+			sed 's|<h1>|- |' |\
+			sed 's|<h2>|   - |' |\
+			sed 's|<h3>|      - |' |\
+			sed 's|<h4>|         - |' |\
+			sed 's|<h5>|            - |' |\
+			sed 's|<h6>|               - |' |\
+			sed 's|<h7>|                  - |' |\
+			sed 's|<h8>|                     - |' |\
+			sed 's|<h9>|                        - |' |\
+			sed 's|</h[[:digit:]]>||')"
+		# Somehow this works to allow sed to replace '{toc}' (single line) with
+		# ${TOC_ESCAPED} (many lines)
+		TOC_ESCAPED="$(printf '%s\n' "${TOC}" | sed 's|[\/&]|\\&|g;s|$|\\|')"
+		TOC_ESCAPED="${TOC_ESCAPED%?}"
+		sed "s|${TOC_CODE}|\\n${TOC_ESCAPED}\\n|" "${IN_FILE}"
+		rm "${TEMP_HTML}"
+	else
+		cat "${IN_FILE}"
+	fi
+}
+
+# options must be validated before running this
+function post_markdown {
+	OPTIONS="$1"
+	TEMP_IN="$(mktemp)"
+	TEMP_OUT="$(mktemp)"
+	cat > "${TEMP_IN}"
+	if [[ "$(op_is_set "${OPTIONS}" heading_ids)" != "" ]] && [[ "$(op_get "${OPTIONS}" heading_ids)" != "0" ]]
+	then
+		HTML_URL="$(op_get "${OPTIONS}" post_file_name)"
+		HTML_URL="${ROOT_URL}/posts/$(basename "${HTML_URL}" ".${POST_EXTENSION}").html"
+		post_markdown_heading_ids "${HTML_URL}" "${TEMP_IN}" > "${TEMP_OUT}"
+		cp "${TEMP_OUT}" "${TEMP_IN}"
+	fi
+	cat "${TEMP_IN}"
+	rm "${TEMP_IN}" "${TEMP_OUT}"
+}
+
+function post_markdown_heading_ids {
+	HTML_URL="$1"
+	shift
+	HTML_CONTENT_FILE="$1"
+	shift
+	HEADINGS=( )
+	while read LINE
+	do
+		if [[ "$(echo "${LINE}" | grep "^<h[[:digit:]]>.*</h[[:digit:]]>" )" == "" ]]
+		then
+			echo "${LINE}"
+			continue
+		fi
+		HEADING="$(echo ${LINE} | cut -d ':' -f 2- | sed 's|^<h[[:digit:]]>\(.*\)</h[[:digit:]]>|\1|')"
+		HEADING="$(echo "${HEADING}" | to_lower | strip_punctuation | strip_space)"
+		WORKING_HEADING="${HEADING}"
+		while [[ " ${HEADINGS[@]} " =~ " ${WORKING_HEADING} " ]]
+		do
+			I=$((I+1))
+			WORKING_HEADING="${HEADING}-${I}"
+		done
+		HEADINGS+=(${WORKING_HEADING})
+		echo "${LINE}" | sed \
+			-e "${LINE_NUM}s|^<h\([[:digit:]]\)>|<h\1 id=\'${WORKING_HEADING}'>|" \
+			-e "${LINE_NUM}s|</h\([[:digit:]]\)>|</h\1>|"
+	done < "${HTML_CONTENT_FILE}"
 }
