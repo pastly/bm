@@ -148,7 +148,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - author, date, mod date metadata
 - post id (unused)
 
-[v2.6.0]: https://gogs.system33.pw/mello/bm/src/v2.7.0
+[v2.7.0]: https://gogs.system33.pw/mello/bm/src/v2.7.0
 [v2.6.0]: https://gogs.system33.pw/mello/bm/src/v2.6.0
 [v2.5.0]: https://gogs.system33.pw/mello/bm/src/v2.5.0
 [v2.4.0]: https://gogs.system33.pw/mello/bm/src/v2.4.0
