@@ -39,6 +39,9 @@ m4_include(include/post.header.mod.date.html)
 m4_define([[POST_HEADER_PINNED_HTML]],
 m4_include(include/post.header.pinned.html)
 )
+m4_define([[POST_HEADER_PERMALINK_HTML]],
+m4_include(include/post.header.permalink.html)
+)
 m4_define([[END_POST_HEADER_HTML]],
 </div>
 )

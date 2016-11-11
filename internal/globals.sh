@@ -16,6 +16,7 @@ BUILT_STATIC_DIR="${BUILD_DIR}/static"
 M4="$(which m4)"
 M4_FLAGS="--prefix-builtins"
 MAKE="make"
+MAKE_FLAGS="-s -np"
 MAKE_FLAGS="-s"
 MKDIR="mkdir"
 MKDIR_FLAGS="-p"
@@ -67,6 +68,7 @@ which "${MAKE}" &> /dev/null
 	SIGNIFICANT_MOD_AFTER="$((${SIGNIFICANT_MOD_AFTER}))"
 [[ "${CREATE_HELP_VERBOSITY}" == "" ]] && CREATE_HELP_VERBOSITY="long"
 [[ "${REBUILD_POLICY}" == "" ]] && REBUILD_POLICY="asap"
+[[ "${MAKE_SHORT_POSTS}" == "" ]] && MAKE_SHORT_POSTS="yes"
 
 # Done gathering and setting variables, so stop auto-exporting
 

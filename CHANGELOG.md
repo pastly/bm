@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- config option to make permalinks/shortlinks (#66)
+
 ### Changed
 - move many Makefile variables definitions to globals.sh
 

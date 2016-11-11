@@ -16,6 +16,8 @@ function build_post {
 	DATE="$(ts_to_date "${DATE_FRMT}" "${DATE}")"
 	MOD_DATE="$(ts_to_date "${LONG_DATE_FRMT}" "${MOD_DATE}")"
 	AUTHOR="$(get_author "${IN}")"
+	SHORT_POST="${BUILT_SHORT_POST_DIR}/$(get_id "${IN}").html"
+	PERMALINK="${ROOT_URL}/p/$(get_id "${IN}").html"
 
 	CONTENT="$(get_and_parse_content "${IN}" "" "${ERROR_FILE}")"
 	if [[ "$(cat "${ERROR_FILE}")" != "" ]]
@@ -37,6 +39,12 @@ EOF
 POST_HEADER_MOD_DATE_HTML([[${MOD_DATE}]])
 EOF
 	fi
+	if [[ "${MAKE_SHORT_POSTS}" == "yes" ]]
+	then
+		cat >> ${OUT_TEMP} << EOF
+POST_HEADER_PERMALINK_HTML([[${PERMALINK}]])
+EOF
+	fi
 	cat >> ${OUT_TEMP} << EOF
 END_POST_HEADER_HTML
 ${CONTENT}
@@ -44,10 +52,18 @@ CONTENT_PAGE_FOOTER_HTML([[${ROOT_URL}]], [[${VERSION}]])
 END_HTML
 EOF
 	"${M4}" ${M4_FLAGS} "${OUT_TEMP}" > "${OUT}"
+	if [[ "${MAKE_SHORT_POSTS}" == "yes" ]]
+	then
+		cp "${OUT}" "${SHORT_POST}"
+	fi
 	rm "${OUT_TEMP}" "${ERROR_FILE}"
 }
 
 "${MKDIR}" ${MKDIR_FLAGS} "${BUILT_POST_DIR}"
+if [[ "${MAKE_SHORT_POSTS}" == "yes" ]]
+then
+	"${MKDIR}" ${MKDIR_FLAGS} "${BUILT_SHORT_POST_DIR}"
+fi
 
 OUT_FILE="$1"
 shift

@@ -19,6 +19,7 @@ function do_file {
 	DATE="$(ts_to_date "${DATE_FRMT}" "${DATE}")"
 	MOD_DATE="$(ts_to_date "${LONG_DATE_FRMT}" "${MOD_DATE}")"
 	AUTHOR="$(get_author "${FILE}")"
+	PERMALINK="${ROOT_URL}/p/$(get_id "${FILE}").html"
 
 	CONTENT_IS_TRIMMED="$(content_will_be_trimmed "${FILE}")"
 
@@ -42,6 +43,12 @@ EOF
 	then
 		cat << EOF >> "${TEMP}"
 POST_HEADER_MOD_DATE_HTML([[${MOD_DATE}]])
+EOF
+	fi
+	if [[ "${MAKE_SHORT_POSTS}" == "yes" ]]
+	then
+		cat >> ${TEMP} << EOF
+POST_HEADER_PERMALINK_HTML([[${PERMALINK}]])
 EOF
 	fi
 	if [[ "${IS_PINNED}" != "" ]] && (( "${IS_PINNED}" > "0" ))
