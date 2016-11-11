@@ -63,11 +63,11 @@ h2#blogsubtitle {
 h1#posttitle {
 	margin-bottom:5px;
 }
-p.postsubtitle {
+.postsubtitle {
 	margin-top:5px;
 	margin-bottom:0px;
 }
-p.postsubtitle:last-child {
+.postsubtitle:last-child {
 	margin-bottom:40px;
 }
 blockquote { 
