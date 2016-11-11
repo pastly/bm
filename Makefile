@@ -3,20 +3,8 @@ CMD_BUILD_POSTS_INDEX=./internal/build-posts-index.sh
 CMD_BUILD_INDEX=./internal/build-index.sh
 CMD_BUILD_TAGS=./internal/build-tags.sh
 
-M4=m4
-M4_FLAGS=--prefix-builtins
-
-MKDIR=mkdir
-MKDIR_FLAGS=-p
-
-RM=rm
-RM_FLAGS=-fr
-
 .PHONY: all clean
 
-POST_DIR=posts
-BUILD_DIR=build
-INCLUDE_DIR=include
 BUILT_POST_DIR=$(BUILD_DIR)/posts
 BUILT_TAG_DIR=$(BUILD_DIR)/tags
 BUILT_STATIC_DIR=$(BUILD_DIR)/static

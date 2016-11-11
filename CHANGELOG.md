@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Changed
+- move many Makefile variables definitions to globals.sh
+
 ## [v2.7.0] - 2016-10-22
 ### Added
 - `./bm build` script as a wrapper to `make` (#60)

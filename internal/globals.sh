@@ -7,14 +7,23 @@ TOC_CODE='{toc}'
 TITLE_SEPERATOR_CHAR='-'
 POST_EXTENSION='bm'
 POST_DIR='posts'
+BUILD_DIR="build"
+INCLUDE_DIR="include"
 M4="$(which m4)"
 M4_FLAGS="--prefix-builtins"
 MAKE="make"
 MAKE_FLAGS="-s"
+MKDIR="mkdir"
+MKDIR_FLAGS="-p"
+RM="rm"
+RM_FLAGS="-fr"
 VERSION="v2.7.0"
 TAG_ALPHABET="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-"
 ID_ALPHABET="123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 KNOWN_HASH_PROGRAMS="sha1sum sha1 sha256sum sha256 md5sum md5 cat"
+
+# Variable gathering and setting all needs to be auto-exported
+set -a
 
 source include/bm.conf.example
 [[ -f include/bm.conf ]] && source include/bm.conf
@@ -54,6 +63,9 @@ which "${MAKE}" &> /dev/null
 	SIGNIFICANT_MOD_AFTER="$((${SIGNIFICANT_MOD_AFTER}))"
 [[ "${CREATE_HELP_VERBOSITY}" == "" ]] && CREATE_HELP_VERBOSITY="long"
 [[ "${REBUILD_POLICY}" == "" ]] && REBUILD_POLICY="asap"
+
+# Done gathering and setting variables, so stop auto-exporting
+set +a
 
 function op_get {
 	OPTION_FILE="$1"
