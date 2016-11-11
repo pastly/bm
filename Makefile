@@ -5,10 +5,6 @@ CMD_BUILD_TAGS=./internal/build-tags.sh
 
 .PHONY: all clean
 
-BUILT_POST_DIR=$(BUILD_DIR)/posts
-BUILT_TAG_DIR=$(BUILD_DIR)/tags
-BUILT_STATIC_DIR=$(BUILD_DIR)/static
-
 # These are the files that always exist
 # AKA source files
 POST_FILES := $(shell find $(POST_DIR) -name '*.bm')
