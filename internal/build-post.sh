@@ -47,8 +47,7 @@ EOF
 	rm "${OUT_TEMP}" "${ERROR_FILE}"
 }
 
-OUT_DIR="$(dirname $1)"
-mkdir -p "${OUT_DIR}"
+"${MKDIR}" ${MKDIR_FLAGS} "${BUILT_POST_DIR}"
 
 OUT_FILE="$1"
 shift

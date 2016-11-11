@@ -7,7 +7,7 @@ shift
 TEMP_INDEX_FILE=$(mktemp)
 TEMP_TAG_FILE=$(mktemp)
 OUT_DIR=$(dirname "${INDEX_FILE}")
-mkdir -p "${OUT_DIR}"
+"${MKDIR}" ${MKDIR_FLAGS} "${OUT_DIR}"
 
 FILES_WITH_TAGS=""
 FWT_I=0
