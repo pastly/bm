@@ -69,7 +69,6 @@ which "${MAKE}" &> /dev/null
 [[ "${REBUILD_POLICY}" == "" ]] && REBUILD_POLICY="asap"
 
 # Done gathering and setting variables, so stop auto-exporting
-set +a
 
 function op_get {
 	OPTION_FILE="$1"
@@ -623,3 +622,4 @@ function post_markdown_heading_ids {
 			-e "${LINE_NUM}s|</h\([[:digit:]]\)>|</h\1>|"
 	done < "${HTML_CONTENT_FILE}"
 }
+set +a
