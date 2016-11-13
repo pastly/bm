@@ -50,12 +50,13 @@ then
 		echo "Warning: ${FILE} moving to ${NEW_FILE}"
 		rm "${FILE}"
 		FILE="${NEW_FILE}"
+		TITLE_CHANGED="foobar"
 	fi
 	sed -i "2,2{s/^${OLD_MOD_DATE}$/$(date +'%s')/;}" "${TEMP}"
 	cp "${TEMP}" "${FILE}"
 	if [[ "${REBUILD_POLICY}" != "manual" ]]
 	then
-		./bm build all
+		[[ "${TITLE_CHANGED}" == "" ]] && ./bm build all || ./bm build rebuild
 	else
 		echo "You must now run the following command to update the build"
 		echo "./bm build all"

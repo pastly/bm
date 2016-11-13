@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - move many Makefile variables definitions to globals.sh
 
+### Fixed
+- force full rebuild if post title changes (#68)
+
 ### Removed
 - `-v` and `--version` options from `bm` script
 
