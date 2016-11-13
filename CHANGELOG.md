@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - config option to make permalinks/shortlinks (#66)
+- `version` command as `--version` prints too much for scripts (#70)
 
 ### Changed
 - move many Makefile variables definitions to globals.sh
+
+### Removed
+- `-v` and `--version` options from `bm` script
 
 ## [v2.7.0] - 2016-10-22
 ### Added

@@ -3,7 +3,7 @@
 COMMAND="$1"
 shift
 
-HELP_COMMANDS=( -? -h --help -v --version )
+HELP_COMMANDS=( -? -h --help )
 
 if [[ "${COMMAND}" == "" ]] || \
    [[ " ${HELP_COMMANDS[@]} " =~ " ${COMMAND} " ]]
@@ -13,7 +13,7 @@ then
 	echo "Wiki at https://gogs.system33.pw/mello/bm/wiki"
 fi
 
-VALID_COMMANDS=( build create edit list remove )
+VALID_COMMANDS=( build create edit list remove version )
 
 if [[ " ${VALID_COMMANDS[@]} " =~ " ${COMMAND} " ]]
 then
