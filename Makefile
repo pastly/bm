@@ -4,6 +4,7 @@ CMD_BUILD_INDEX=./internal/build-index.sh
 CMD_BUILD_TAGS=./internal/build-tags.sh
 
 .PHONY: all clean
+SHELL=/bin/bash
 
 # These are the files that always exist
 # AKA source files
@@ -27,7 +28,32 @@ BUILT_META_FILES := \
 	$(BUILT_POST_DIR)/index.html \
 	$(BUILT_TAG_DIR)/index.html
 
-all: $(BUILT_POSTS) $(BUILT_STATICS) $(BUILT_META_FILES)
+POST_METADATA_FILES := $(foreach file,$(POST_FILES),$(METADATA_DIR)/$(shell get_id $(file)))
+POST_METADATA_FILES := $(foreach dir,$(POST_METADATA_FILES),\
+	$(dir)/headers \
+	$(dir)/tags \
+	$(dir)/options)
+
+all: $(BUILT_POSTS) $(BUILT_STATICS) $(BUILT_META_FILES) $(POST_METADATA_FILES)
+
+$(METADATA_DIR)/%/headers: $(POST_DIR)/*/*/*-%.bm
+	$(MKDIR) $(MKDIR_FLAGS) $(shell dirname $@)
+	get_headers $< > $@
+
+$(METADATA_DIR)/%/tags: $(POST_DIR)/*/*/*-%.bm
+	$(MKDIR) $(MKDIR_FLAGS) $(shell dirname $@)
+	get_tags $< > $@
+
+$(METADATA_DIR)/%/options: $(POST_DIR)/*/*/*-%.bm
+	$(MKDIR) $(MKDIR_FLAGS) $(shell dirname $@)
+	mv $(shell parse_options $<) $@
+	validate_options $< $@
+
+$(METADATA_DIR)/%/tags: $(POST_DIR)/*/*/*-%.bm $(METADATA_DIR)/%/headers
+	@echo $@
+
+$(METADATA_DIR)/%/toc: $(POST_DIR)/*/*/*-%.bm
+	@echo $@ $<
 
 # Target for posts
 # ** If directory structure of POST_DIR every changes, this will need updating
