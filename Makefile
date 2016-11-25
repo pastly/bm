@@ -55,9 +55,6 @@ $(METADATA_DIR)/%/options: $(POST_DIR)/*/*/*-%.bm
 	mv $(shell parse_options $<) $@
 	validate_options $< $@
 
-$(METADATA_DIR)/%/tags: $(POST_DIR)/*/*/*-%.bm $(METADATA_DIR)/%/headers
-	@echo $@
-
 # Target for posts
 # ** If directory structure of POST_DIR every changes, this will need updating
 # ** as it is not generalized anymore
