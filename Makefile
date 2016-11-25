@@ -43,15 +43,15 @@ $(METADATA_DIR)/postsbydate: $(POST_FILES)
 	for POST in `sort_by_date $^`; do get_id $$POST; done > $@
 
 $(METADATA_DIR)/%/headers: $(POST_DIR)/*/*/*-%.bm
-	$(MKDIR) $(MKDIR_FLAGS) $(shell dirname $@)
+	$(MKDIR) $(MKDIR_FLAGS) $(@D)
 	get_headers $< > $@
 
 $(METADATA_DIR)/%/tags: $(POST_DIR)/*/*/*-%.bm
-	$(MKDIR) $(MKDIR_FLAGS) $(shell dirname $@)
+	$(MKDIR) $(MKDIR_FLAGS) $(@D)
 	get_tags $< > $@
 
 $(METADATA_DIR)/%/options: $(POST_DIR)/*/*/*-%.bm
-	$(MKDIR) $(MKDIR_FLAGS) $(shell dirname $@)
+	$(MKDIR) $(MKDIR_FLAGS) $(@D)
 	mv $(shell parse_options $<) $@
 	validate_options $< $@
 
