@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-set -a
 source internal/globals.sh
-set +a
 
 SEARCH_VALUE="$@"
 SEARCH_VALUE="$(echo ${SEARCH_VALUE} | to_lower | strip_punctuation | strip_space)"

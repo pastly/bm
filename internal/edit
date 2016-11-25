@@ -2,9 +2,7 @@
 
 [[ "$1" == "" ]] && ./internal/list && exit 0
 
-set -a
 source internal/globals.sh
-set +a
 
 set_editor
 

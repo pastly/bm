@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Variable gathering and setting all needs to be auto-exported
+set -a
 
 COMMENT_CODE='///'
 TAG_CODE='@@'
@@ -27,9 +29,6 @@ VERSION="v3.0.0-develop"
 TAG_ALPHABET="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-"
 ID_ALPHABET="123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 KNOWN_HASH_PROGRAMS="sha1sum sha1 sha256sum sha256 md5sum md5 cat"
-
-# Variable gathering and setting all needs to be auto-exported
-set -a
 
 source include/bm.conf.example
 [[ -f include/bm.conf ]] && source include/bm.conf
@@ -70,8 +69,6 @@ which "${MAKE}" &> /dev/null
 [[ "${CREATE_HELP_VERBOSITY}" == "" ]] && CREATE_HELP_VERBOSITY="long"
 [[ "${REBUILD_POLICY}" == "" ]] && REBUILD_POLICY="asap"
 [[ "${MAKE_SHORT_POSTS}" == "" ]] && MAKE_SHORT_POSTS="yes"
-
-# Done gathering and setting variables, so stop auto-exporting
 
 function op_get {
 	OPTION_FILE="$1"

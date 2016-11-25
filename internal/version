@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-set -a
 source internal/globals.sh
-set +a
 
 echo "${VERSION}"
 exit 0
