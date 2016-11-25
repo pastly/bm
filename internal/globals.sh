@@ -30,6 +30,7 @@ TAG_ALPHABET="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-"
 ID_ALPHABET="123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 KNOWN_HASH_PROGRAMS="sha1sum sha1 sha256sum sha256 md5sum md5 cat"
 
+source internal/options.sh
 source include/bm.conf.example
 [[ -f include/bm.conf ]] && source include/bm.conf
 
@@ -69,33 +70,6 @@ which "${MAKE}" &> /dev/null
 [[ "${CREATE_HELP_VERBOSITY}" == "" ]] && CREATE_HELP_VERBOSITY="long"
 [[ "${REBUILD_POLICY}" == "" ]] && REBUILD_POLICY="asap"
 [[ "${MAKE_SHORT_POSTS}" == "" ]] && MAKE_SHORT_POSTS="yes"
-
-function op_get {
-	OPTION_FILE="$1"
-	OP="$2"
-	grep --word-regex "${OP}" "${OPTION_FILE}" | cut -f 2
-}
-
-function op_set {
-	OPTIONS_FILE="$1"
-	OP="$2"
-	VALUE="$3"
-	[[ "${VALUE}" == "" ]] && VALUE="1"
-	if [[ ${OP} =~ ^no_ ]]
-	then
-		OP="${OP#no_}"
-		[[ "${VALUE}" == "0" ]] && VALUE="1" || VALUE="0"
-	fi
-	sed --in-place "/^${OP}\t/d" "${OPTIONS_FILE}"
-	echo -e "${OP}\t${VALUE}" >> "${OPTIONS_FILE}"
-}
-
-function op_is_set {
-	OPTION_FILE="$1"
-	OP="$2"
-	IS_SET="$(op_get "${OPTION_FILE}" "${OP}")"
-	[[ "${IS_SET}" == "" ]] && echo "" || echo "foobar"
-}
 
 # Parses the options in FILE into OP_FILE and returns the name of OP_FILE.
 # FILE must be an original post file. It cannot be temporary, even if it has

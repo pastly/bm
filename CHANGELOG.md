@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - move many Makefile variables definitions to globals.sh
+- moved generic option functions to options.sh
 
 ### Fixed
 - force full rebuild if post title changes (#68)
