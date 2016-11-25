@@ -148,6 +148,7 @@ function validate_options {
 		[[ "$(op_get "${OPTIONS}" heading_ids)" == "0" ]] && \
 		echo "table of contents requested but heading_ids is off" && return
 	[[ "$(file_has_toc_code "${FILE}")" != "" ]] && op_set "${OPTIONS}" heading_ids
+	return 0
 }
 
 function strip_comments {
