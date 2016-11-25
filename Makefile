@@ -58,9 +58,6 @@ $(METADATA_DIR)/%/options: $(POST_DIR)/*/*/*-%.bm
 $(METADATA_DIR)/%/tags: $(POST_DIR)/*/*/*-%.bm $(METADATA_DIR)/%/headers
 	@echo $@
 
-$(METADATA_DIR)/%/toc: $(POST_DIR)/*/*/*-%.bm
-	@echo $@ $<
-
 # Target for posts
 # ** If directory structure of POST_DIR every changes, this will need updating
 # ** as it is not generalized anymore
