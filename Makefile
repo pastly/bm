@@ -93,5 +93,6 @@ $(USER_CONF_FILE): $(INCLUDE_DIR)/bm.conf.example
 	[ ! -f $@ ] && grep -vE '^#' $< > $@ || touch $@
 
 clean:
-	$(RM) $(RM_FLAGS) -- $(BUILD_DIR)/*
+	$(RM) $(RM_FLAGS) -- $(BUILD_DIR)/* $(METADATA_DIR)/*
 	[ -d $(BUILD_DIR) ] && [ ! -L $(BUILD_DIR) ] && rmdir $(BUILD_DIR) || exit 0
+	[ -d $(METADATA_DIR) ] && [ ! -L $(METADATA_DIR) ] && rmdir $(METADATA_DIR) || exit 0
