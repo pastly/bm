@@ -36,10 +36,12 @@ POST_METADATA_FILES := $(foreach file,$(POST_FILES),$(METADATA_DIR)/$(shell get_
 POST_METADATA_FILES := $(foreach dir,$(POST_METADATA_FILES),\
 	$(dir)/headers \
 	$(dir)/tags \
-	$(dir)/options)
+	$(dir)/options \
+	$(dir)/content \
+	$(dir)/previewcontent)
 
-all: $(OUT_DIRS) $(METADATA_FILES) $(POST_METADATA_FILES) #\
-#	$(BUILT_POSTS) $(BUILT_STATICS) $(BUILT_META_FILES)
+all: $(OUT_DIRS) $(METADATA_FILES) $(POST_METADATA_FILES) \
+	$(BUILT_POSTS) $(BUILT_STATICS) $(BUILT_META_FILES)
 
 $(OUT_DIRS):
 	$(MKDIR) $(MKDIR_FLAGS) $@
@@ -49,16 +51,30 @@ $(METADATA_DIR)/postsbydate: $(POST_FILES) | $(OUT_DIRS)
 
 $(METADATA_DIR)/%/headers: $(POST_DIR)/*/*/*-%.bm
 	$(MKDIR) $(MKDIR_FLAGS) $(@D)
+	@echo $@
 	get_headers $< > $@
 
 $(METADATA_DIR)/%/tags: $(POST_DIR)/*/*/*-%.bm
 	$(MKDIR) $(MKDIR_FLAGS) $(@D)
+	@echo $@
 	get_tags $< > $@
 
 $(METADATA_DIR)/%/options: $(POST_DIR)/*/*/*-%.bm
 	$(MKDIR) $(MKDIR_FLAGS) $(@D)
+	@echo $@
 	mv $(shell parse_options $<) $@
 	validate_options $< $@
+
+$(METADATA_DIR)/%/content: $(POST_DIR)/*/*/*-%.bm
+	$(MKDIR) $(MKDIR_FLAGS) $(@D)
+	@echo $@
+	get_content $< > $@
+
+$(METADATA_DIR)/%/previewcontent: $(METADATA_DIR)/%/content $(METADATA_DIR)/%/options
+	$(MKDIR) $(MKDIR_FLAGS) $(@D)
+	@echo $@
+	get_preview_content $(@D)/content $(@D)/options > $@
+	#get_preview_content $< > $@
 
 # Target for posts
 # ** If directory structure of POST_DIR every changes, this will need updating

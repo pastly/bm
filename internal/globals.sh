@@ -462,7 +462,7 @@ function pre_markdown {
 }
 
 # options must be validated before running this
-function pre_markdown_trim_content {
+function get_preview_content {
 	CONTENT="$1"
 	shift
 	OPTIONS="$1"
@@ -471,7 +471,7 @@ function pre_markdown_trim_content {
 	if [[ "${PREVIEW_STOP_LINE}" != "" ]]
 	then
 		PREVIEW_STOP_LINE="$(echo "${PREVIEW_STOP_LINE}" | head -n 1 | sed -E 's|^([0-9]+):.*|\1|')"
-		head -n "${PREVIEW_STOP_LINE}" "${CONTENT}"
+		head -n "${PREVIEW_STOP_LINE}" "${CONTENT}" | sed 's|{preview-stop}||'
 	else
 		local PREVIEW_MAX_WORDS="${PREVIEW_MAX_WORDS}"
 		if [[ "$(op_is_set "${OPTIONS}" preview_max_words)" != "" ]]
