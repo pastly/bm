@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - config option to make permalinks/shortlinks (#66)
 - `version` command as `--version` prints too much for scripts (#70)
+- add branch descriptions to readme
 
 ### Changed
 - move many Makefile variables definitions to globals.sh

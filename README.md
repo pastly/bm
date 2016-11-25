@@ -35,3 +35,12 @@ Please report issues via the [issue tracker]
 [configuration]: https://gogs.system33.pw/mello/bm/wiki/Configuration
 [options]: https://gogs.system33.pw/mello/bm/wiki/Options
 [issue tracker]: https://gogs.system33.pw/mello/bm/issues
+
+# Branches
+
+- Master should always be the same as the newest release.
+- Each release has a branch, and each should also have a tag by the same name.
+  Branches may get pruned eventually, but tags will always remain.
+- Next is the active development branch. It's _probably_ stable enough to not
+  delete all your posts, and sometimes it will actually do useful things with
+  them. Don't count on it.
