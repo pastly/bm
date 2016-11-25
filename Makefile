@@ -28,13 +28,18 @@ BUILT_META_FILES := \
 	$(BUILT_POST_DIR)/index.html \
 	$(BUILT_TAG_DIR)/index.html
 
+METADATA_FILES := $(METADATA_DIR)/postsbydate
 POST_METADATA_FILES := $(foreach file,$(POST_FILES),$(METADATA_DIR)/$(shell get_id $(file)))
 POST_METADATA_FILES := $(foreach dir,$(POST_METADATA_FILES),\
 	$(dir)/headers \
 	$(dir)/tags \
 	$(dir)/options)
 
-all: $(BUILT_POSTS) $(BUILT_STATICS) $(BUILT_META_FILES) $(POST_METADATA_FILES)
+all: $(BUILT_POSTS) $(BUILT_STATICS) $(BUILT_META_FILES) $(METADATA_FILES) $(POST_METADATA_FILES)
+
+$(METADATA_DIR)/postsbydate: $(POST_FILES)
+	$(MKDIR) $(MKDIR_FLAGS) $(@D)
+	for POST in `sort_by_date $^`; do get_id $$POST; done > $@
 
 $(METADATA_DIR)/%/headers: $(POST_DIR)/*/*/*-%.bm
 	$(MKDIR) $(MKDIR_FLAGS) $(shell dirname $@)
