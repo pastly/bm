@@ -28,6 +28,9 @@ BUILT_META_FILES := \
 	$(BUILD_DIR)/index.html \
 	$(BUILT_POST_DIR)/index.html \
 	$(BUILT_TAG_DIR)/index.html
+ifeq ($(MAKE_SHORT_POSTS),yes)
+BUILT_SHORT_POSTS := $(foreach file,$(POST_FILES),$(BUILT_SHORT_POST_DIR)/$(shell get_id $(file)).html)
+endif
 
 METADATA_FILES := $(METADATA_DIR)/postsbydate
 POST_METADATA_FILES := $(foreach file,$(POST_FILES),$(METADATA_DIR)/$(shell get_id $(file)))
@@ -81,9 +84,11 @@ $(METADATA_DIR)/%/previewcontent: $(METADATA_DIR)/%/content $(METADATA_DIR)/%/op
 $(BUILT_POST_DIR)/%.html: $(POST_DIR)/*/*/%.bm $(INCLUDE_FILES) $(CSS_FILES) | $(OUT_DIRS)
 	@echo $@
 	$(CMD_BUILD_POST) $< > $@
-ifeq ($(MAKE_SHORT_POSTS),yes)
-	cp $@ $(BUILT_SHORT_POST_DIR)/$(shell get_id $<).html
-endif
+
+# Target for short posts
+$(BUILT_SHORT_POST_DIR)/%.html: | $(BUILT_POSTS)
+	@echo $@
+	cp $(BUILT_POST_DIR)/*-$*.html $@
 
 # Target for homepage
 $(BUILD_DIR)/index.html: $(POST_FILES) $(INCLUDE_FILES) $(CSS_FILES) | $(OUT_DIRS)
