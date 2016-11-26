@@ -38,6 +38,7 @@ POST_METADATA_FILES := $(foreach dir,$(POST_METADATA_FILES),\
 	$(dir)/headers \
 	$(dir)/tags \
 	$(dir)/options \
+	$(dir)/toc \
 	$(dir)/content \
 	$(dir)/previewcontent)
 
@@ -70,6 +71,10 @@ $(METADATA_DIR)/%/options: $(POST_DIR)/*/*/*-%.bm
 	@echo $@
 	mv $(shell parse_options $<) $@
 	validate_options $< $@
+
+$(METADATA_DIR)/%/toc: $(METADATA_DIR)/%/content
+	#@echo $@
+	get_toc $< > $@
 
 $(METADATA_DIR)/%/content: $(POST_DIR)/*/*/*-%.bm
 	$(MKDIR) $(MKDIR_FLAGS) $(@D)

@@ -168,6 +168,23 @@ function get_content {
 		tail -n +8
 }
 
+function get_toc {
+	FILE="$1"
+	[[ "$(file_has_toc_code "${FILE}")" == "" ]] && exit 0
+	< "${FILE}" "${MARKDOWN}" |\
+	grep "<h[[:digit:]]>" |\
+	sed 's|<h1>|- |' |\
+	sed 's|<h2>|   - |' |\
+	sed 's|<h3>|      - |' |\
+	sed 's|<h4>|         - |' |\
+	sed 's|<h5>|            - |' |\
+	sed 's|<h6>|               - |' |\
+	sed 's|<h7>|                  - |' |\
+	sed 's|<h8>|                     - |' |\
+	sed 's|<h9>|                        - |' |\
+	sed 's|</h[[:digit:]]>||'
+}
+
 function to_lower {
 	tr '[:upper:]' '[:lower:]'
 }
