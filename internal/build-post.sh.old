@@ -2,16 +2,6 @@
 
 source internal/globals.sh
 
-POST_FILE="$1"
-METADATA="${METADATA_DIR}/$(get_id "${POST_FILE}")"
-HEADERS="${METADATA}/headers"
-OPTIONS="${METADATA}/options"
-TAGS="${METADATA}/tags"
-
-get_title $HEADERS
-get_author $HEADERS
-exit 0
-
 function build_post {
 	IN="$1"
 	OUT="$2"
@@ -69,12 +59,13 @@ EOF
 	rm "${OUT_TEMP}" "${ERROR_FILE}"
 }
 
+"${MKDIR}" ${MKDIR_FLAGS} "${BUILT_POST_DIR}"
 if [[ "${MAKE_SHORT_POSTS}" == "yes" ]]
 then
 	"${MKDIR}" ${MKDIR_FLAGS} "${BUILT_SHORT_POST_DIR}"
 fi
 
-OUT_FILE="/dev/stdout"
+OUT_FILE="$1"
 shift
 
 while [ ! -z "$1" ]

@@ -14,12 +14,10 @@ USER_CONF_FILE := $(INCLUDE_DIR)/bm.conf
 INCLUDE_FILES := $(shell find $(INCLUDE_DIR) -name '*.html' -or -name '*.m4' -or -name '*.conf.example') \
 	$(USER_CONF_FILE)
 
-# These are output dirs that need to exist before files start getting dropped in
-# them
-OUT_DIRS := $(METADATA_DIR) $(BUILT_POST_DIR) $(BUILT_STATIC_DIR) $(BUILT_TAG_DIR)
+# These are output dirs that need to exist before files start getting dropped in them
+OUT_DIRS := $(METADATA_DIR) $(BUILT_POST_DIR) $(BUILT_STATIC_DIR) $(BUILT_TAG_DIR) $(BUILT_SHORT_POST_DIR)
 
-# These are the targets. These files don't exist
-# until after a successful build
+# These are the targets. These files don't exist until after a successful build
 BUILT_POSTS := $(POST_FILES:.bm=.html) # posts/year/month/post-title-123.{bm,html}
 BUILT_POSTS := $(notdir $(BUILT_POSTS)) # post-title-123.html
 BUILT_POSTS := $(addprefix $(BUILT_POST_DIR)/,$(BUILT_POSTS)) # build/posts/post-title-123.html
@@ -76,17 +74,16 @@ $(METADATA_DIR)/%/content: $(POST_DIR)/*/*/*-%.bm
 	get_content $< > $@
 
 $(METADATA_DIR)/%/previewcontent: $(METADATA_DIR)/%/content $(METADATA_DIR)/%/options
-	$(MKDIR) $(MKDIR_FLAGS) $(@D)
-	@echo $@
+	#@echo $@
 	get_preview_content $(@D)/content $(@D)/options > $@
-	#get_preview_content $< > $@
 
 # Target for posts
-# ** If directory structure of POST_DIR every changes, this will need updating
-# ** as it is not generalized anymore
 $(BUILT_POST_DIR)/%.html: $(POST_DIR)/*/*/%.bm $(INCLUDE_FILES) $(CSS_FILES) | $(OUT_DIRS)
 	@echo $@
-	$(CMD_BUILD_POST) $@ $<
+	$(CMD_BUILD_POST) $< > $@
+ifeq ($(MAKE_SHORT_POSTS),yes)
+	cp $@ $(BUILT_SHORT_POST_DIR)/$(shell get_id $<).html
+endif
 
 # Target for homepage
 $(BUILD_DIR)/index.html: $(POST_FILES) $(INCLUDE_FILES) $(CSS_FILES) | $(OUT_DIRS)
