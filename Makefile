@@ -98,7 +98,7 @@ $(BUILT_POST_DIR)/%.html: $(POST_DIR)/*/*/%.bm $(INCLUDE_FILES) $(CSS_FILES) $(P
 	< $(METADATA)/content pre_markdown $(shell get_id $<) | $(MARKDOWN) > $@
 
 # Target for short posts
-$(BUILT_SHORT_POST_DIR)/%.html: | $(BUILT_POSTS)
+$(BUILT_SHORT_POST_DIR)/%.html: $(BUILT_POSTS)
 	@echo $@
 	cp $(BUILT_POST_DIR)/*-$*.html $@
 
