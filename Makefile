@@ -36,6 +36,7 @@ METADATA_FILES := $(METADATA_DIR)/postsbydate
 POST_METADATA_FILES := $(foreach file,$(POST_FILES),$(METADATA_DIR)/$(shell get_id $(file)))
 POST_METADATA_FILES := $(foreach dir,$(POST_METADATA_FILES),\
 	$(dir)/headers \
+	$(dir)/body \
 	$(dir)/tags \
 	$(dir)/options \
 	$(dir)/toc \
@@ -85,10 +86,16 @@ $(METADATA_DIR)/%/previewcontent: $(METADATA_DIR)/%/content $(METADATA_DIR)/%/op
 	#@echo $@
 	get_preview_content $(@D)/content $(@D)/options > $@
 
+$(METADATA_DIR)/%/body: $(METADATA_DIR)/%/headers $(METADATA_DIR)/%/content $(METADATA_DIR)/%/toc
+	#@echo $@
+	$(eval METADATA := $(METADATA_DIR)/$(shell get_id $<))
+	< $(METADATA)/content pre_markdown $(shell get_id $<) | $(MARKDOWN) > $@
+
 # Target for posts
-$(BUILT_POST_DIR)/%.html: $(POST_DIR)/*/*/%.bm $(INCLUDE_FILES) $(CSS_FILES) | $(OUT_DIRS)
-	@echo $@
-	$(CMD_BUILD_POST) $< > $@
+$(BUILT_POST_DIR)/%.html: $(POST_DIR)/*/*/%.bm $(INCLUDE_FILES) $(CSS_FILES) $(POST_METADATA_FILES)
+	@echo $@ $<
+	$(eval METADATA := $(METADATA_DIR)/$(shell get_id $<))
+	< $(METADATA)/content pre_markdown $(shell get_id $<) | $(MARKDOWN) > $@
 
 # Target for short posts
 $(BUILT_SHORT_POST_DIR)/%.html: | $(BUILT_POSTS)

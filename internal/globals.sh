@@ -170,9 +170,38 @@ function get_content {
 
 function get_toc {
 	FILE="$1"
+	TEMP_HTML="$(mktemp)"
 	[[ "$(file_has_toc_code "${FILE}")" == "" ]] && exit 0
-	< "${FILE}" "${MARKDOWN}" |\
-	grep "<h[[:digit:]]>" |\
+	< "${FILE}" "${MARKDOWN}" > "${TEMP_HTML}"
+	HEADINGS=( )
+	LINE_NUMBERS=( )
+	while read -r LINE
+	do
+		LINE_NUMBERS+=("$(echo ${LINE} | cut -d ':' -f 1)")
+		HEADING="$(echo ${LINE} | cut -d ':' -f 2- |\
+			sed 's|<h[[:digit:]]>\(.*\)</h[[:digit:]]>|\1|' |\
+			title_to_heading_id)"
+		WORKING_HEADING="#${HEADING}"
+		I="0"
+		while [[ " ${HEADINGS[@]} " =~ " ${WORKING_HEADING} " ]]
+		do
+			I=$((I+1))
+			WORKING_HEADING="#${HEADING}-${I}"
+		done
+		HEADINGS+=(${WORKING_HEADING})
+	done < <(grep --line-number "<h[[:digit:]]>" "${TEMP_HTML}")
+	I="0"
+	for HEADING in ${HEADINGS[@]}
+	do
+		LINE_NUM="${LINE_NUMBERS["${I}"]}"
+		sed --in-place \
+			-e "${LINE_NUM}s|<h\([[:digit:]]\)>|<h\1><a href=\'${HTML_URL}${HEADING}\'>|" \
+			-e "${LINE_NUM}s|</h\([[:digit:]]\)>|</a></h\1>|" \
+			"${TEMP_HTML}"
+		I=$((I+1))
+		#(( "${I}" > "2" )) && break
+	done
+	grep "<h[[:digit:]]>" "${TEMP_HTML}" |\
 	sed 's|<h1>|- |' |\
 	sed 's|<h2>|   - |' |\
 	sed 's|<h3>|      - |' |\
@@ -183,6 +212,11 @@ function get_toc {
 	sed 's|<h8>|                     - |' |\
 	sed 's|<h9>|                        - |' |\
 	sed 's|</h[[:digit:]]>||'
+	rm "${TEMP_HTML}"
+}
+
+function title_to_heading_id {
+	to_lower | strip_punctuation | strip_space | cut -d '-' -f -3
 }
 
 function to_lower {
@@ -457,25 +491,17 @@ function only_pinned_posts {
 
 # options must be validated before running this
 function pre_markdown {
-	DO_TRIM="$1"
-	shift
-	OPTIONS="$1"
-	shift
-	TEMP_IN="$(mktemp)"
-	TEMP_OUT="$(mktemp)"
-	cat > "${TEMP_IN}"
-	if [[ "$(file_has_toc_code "${TEMP_IN}")" != "" ]]
-	then
-		pre_markdown_build_toc "${TEMP_IN}" "${OPTIONS}" > "${TEMP_OUT}"
-		cp "${TEMP_OUT}" "${TEMP_IN}"
-	fi
-	if [[ "${DO_TRIM}" != "" ]]
-	then
-		pre_markdown_trim_content "${TEMP_IN}" "${OPTIONS}" > "${TEMP_OUT}"
-		cp "${TEMP_OUT}" "${TEMP_IN}"
-	fi
-	cat "${TEMP_IN}"
-	rm "${TEMP_IN}" "${TEMP_OUT}"
+	ID="$1"
+	METADATA="${METADATA_DIR}/${ID}"
+
+	# 1: do table of contents
+
+	TOC="$(cat "${METADATA}/toc")"
+	# Somehow this works to allow sed to replace '{toc}' (single line) with
+	# ${TOC_ESCAPED} (many lines)
+	TOC_ESCAPED="$(printf '%s\n' "${TOC}" | sed 's|[\/&]|\\&|g;s|$|\\|')"
+	TOC_ESCAPED="${TOC_ESCAPED%?}"
+	sed "s|${TOC_CODE}|\\n${TOC_ESCAPED}\\n|"
 }
 
 # options must be validated before running this
@@ -505,68 +531,6 @@ function get_preview_content {
 				break
 			fi
 		done < "${CONTENT}"
-	fi
-}
-
-
-# options must be validated before running this
-function pre_markdown_build_toc {
-	IN_FILE="$1"
-	shift
-	OPTIONS="$1"
-	shift
-	HTML_URL="$(op_get "${OPTIONS}" post_file_name)"
-	HTML_URL="${ROOT_URL}/posts/$(basename "${HTML_URL}" ".${POST_EXTENSION}").html"
-	if [[ "$(file_has_toc_code "${IN_FILE}")" != "" ]]
-	then
-		TEMP_HTML="$(mktemp)"
-		cat "${IN_FILE}" | "${MARKDOWN}" > "${TEMP_HTML}"
-		HEADINGS=( )
-		LINE_NUMBERS=( )
-		while read -r LINE
-		do
-			LINE_NUMBERS+=("$(echo ${LINE} | cut -d ':' -f 1)")
-			HEADING="$(echo ${LINE} | cut -d ':' -f 2- | sed 's|<h[[:digit:]]>\(.*\)</h[[:digit:]]>|\1|')"
-			HEADING="$(echo "${HEADING}" | to_lower | strip_punctuation | strip_space)"
-			WORKING_HEADING="#${HEADING}"
-			I="0"
-			while [[ " ${HEADINGS[@]} " =~ " ${WORKING_HEADING} " ]]
-			do
-				I=$((I+1))
-				WORKING_HEADING="#${HEADING}-${I}"
-			done
-			HEADINGS+=(${WORKING_HEADING})
-		done < <(grep --line-number "<h[[:digit:]]>" "${TEMP_HTML}")
-		I="0"
-		for HEADING in ${HEADINGS[@]}
-		do
-			LINE_NUM="${LINE_NUMBERS["${I}"]}"
-			sed --in-place \
-				-e "${LINE_NUM}s|<h\([[:digit:]]\)>|<h\1><a href=\'${HTML_URL}${HEADING}\'>|" \
-				-e "${LINE_NUM}s|</h\([[:digit:]]\)>|</a></h\1>|" \
-				"${TEMP_HTML}"
-			I=$((I+1))
-			#(( "${I}" > "2" )) && break
-		done
-		TOC="$(grep "<h[[:digit:]]>" "${TEMP_HTML}" |\
-			sed 's|<h1>|- |' |\
-			sed 's|<h2>|   - |' |\
-			sed 's|<h3>|      - |' |\
-			sed 's|<h4>|         - |' |\
-			sed 's|<h5>|            - |' |\
-			sed 's|<h6>|               - |' |\
-			sed 's|<h7>|                  - |' |\
-			sed 's|<h8>|                     - |' |\
-			sed 's|<h9>|                        - |' |\
-			sed 's|</h[[:digit:]]>||')"
-		# Somehow this works to allow sed to replace '{toc}' (single line) with
-		# ${TOC_ESCAPED} (many lines)
-		TOC_ESCAPED="$(printf '%s\n' "${TOC}" | sed 's|[\/&]|\\&|g;s|$|\\|')"
-		TOC_ESCAPED="${TOC_ESCAPED%?}"
-		sed "s|${TOC_CODE}|\\n${TOC_ESCAPED}\\n|" "${IN_FILE}"
-		rm "${TEMP_HTML}"
-	else
-		cat "${IN_FILE}"
 	fi
 }
 
