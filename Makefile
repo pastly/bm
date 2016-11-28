@@ -30,7 +30,11 @@ BUILT_META_FILES := \
 	$(BUILT_TAG_DIR)/index.html
 BUILT_SHORT_POSTS := $(foreach file,$(POST_FILES),$(BUILT_SHORT_POST_DIR)/$(shell get_id $(file)).html)
 
-METADATA_FILES := $(METADATA_DIR)/postsbydate
+METADATA_FILES := \
+	$(METADATA_DIR)/pagehead \
+	$(METADATA_DIR)/pagefoot \
+	$(METADATA_DIR)/postsbydate
+
 POST_METADATA_FILES := $(foreach file,$(POST_FILES),$(METADATA_DIR)/$(shell get_id $(file)))
 POST_METADATA_FILES := $(foreach dir,$(POST_METADATA_FILES),\
 	$(dir)/headers \
@@ -53,6 +57,12 @@ all: $(OUT_DIRS) \
 
 $(OUT_DIRS):
 	$(MKDIR) $(MKDIR_FLAGS) $@
+
+$(METADATA_DIR)/pagehead:
+
+
+$(METADATA_DIR)/pagefoot:
+
 
 $(METADATA_DIR)/postsbydate: $(POST_FILES) | $(OUT_DIRS)
 	for POST in `sort_by_date $^`; do get_id $$POST; done > $@
