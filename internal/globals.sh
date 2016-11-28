@@ -536,19 +536,9 @@ function get_preview_content {
 
 # options must be validated before running this
 function post_markdown {
-	OPTIONS="$1"
-	TEMP_IN="$(mktemp)"
-	TEMP_OUT="$(mktemp)"
-	cat > "${TEMP_IN}"
-	if [[ "$(op_is_set "${OPTIONS}" heading_ids)" != "" ]] && [[ "$(op_get "${OPTIONS}" heading_ids)" != "0" ]]
-	then
-		HTML_URL="$(op_get "${OPTIONS}" post_file_name)"
-		HTML_URL="${ROOT_URL}/posts/$(basename "${HTML_URL}" ".${POST_EXTENSION}").html"
-		post_markdown_heading_ids "${HTML_URL}" "${TEMP_IN}" > "${TEMP_OUT}"
-		cp "${TEMP_OUT}" "${TEMP_IN}"
-	fi
-	cat "${TEMP_IN}"
-	rm "${TEMP_IN}" "${TEMP_OUT}"
+	# 1: make tags into links
+
+	sed -e "s|${TAG_CODE}\([${TAG_ALPHABET}]\+\)|<a href='${ROOT_URL}/tags/\L\1.html'>\E\1</a>|g"
 }
 
 function post_markdown_heading_ids {
