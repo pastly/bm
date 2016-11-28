@@ -1,6 +1,6 @@
 build
 posts
-metadata
+meta
 !internal/build
 *.swp
 bm.conf
