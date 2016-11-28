@@ -538,7 +538,12 @@ function get_preview_content {
 function post_markdown {
 	# 1: make tags into links
 
-	sed -e "s|${TAG_CODE}\([${TAG_ALPHABET}]\+\)|<a href='${ROOT_URL}/tags/\L\1.html'>\E\1</a>|g"
+	sed -e "s|${TAG_CODE}\([${TAG_ALPHABET}]\+\)|<a href='${ROOT_URL}/tags/\L\1.html'>\E\1</a>|g" |\
+	\
+	# 2: remove various macros \
+	\
+	sed -e "s|${PREVIEW_STOP_CODE}||g" | \
+	sed -e "s|${TOC_CODE}||g" # shouldn't be necessary as it will have been replaced already
 }
 
 function post_markdown_heading_ids {
