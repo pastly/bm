@@ -568,4 +568,41 @@ function post_markdown_heading_ids {
 			-e "${LINE_NUM}s|</h\([[:digit:]]\)>|</h\1>|"
 	done < "${HTML_CONTENT_FILE}"
 }
+
+function build_content_header {
+	METADATA="${METADATA_DIR}/$1"
+	HEADERS="${METADATA}/headers"
+	TITLE="$(get_title "${HEADERS}")"
+	DATE="$(get_date "${HEADERS}")"
+	MOD_DATE="$(get_mod_date "${HEADERS}")"
+	(( "$((${MOD_DATE}-${DATE}))" > "${SIGNIFICANT_MOD_AFTER}" )) && \
+		MODIFIED="foobar" || MODIFIED=""
+	DATE="$(ts_to_date "${DATE_FRMT}" "${DATE}")"
+	MOD_DATE="$(ts_to_date "${LONG_DATE_FRMT}" "${MOD_DATE}")"
+	AUTHOR="$(get_author "${HEADERS}")"
+	PERMALINK="${ROOT_URL}/p/$1.html"
+	cat << EOF
+m4_include(include/html.m4)
+START_HTML([[${ROOT_URL}]], [[${TITLE} - ${BLOG_TITLE}]])
+CONTENT_PAGE_HEADER_HTML([[${ROOT_URL}]], [[${BLOG_TITLE}]], [[${BLOG_SUBTITLE}]])
+START_POST_HEADER_HTML([[${TITLE}]], [[${DATE}]], [[${AUTHOR}]])
+EOF
+	[[ "${MODIFIED}" != "" ]] && cat << EOF
+POST_HEADER_MOD_DATE_HTML([[${MOD_DATE}]])
+EOF
+	[[ "${MAKE_SHORT_POSTS}" == "yes" ]] && cat << EOF
+POST_HEADER_PERMALINK_HTML([[${PERMALINK}]])
+EOF
+	cat << EOF
+END_POST_HEADER_HTML
+EOF
+}
+
+function build_content_footer {
+	cat << EOF
+m4_include(include/html.m4)
+CONTENT_PAGE_FOOTER_HTML([[${ROOT_URL}]], [[${VERSION}]])
+END_HTML
+EOF
+}
 set +a
