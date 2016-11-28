@@ -116,9 +116,19 @@ $(METADATA_DIR)/%/body: $(METADATA_DIR)/%/headers $(METADATA_DIR)/%/content $(ME
 	post_markdown $(shell get_id $<) > $@
 
 # Target for short posts
-$(BUILT_SHORT_POST_DIR)/%.html: $(BUILT_POSTS)
+$(BUILT_SHORT_POST_DIR)/%.html: $(METADATA_DIR)/%/head $(METADATA_DIR)/%/body $(METADATA_DIR)/%/foot
 	@echo $@
-	cp $(BUILT_POST_DIR)/*-$*.html $@
+	cat $^ | awk 'NF' > $@
+
+# Target for posts
+$(BUILT_POSTS): $(BUILT_SHORT_POSTS)
+	@echo $@
+	$(eval ID := $(shell echo $@ | sed -E 's|.*-(.*).html|\1|'))
+ifeq ($(MAKE_SHORT_POSTS),yes)
+	cp $(BUILT_SHORT_POST_DIR)/$(ID).html $@
+else
+	mv $(BUILT_SHORT_POST_DIR)/$(ID).html $@
+endif
 
 # Target for homepage
 $(BUILD_DIR)/index.html: $(POST_FILES) $(INCLUDE_FILES) $(CSS_FILES) | $(OUT_DIRS)
