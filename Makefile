@@ -28,15 +28,15 @@ BUILT_META_FILES := \
 	$(BUILD_DIR)/index.html \
 	$(BUILT_POST_DIR)/index.html \
 	$(BUILT_TAG_DIR)/index.html
-ifeq ($(MAKE_SHORT_POSTS),yes)
 BUILT_SHORT_POSTS := $(foreach file,$(POST_FILES),$(BUILT_SHORT_POST_DIR)/$(shell get_id $(file)).html)
-endif
 
 METADATA_FILES := $(METADATA_DIR)/postsbydate
 POST_METADATA_FILES := $(foreach file,$(POST_FILES),$(METADATA_DIR)/$(shell get_id $(file)))
 POST_METADATA_FILES := $(foreach dir,$(POST_METADATA_FILES),\
 	$(dir)/headers \
+	$(dir)/head \
 	$(dir)/body \
+	$(dir)/foot \
 	$(dir)/tags \
 	$(dir)/options \
 	$(dir)/toc \
@@ -86,16 +86,24 @@ $(METADATA_DIR)/%/previewcontent: $(METADATA_DIR)/%/content $(METADATA_DIR)/%/op
 	#@echo $@
 	get_preview_content $(@D)/content $(@D)/options > $@
 
-$(METADATA_DIR)/%/body: $(METADATA_DIR)/%/headers $(METADATA_DIR)/%/content $(METADATA_DIR)/%/toc
-	#@echo $@
-	$(eval METADATA := $(METADATA_DIR)/$(shell get_id $<))
-	< $(METADATA)/content pre_markdown $(shell get_id $<) | $(MARKDOWN) > $@
+# Target for per-post header. Completely HTML formatted
+$(METADATA_DIR)/%/head: $(METADATA_DIR)/%/headers
+	@echo $@
+	build_content_header $* | $(M4) $(M4_FLAGS) > $@
 
-# Target for posts
-$(BUILT_POST_DIR)/%.html: $(POST_DIR)/*/*/%.bm $(INCLUDE_FILES) $(CSS_FILES) $(POST_METADATA_FILES)
-	@echo $@ $<
+# Target for per-post footer. Completely HTML formatted
+$(METADATA_DIR)/%/foot:
+	@echo $@
+	build_content_footer $* | $(M4) $(M4_FLAGS) > $@
+
+# Target for per-post body. Completely HTML formatted.
+$(METADATA_DIR)/%/body: $(METADATA_DIR)/%/headers $(METADATA_DIR)/%/content $(METADATA_DIR)/%/toc
+	@echo $@
 	$(eval METADATA := $(METADATA_DIR)/$(shell get_id $<))
-	< $(METADATA)/content pre_markdown $(shell get_id $<) | $(MARKDOWN) > $@
+	< $(METADATA)/content \
+	pre_markdown $(shell get_id $<) |\
+	$(MARKDOWN) |\
+	post_markdown $(shell get_id $<) > $@
 
 # Target for short posts
 $(BUILT_SHORT_POST_DIR)/%.html: $(BUILT_POSTS)
