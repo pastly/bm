@@ -9,8 +9,7 @@ function op_get {
 function op_set {
 	OPTIONS_FILE="$1"
 	OP="$2"
-	VALUE="$3"
-	[[ "${VALUE}" == "" ]] && VALUE="1"
+	[[ $# -ge 3 ]] && VALUE="$3" || VALUE="1"
 	if [[ ${OP} =~ ^no_ ]]
 	then
 		OP="${OP#no_}"
