@@ -5,7 +5,7 @@ CMD_BUILD_TAGS=./internal/build-tags.sh
 
 .PHONY: all clean
 SHELL := /bin/bash
-#.SHELLFLAGS := -eu -o pipefail -c
+.SHELLFLAGS := -eu -o pipefail -c
 #.SHELLFLAGS := -o pipefail -c
 
 # These are the files that always exist
@@ -141,17 +141,17 @@ endif
 # Target for homepage
 $(BUILD_DIR)/index.html: $(POST_FILES) $(INCLUDE_FILES) $(CSS_FILES) | $(OUT_DIRS)
 	#@echo $@
-	$(CMD_BUILD_INDEX) $@ $(POST_FILES)
+	#$(CMD_BUILD_INDEX) $@ $(POST_FILES)
 
 # Target for posts index
 $(BUILT_POST_DIR)/index.html: $(POST_FILES) $(INCLUDE_FILES) $(CSS_FILES) | $(OUT_DIRS)
 	#@echo $@
-	$(CMD_BUILD_POSTS_INDEX) $@ $(POST_FILES)
+	#$(CMD_BUILD_POSTS_INDEX) $@ $(POST_FILES)
 
 # Target for tags index
 $(BUILT_TAG_DIR)/index.html: $(POST_FILES) $(INCLUDE_FILES) $(CSS_FILES) | $(OUT_DIRS)
 	#@echo $@
-	$(CMD_BUILD_TAGS) $@ $(POST_FILES)
+	#$(CMD_BUILD_TAGS) $@ $(POST_FILES)
 
 # Target for all CSS
 $(BUILT_STATIC_DIR)/%.css: $(INCLUDE_DIR)/%.css.in $(INCLUDE_FILES) | $(OUT_DIRS)
