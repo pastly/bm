@@ -4,7 +4,9 @@ CMD_BUILD_INDEX=./internal/build-index.sh
 CMD_BUILD_TAGS=./internal/build-tags.sh
 
 .PHONY: all clean
-SHELL=/bin/bash
+SHELL := /bin/bash
+#.SHELLFLAGS := -eu -o pipefail -c
+#.SHELLFLAGS := -o pipefail -c
 
 # These are the files that always exist
 # AKA source files
