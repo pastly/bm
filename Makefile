@@ -67,33 +67,39 @@ $(METADATA_DIR)/pagefoot:
 $(METADATA_DIR)/postsbydate: $(POST_FILES) | $(OUT_DIRS)
 	for POST in `sort_by_date $^`; do get_id $$POST; done > $@
 
+# Target for per-post headers
 $(METADATA_DIR)/%/headers: $(POST_DIR)/*/*/*-%.bm
 	$(MKDIR) $(MKDIR_FLAGS) $(@D)
 	@echo $@
 	get_headers $< > $@
 
+# Target for per-post tags, deduplicated and one per line
 $(METADATA_DIR)/%/tags: $(POST_DIR)/*/*/*-%.bm
 	$(MKDIR) $(MKDIR_FLAGS) $(@D)
 	@echo $@
 	get_tags $< > $@
 
+# Target for per-post options file, fully validated
 $(METADATA_DIR)/%/options: $(POST_DIR)/*/*/*-%.bm
 	$(MKDIR) $(MKDIR_FLAGS) $(@D)
 	@echo $@
 	mv $(shell parse_options $<) $@
 	validate_options $< $@
 
+# Target for per-post table of contents, or empty of no toc needed
 $(METADATA_DIR)/%/toc: $(METADATA_DIR)/%/content
-	#@echo $@
+	@echo $@
 	get_toc $< > $@
 
+# Target for content that appears an per-post page. Just Markdown, no processing
 $(METADATA_DIR)/%/content: $(POST_DIR)/*/*/*-%.bm
 	$(MKDIR) $(MKDIR_FLAGS) $(@D)
 	@echo $@
 	get_content $< > $@
 
+# Target for content that appears on the homepage
 $(METADATA_DIR)/%/previewcontent: $(METADATA_DIR)/%/content $(METADATA_DIR)/%/options
-	#@echo $@
+	@echo $@
 	get_preview_content $(@D)/content $(@D)/options > $@
 
 # Target for per-post header. Completely HTML formatted
@@ -132,22 +138,22 @@ endif
 
 # Target for homepage
 $(BUILD_DIR)/index.html: $(POST_FILES) $(INCLUDE_FILES) $(CSS_FILES) | $(OUT_DIRS)
-	@echo $@
+	#@echo $@
 	$(CMD_BUILD_INDEX) $@ $(POST_FILES)
 
 # Target for posts index
 $(BUILT_POST_DIR)/index.html: $(POST_FILES) $(INCLUDE_FILES) $(CSS_FILES) | $(OUT_DIRS)
-	@echo $@
+	#@echo $@
 	$(CMD_BUILD_POSTS_INDEX) $@ $(POST_FILES)
 
 # Target for tags index
 $(BUILT_TAG_DIR)/index.html: $(POST_FILES) $(INCLUDE_FILES) $(CSS_FILES) | $(OUT_DIRS)
-	@echo $@
+	#@echo $@
 	$(CMD_BUILD_TAGS) $@ $(POST_FILES)
 
 # Target for all CSS
 $(BUILT_STATIC_DIR)/%.css: $(INCLUDE_DIR)/%.css.in $(INCLUDE_FILES) | $(OUT_DIRS)
-	@echo $@
+	#@echo $@
 	$(MKDIR) $(MKDIR_FLAGS) $(BUILT_STATIC_DIR)
 	$(M4) $(M4_FLAGS) $< > $@
 
