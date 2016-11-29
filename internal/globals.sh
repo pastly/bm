@@ -264,8 +264,8 @@ function ts_to_date {
 
 function get_tags {
 	FILE="$1"
-	strip_comments "${FILE}" | \
 		grep --extended-regexp --only-matching "${TAG_CODE}[${TAG_ALPHABET}]+" | \
+	get_content "${FILE}" | \
 		sed -e "s|${TAG_CODE}||g" | to_lower | \
 		sort | uniq
 }
