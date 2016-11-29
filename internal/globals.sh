@@ -264,8 +264,10 @@ function ts_to_date {
 
 function get_tags {
 	FILE="$1"
-		grep --extended-regexp --only-matching "${TAG_CODE}[${TAG_ALPHABET}]+" | \
+	# brackets around grep so that when it returns 1 on no match, bash doesn't
+	# throw a fit. Yes this has the side effect of ignoring a real error (code 2)
 	get_content "${FILE}" | \
+		{ grep --extended-regexp --only-matching "${TAG_CODE}[${TAG_ALPHABET}]+" || true; } | \
 		sed -e "s|${TAG_CODE}||g" | to_lower | \
 		sort | uniq
 }
@@ -510,7 +512,9 @@ function get_preview_content {
 	shift
 	OPTIONS="$1"
 	shift
-	PREVIEW_STOP_LINE="$(grep --fixed-strings --line-number "${PREVIEW_STOP_CODE}" "${CONTENT}")"
+	# curly brackets so bash doesn't throw a fit when grep doesn't find a match
+	# this has the side effect of ignoring real error codes
+	PREVIEW_STOP_LINE="$({ grep --fixed-strings --line-number "${PREVIEW_STOP_CODE}" "${CONTENT}" || true; })"
 	if [[ "${PREVIEW_STOP_LINE}" != "" ]]
 	then
 		PREVIEW_STOP_LINE="$(echo "${PREVIEW_STOP_LINE}" | head -n 1 | sed -E 's|^([0-9]+):.*|\1|')"
