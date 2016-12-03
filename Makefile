@@ -76,7 +76,7 @@ $(METADATA_DIR)/%/headers: $(POST_DIR)/*/*/*-%.bm
 	get_headers $< > $@
 
 # Target for per-post tags, deduplicated and one per line
-$(METADATA_DIR)/%/tags: $(POST_DIR)/*/*/*-%.bm
+$(METADATA_DIR)/%/tags: $(METADATA_DIR)/%/content
 	$(MKDIR) $(MKDIR_FLAGS) $(@D)
 	@echo $@
 	get_tags $< > $@
