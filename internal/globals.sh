@@ -170,8 +170,8 @@ function get_content {
 
 function get_toc {
 	FILE="$1"
+	[[ "$(file_has_toc_code "${FILE}")" == "" ]] && return
 	TEMP_HTML="$(mktemp)"
-	[[ "$(file_has_toc_code "${FILE}")" == "" ]] && exit 0
 	< "${FILE}" "${MARKDOWN}" > "${TEMP_HTML}"
 	HEADINGS=( )
 	LINE_NUMBERS=( )
