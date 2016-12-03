@@ -195,6 +195,7 @@ function get_toc {
 			HEADINGS+=(${WORKING_HEADING})
 		fi
 	done < <(grep --line-number "<h[[:digit:]]>" "${TEMP_HTML}")
+	[[ -z ${!HEADINGS[@]} ]] && rm "${TEMP_HTML}" && return
 	I="0"
 	for HEADING in ${HEADINGS[@]}
 	do
