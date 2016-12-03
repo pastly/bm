@@ -182,13 +182,18 @@ function get_toc {
 			sed 's|<h[[:digit:]]>\(.*\)</h[[:digit:]]>|\1|' |\
 			title_to_heading_id)"
 		WORKING_HEADING="#${HEADING}"
-		I="0"
-		while [[ " ${HEADINGS[@]} " =~ " ${WORKING_HEADING} " ]]
-		do
-			I=$((I+1))
-			WORKING_HEADING="#${HEADING}-${I}"
-		done
-		HEADINGS+=(${WORKING_HEADING})
+		if [[ -z ${!HEADINGS[@]} ]]
+		then
+			HEADINGS+=(${WORKING_HEADING})
+		else
+			I="0"
+			while [[ " ${HEADINGS[@]} " =~ " ${WORKING_HEADING} " ]]
+			do
+				I=$((I+1))
+				WORKING_HEADING="#${HEADING}-${I}"
+			done
+			HEADINGS+=(${WORKING_HEADING})
+		fi
 	done < <(grep --line-number "<h[[:digit:]]>" "${TEMP_HTML}")
 	I="0"
 	for HEADING in ${HEADINGS[@]}
