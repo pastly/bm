@@ -348,16 +348,15 @@ function sort_by_date {
 	# If sending file names in via stdin,
 	# they must be \0 delimited
 	ARRAY=( )
-	if [ ! -z "$1" ]
+	if [[ $# -ge 1 ]]
 	then
 		FILE="$1"
 		shift
-		while [[ "${FILE}" != "" ]]
+		while [ 1 ]
 		do
 			DATE="$(get_date "${FILE}")"
 			ARRAY["${DATE}"]="${FILE}"
-			FILE="$1"
-			shift
+			[[ $# -ge 1 ]] && FILE="$1" && shift || break
 		done
 	elif [ -p /dev/stdin ]
 	then
