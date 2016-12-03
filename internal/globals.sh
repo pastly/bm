@@ -195,7 +195,7 @@ function get_toc {
 	do
 		LINE_NUM="${LINE_NUMBERS["${I}"]}"
 		sed --in-place \
-			-e "${LINE_NUM}s|<h\([[:digit:]]\)>|<h\1><a href=\'${HTML_URL}${HEADING}\'>|" \
+			-e "${LINE_NUM}s|<h\([[:digit:]]\)>|<h\1><a href=\'${HEADING}\'>|" \
 			-e "${LINE_NUM}s|</h\([[:digit:]]\)>|</a></h\1>|" \
 			"${TEMP_HTML}"
 		I=$((I+1))
