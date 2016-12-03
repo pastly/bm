@@ -66,7 +66,7 @@ $(METADATA_DIR)/pagehead:
 $(METADATA_DIR)/pagefoot:
 
 
-$(METADATA_DIR)/postsbydate: $(POST_FILES) | $(OUT_DIRS)
+$(METADATA_DIR)/postsbydate: $(filter $(METADATA_DIR)/%/headers,$(POST_METADATA_FILES)) | $(OUT_DIRS)
 	for POST in `sort_by_date $^`; do get_id $$POST; done > $@
 
 # Target for per-post headers
