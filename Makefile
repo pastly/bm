@@ -111,6 +111,7 @@ $(METADATA_DIR)/%/head: $(METADATA_DIR)/%/headers
 
 # Target for per-post footer. Completely HTML formatted
 $(METADATA_DIR)/%/foot:
+	$(MKDIR) $(MKDIR_FLAGS) $(@D)
 	@echo $@
 	build_content_footer $* | $(M4) $(M4_FLAGS) > $@
 
