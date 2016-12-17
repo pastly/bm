@@ -16,9 +16,6 @@ USER_CONF_FILE := $(INCLUDE_DIR)/bm.conf
 INCLUDE_FILES := $(shell find $(INCLUDE_DIR) -name '*.html' -or -name '*.m4' -or -name '*.conf.example') \
 	$(USER_CONF_FILE)
 
-# These are output dirs that need to exist before files start getting dropped in them
-OUT_DIRS := $(METADATA_DIR) $(BUILT_POST_DIR) $(BUILT_STATIC_DIR) $(BUILT_TAG_DIR) $(BUILT_SHORT_POST_DIR)
-
 # These are the targets. These files don't exist until after a successful build
 BUILT_POSTS := $(POST_FILES:.bm=.html) # posts/year/month/post-title-123.{bm,html}
 BUILT_POSTS := $(notdir $(BUILT_POSTS)) # post-title-123.html
@@ -49,6 +46,15 @@ POST_METADATA_FILES := $(foreach dir,$(POST_METADATA_FILES),\
 	$(dir)/content \
 	$(dir)/previewcontent)
 
+# These are output dirs that need to exist before files start getting dropped in them
+OUT_DIRS := $(METADATA_DIR) \
+	$(dir  $(filter $(METADATA_DIR)/%/headers,$(POST_METADATA_FILES)))\
+	$(BUILT_POST_DIR) \
+	$(BUILT_STATIC_DIR) \
+	$(BUILT_TAG_DIR) \
+	$(BUILT_SHORT_POST_DIR)
+
+
 all: $(OUT_DIRS) \
 	$(METADATA_FILES) \
 	$(POST_METADATA_FILES) \
@@ -70,20 +76,17 @@ $(METADATA_DIR)/postsbydate: $(filter $(METADATA_DIR)/%/headers,$(POST_METADATA_
 	for POST in `sort_by_date $^`; do get_id $$POST; done > $@
 
 # Target for per-post headers
-$(METADATA_DIR)/%/headers: $(POST_DIR)/*/*/*-%.bm
-	$(MKDIR) $(MKDIR_FLAGS) $(@D)
+$(METADATA_DIR)/%/headers: $(POST_DIR)/*/*/*-%.bm | $(OUT_DIRS)
 	@echo $@
 	get_headers $< > $@
 
 # Target for per-post tags, deduplicated and one per line
 $(METADATA_DIR)/%/tags: $(METADATA_DIR)/%/content
-	$(MKDIR) $(MKDIR_FLAGS) $(@D)
 	@echo $@
 	get_tags $< > $@
 
 # Target for per-post options file, fully validated
-$(METADATA_DIR)/%/options: $(POST_DIR)/*/*/*-%.bm
-	$(MKDIR) $(MKDIR_FLAGS) $(@D)
+$(METADATA_DIR)/%/options: $(POST_DIR)/*/*/*-%.bm | $(OUT_DIRS)
 	@echo $@
 	mv $(shell parse_options $<) $@
 	validate_options $< $@
@@ -94,8 +97,7 @@ $(METADATA_DIR)/%/toc: $(METADATA_DIR)/%/content
 	get_toc $< > $@
 
 # Target for content that appears an per-post page. Just Markdown, no processing
-$(METADATA_DIR)/%/content: $(POST_DIR)/*/*/*-%.bm
-	$(MKDIR) $(MKDIR_FLAGS) $(@D)
+$(METADATA_DIR)/%/content: $(POST_DIR)/*/*/*-%.bm | $(OUT_DIRS)
 	@echo $@
 	get_content $< > $@
 
@@ -110,8 +112,7 @@ $(METADATA_DIR)/%/head: $(METADATA_DIR)/%/headers
 	build_content_header $* | $(M4) $(M4_FLAGS) > $@
 
 # Target for per-post footer. Completely HTML formatted
-$(METADATA_DIR)/%/foot:
-	$(MKDIR) $(MKDIR_FLAGS) $(@D)
+$(METADATA_DIR)/%/foot: | $(OUT_DIRS)
 	@echo $@
 	build_content_footer $* | $(M4) $(M4_FLAGS) > $@
 
@@ -157,7 +158,6 @@ $(BUILT_TAG_DIR)/index.html: $(POST_FILES) $(INCLUDE_FILES) $(CSS_FILES) | $(OUT
 # Target for all CSS
 $(BUILT_STATIC_DIR)/%.css: $(INCLUDE_DIR)/%.css.in $(INCLUDE_FILES) | $(OUT_DIRS)
 	#@echo $@
-	$(MKDIR) $(MKDIR_FLAGS) $(BUILT_STATIC_DIR)
 	$(M4) $(M4_FLAGS) $< > $@
 
 # Target to automatically make the config file if necessary
