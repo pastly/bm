@@ -87,8 +87,7 @@ $(METADATA_DIR)/%/tags: $(METADATA_DIR)/%/content
 
 # Target for per-post options file, fully validated
 $(METADATA_DIR)/%/options: $(POST_DIR)/*/*/*-%.bm | $(OUT_DIRS)
-	@echo $@
-	mv $(shell parse_options $<) $@
+	parse_options $< > $@
 	validate_options $< $@
 
 # Target for per-post table of contents, or empty of no toc needed

@@ -71,12 +71,12 @@ which "${MAKE}" &> /dev/null
 [[ "${REBUILD_POLICY}" == "" ]] && REBUILD_POLICY="asap"
 [[ "${MAKE_SHORT_POSTS}" == "" ]] && MAKE_SHORT_POSTS="yes"
 
-# Parses the options in FILE into OP_FILE and returns the name of OP_FILE.
+# Parses the options in FILE into OP_FILE and returns the contents of OP_FILE.
 # FILE must be an original post file. It cannot be temporary, even if it has
 # full headers and content
 function parse_options {
 	FILE="$1"
-	OPTIONS_IN="$(strip_comments "${FILE}" | head -n 4 | tail -n 1)"
+	OPTIONS_IN="$(head -n 4 "${FILE}" | tail -n 1)"
 	OP_FILE="$(mktemp)"
 	for OP_V in $OPTIONS_IN
 	do
@@ -95,7 +95,8 @@ function parse_options {
 	# make it easier to keep track of the original file name when we're
 	# many temporary files deep
 	op_set "${OP_FILE}" post_file_name "${FILE}"
-	echo "${OP_FILE}"
+	cat "${OP_FILE}"
+	rm "${OP_FILE}"
 }
 
 # checks that the combination of options is valid for the given file.
