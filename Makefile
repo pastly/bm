@@ -31,7 +31,10 @@ BUILT_SHORT_POSTS := $(foreach file,$(POST_FILES),$(BUILT_SHORT_POST_DIR)/$(shel
 METADATA_FILES := \
 	$(METADATA_DIR)/pagehead \
 	$(METADATA_DIR)/pagefoot \
-	$(METADATA_DIR)/postsbydate
+	$(METADATA_DIR)/indexbody \
+	$(METADATA_DIR)/tagindexbody \
+	$(METADATA_DIR)/postindexbody \
+	$(METADATA_DIR)/postsbydate \
 
 POST_METADATA_FILES := $(foreach file,$(POST_FILES),$(METADATA_DIR)/$(shell get_id $(file)))
 POST_METADATA_FILES := $(foreach dir,$(POST_METADATA_FILES),\
@@ -66,10 +69,22 @@ $(OUT_DIRS):
 	$(MKDIR) $(MKDIR_FLAGS) $@
 
 $(METADATA_DIR)/pagehead:
-
+	@echo $@
+	build_index_header | $(M4) $(M4_FLAGS) > $@
 
 $(METADATA_DIR)/pagefoot:
+	@echo $@
+	build_index_footer | $(M4) $(M4_FLAGS) > $@
 
+$(METADATA_DIR)/indexbody: $(METADATA_DIR)/postsbydate | $(POST_METADATA_FILES)
+	@echo $@
+	build_index_body $< | $(M4) $(M4_FLAGS) > $@
+
+$(METADATA_DIR)/tagindexbody: | $(OUT_DIRS)
+	touch $@
+
+$(METADATA_DIR)/postindexbody: | $(OUT_DIRS)
+	touch $@
 
 $(METADATA_DIR)/postsbydate: $(filter $(METADATA_DIR)/%/headers,$(POST_METADATA_FILES)) | $(OUT_DIRS)
 	for POST in `sort_by_date $^`; do get_id $$POST; done > $@
@@ -139,19 +154,17 @@ else
 endif
 
 # Target for homepage
-$(BUILD_DIR)/index.html: $(POST_FILES) $(INCLUDE_FILES) $(CSS_FILES) | $(OUT_DIRS)
-	#@echo $@
-	#$(CMD_BUILD_INDEX) $@ $(POST_FILES)
+$(BUILD_DIR)/index.html: $(METADATA_DIR)/pagehead $(METADATA_DIR)/indexbody $(METADATA_DIR)/pagefoot | $(OUT_DIRS)
+	@echo $@
+	cat $^ | awk 'NF' > $@
 
 # Target for posts index
 $(BUILT_POST_DIR)/index.html: $(POST_FILES) $(INCLUDE_FILES) $(CSS_FILES) | $(OUT_DIRS)
-	#@echo $@
-	#$(CMD_BUILD_POSTS_INDEX) $@ $(POST_FILES)
+	@echo $@
 
 # Target for tags index
 $(BUILT_TAG_DIR)/index.html: $(POST_FILES) $(INCLUDE_FILES) $(CSS_FILES) | $(OUT_DIRS)
-	#@echo $@
-	#$(CMD_BUILD_TAGS) $@ $(POST_FILES)
+	@echo $@
 
 # Target for all CSS
 $(BUILT_STATIC_DIR)/%.css: $(INCLUDE_DIR)/%.css.in $(INCLUDE_FILES) | $(OUT_DIRS)

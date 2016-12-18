@@ -475,21 +475,18 @@ function search_posts_by_title {
 	sort_by_date ${POSTS}
 }
 
+# give this function a file name containing all post ids
+# it echos the ids of pinned posts in the correct order
 function only_pinned_posts {
 	ARRAY=( )
-	FILE="$1"
-	shift
-	while [[ "${FILE}" != "" ]]
+	for ID in $(cat $1)
 	do
-		OPTIONS="$(parse_options "${FILE}")"
+		OPTIONS="${METADATA_DIR}/${ID}/options"
 		PINNED="$(op_get "${OPTIONS}" "pinned")"
 		if [[ "${PINNED}" != "" ]] && (( "${PINNED}" > "0" ))
 		then
-			ARRAY["${PINNED}"]="${FILE}"
+			ARRAY["${PINNED}"]="${ID}"
 		fi
-		rm "${OPTIONS}"
-		FILE="$1"
-		shift
 	done
 	for I in "${!ARRAY[@]}"
 	do
@@ -582,6 +579,93 @@ function post_markdown_heading_ids {
 			-e "${LINE_NUM}s|^<h\([[:digit:]]\)>|<h\1 id=\'${WORKING_HEADING}'>|" \
 			-e "${LINE_NUM}s|</h\([[:digit:]]\)>|</h\1>|"
 	done < "${HTML_CONTENT_FILE}"
+}
+
+function build_index_header {
+	cat << EOF
+m4_include(include/html.m4)
+START_HTML([[${ROOT_URL}]], [[${BLOG_TITLE}]])
+HOMEPAGE_HEADER_HTML([[${ROOT_URL}]], [[${BLOG_TITLE}]], [[${BLOG_SUBTITLE}]])
+EOF
+}
+
+function build_index_footer {
+	cat << EOF
+m4_include(include/html.m4)
+HOMEPAGE_FOOTER_HTML([[${ROOT_URL}]], [[${VERSION}]])
+END_HTML
+EOF
+}
+
+function build_index_body {
+	echo "m4_include(include/html.m4)"
+	POSTS="$1"
+	PINNED_POSTS="$(mktemp)"
+	INCLUDED_POSTS=( )
+	INCLUDED_POSTS_INDEX="0"
+	only_pinned_posts "${POSTS}" > "${PINNED_POSTS}"
+	for POST in $(cat "${PINNED_POSTS}") $(tac "${POSTS}")
+	do
+		(( "${INCLUDED_POSTS_INDEX}" > "0" )) && \
+			[[ " ${INCLUDED_POSTS[@]} " =~ " ${POST} " ]] && \
+			continue
+
+		POST_FILE="$(find ${POST_DIR} -name "*${POST}.${POST_EXTENSION}")"
+		HEADERS="${METADATA_DIR}/${POST}/headers"
+		CONTENT="${METADATA_DIR}/${POST}/previewcontent"
+		OPTIONS="${METADATA_DIR}/${POST}/options"
+		if [[ "${MAKE_SHORT_POSTS}" == "yes" ]]
+		then
+			POST_LINK="${ROOT_URL}/p/${POST}.html"
+			POST_LINK="${ROOT_URL}/posts/$(basename "${POST_FILE}" ".${POST_EXTENSION}").html"
+		else
+			POST_LINK="${ROOT_URL}/posts/$(basename "${POST_FILE}" ".${POST_EXTENSION}").html"
+		fi
+		TITLE="$(get_title "${HEADERS}")"
+		AUTHOR="$(get_author "${HEADERS}")"
+		DATE="$(get_date "${HEADERS}")"
+		MOD_DATE="$(get_mod_date "${HEADERS}")"
+		(( "$((${MOD_DATE}-${DATE}))" > "${SIGNIFICANT_MOD_AFTER}" )) && MODIFIED="foobar" || MODIFIED=""
+		DATE="$(ts_to_date "${DATE_FRMT}" "${DATE}")"
+		MOD_DATE="$(ts_to_date "${LONG_DATE_FRMT}" "${MOD_DATE}")"
+		PERMALINK="${ROOT_URL}/p/$(get_id "${HEADERS}").html"
+		IS_PINNED="$(op_get "${OPTIONS}" pinned)"
+		if [[ "$(cat "${METADATA_DIR}/${POST}/previewcontent" | hash_data)" != \
+			"$(cat "${METADATA_DIR}/${POST}/content" | hash_data)" ]]
+		then
+			CONTENT_IS_TRIMMED="foobar"
+		else
+			CONTENT_IS_TRIMMED=""
+		fi
+		echo "START_HOMEPAGE_PREVIEW_HTML"
+		echo "START_POST_HEADER_HTML([[<a href='${POST_LINK}'>${TITLE}</a>]], [[${DATE}]], [[${AUTHOR}]])"
+		if [[ "${MODIFIED}" != "" ]]
+		then
+			echo "POST_HEADER_MOD_DATE_HTML([[${MOD_DATE}]])"
+		fi
+		if [[ "${MAKE_SHORT_POSTS}" == "yes" ]]
+		then
+			echo "POST_HEADER_PERMALINK_HTML([[${PERMALINK}]])"
+		fi
+		if [[ "${IS_PINNED}" != "" ]] && (( "${IS_PINNED}" > "0" ))
+		then
+			echo "POST_HEADER_PINNED_HTML"
+		fi
+		echo "END_POST_HEADER_HTML"
+		< "${CONTENT}" \
+		pre_markdown "$(get_id "${HEADERS}")" |\
+		${MARKDOWN} |\
+		post_markdown "$(get_id "${HEADERS}")"
+		if [[ "${CONTENT_IS_TRIMMED}" != "" ]]
+		then
+			echo "<a href='${POST_LINK}'><em>Read the entire post</em></a>"
+		fi
+		echo "END_HOMEPAGE_PREVIEW_HTML"
+
+		INCLUDED_POSTS["${INCLUDED_POSTS_INDEX}"]="${POST}"
+		INCLUDED_POSTS_INDEX=$((INCLUDED_POSTS_INDEX+1))
+	done
+	rm "${PINNED_POSTS}"
 }
 
 function build_content_header {
