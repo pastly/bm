@@ -141,7 +141,7 @@ $(METADATA_DIR)/%/body: $(METADATA_DIR)/%/headers $(METADATA_DIR)/%/content $(ME
 # Target for short posts
 $(BUILT_SHORT_POST_DIR)/%.html: $(METADATA_DIR)/%/head $(METADATA_DIR)/%/body $(METADATA_DIR)/%/foot
 	@echo $@
-	cat $^ | awk 'NF' > $@
+	cat $^ > $@
 
 # Target for posts
 $(BUILT_POSTS): $(BUILT_SHORT_POSTS)
@@ -156,7 +156,7 @@ endif
 # Target for homepage
 $(BUILD_DIR)/index.html: $(METADATA_DIR)/pagehead $(METADATA_DIR)/indexbody $(METADATA_DIR)/pagefoot | $(OUT_DIRS)
 	@echo $@
-	cat $^ | awk 'NF' > $@
+	cat $^ > $@
 
 # Target for posts index
 $(BUILT_POST_DIR)/index.html: $(POST_FILES) $(INCLUDE_FILES) $(CSS_FILES) | $(OUT_DIRS)
