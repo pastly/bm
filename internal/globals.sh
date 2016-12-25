@@ -713,4 +713,40 @@ CONTENT_PAGE_FOOTER_HTML([[${ROOT_URL}]], [[${VERSION}]])
 END_HTML
 EOF
 }
+
+function build_tagindex_header {
+	echo "m4_include(include/html.m4)"
+	echo "START_HTML([[${ROOT_URL}]], [[Tags - ${BLOG_TITLE}]])"
+	echo "CONTENT_PAGE_HEADER_HTML([[${ROOT_URL}]], [[${BLOG_TITLE}]], [[${BLOG_SUBTITLE}]])"
+}
+
+function build_tagindex_footer {
+	echo "m4_include(include/html.m4)"
+	echo "CONTENT_PAGE_FOOTER_HTML([[${ROOT_URL}]], [[${VERSION}]])"
+	echo "END_HTML"
+}
+
+function build_tagindex_body {
+	ALL_TAGS=( $(cat "${METADATA_DIR}/tags") )
+	ALL_POSTS=( $(find "${METADATA_DIR}/" -mindepth 2 -type f -name tags) )
+	for T in ${ALL_TAGS[@]}
+	do
+		echo "<h1>${T}</h1>"
+		echo "<ul>"
+		for P in ${ALL_POSTS[@]}
+		do
+			if grep --quiet --line-regexp "${T}" "${P}"
+			then
+				ID="$(basename $(dirname "${P}"))"
+				HEADERS="${METADATA_DIR}/${ID}/headers"
+				LINK="/p/${ID}.html"
+				TITLE="$(get_title "${HEADERS}")"
+				AUTHOR="$(get_author "${HEADERS}")"
+				DATE="$(ts_to_date "${DATE_FRMT}" "$(get_date "${HEADERS}")")"
+				echo "<li><a href='${LINK}'>${TITLE}</a> by ${AUTHOR} on ${DATE}</li>"
+			fi
+		done
+		echo "</ul>"
+	done
+}
 set +a
