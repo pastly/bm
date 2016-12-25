@@ -50,7 +50,7 @@ POST_METADATA_FILES := $(foreach dir,$(POST_METADATA_FILES),\
 
 # These are output dirs that need to exist before files start getting dropped in them
 OUT_DIRS := $(METADATA_DIR) \
-	$(dir  $(filter $(METADATA_DIR)/%/headers,$(POST_METADATA_FILES)))\
+	$(dir $(filter $(METADATA_DIR)/%/headers,$(POST_METADATA_FILES))) \
 	$(BUILT_POST_DIR) \
 	$(BUILT_STATIC_DIR) \
 	$(BUILT_TAG_DIR) \
