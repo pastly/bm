@@ -494,6 +494,17 @@ function only_pinned_posts {
 	done
 }
 
+# give this function a file name containing all post ids
+# it calls only_pinned_posts and echos post ids that aren't pinned
+function only_unpinned_posts {
+	PINNED=( $(only_pinned_posts $1) )
+	for ID in $(cat $1)
+	do
+		[[ ! " ${PINNED[@]} " =~ " ${ID} " ]] \
+			&& echo "${ID}"
+	done
+}
+
 # options must be validated before running this
 function pre_markdown {
 	ID="$1"
@@ -601,15 +612,13 @@ function build_index_body {
 	echo "m4_include(include/html.m4)"
 	POSTS="$1"
 	PINNED_POSTS="$(mktemp)"
+	UNPINNED_POSTS="$(mktemp)"
 	INCLUDED_POSTS=( )
 	INCLUDED_POSTS_INDEX="0"
 	only_pinned_posts "${POSTS}" > "${PINNED_POSTS}"
-	for POST in $(cat "${PINNED_POSTS}") $(tac "${POSTS}")
+	only_unpinned_posts "${POSTS}" > "${UNPINNED_POSTS}"
+	for POST in $(cat "${PINNED_POSTS}") $(tac "${UNPINNED_POSTS}" | head -n "${POSTS_ON_HOMEPAGE}")
 	do
-		(( "${INCLUDED_POSTS_INDEX}" > "0" )) && \
-			[[ " ${INCLUDED_POSTS[@]} " =~ " ${POST} " ]] && \
-			continue
-
 		POST_FILE="$(find ${POST_DIR} -name "*${POST}.${POST_EXTENSION}")"
 		HEADERS="${METADATA_DIR}/${POST}/headers"
 		CONTENT="${METADATA_DIR}/${POST}/previewcontent"
@@ -665,7 +674,7 @@ function build_index_body {
 		INCLUDED_POSTS["${INCLUDED_POSTS_INDEX}"]="${POST}"
 		INCLUDED_POSTS_INDEX=$((INCLUDED_POSTS_INDEX+1))
 	done
-	rm "${PINNED_POSTS}"
+	rm "${PINNED_POSTS}" "${UNPINNED_POSTS}"
 }
 
 function build_content_header {
