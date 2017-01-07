@@ -111,14 +111,14 @@ function validate_options {
 	if [[ "${FILE}" == "" ]] || [[ "${OPTIONS}" == "" ]]
 	then
 		echo "missing file or options file"
-		return
+		return 1
 	fi
 	# If user wants a TOC, then heading_ids must be unset or set to on.
 	# Set it to true if unset
 	[[ "$(file_has_toc_code "${FILE}")" != "" ]] && \
 		[[ "$(op_is_set "${OPTIONS}" heading_ids)" != "" ]] && \
 		[[ "$(op_get "${OPTIONS}" heading_ids)" == "0" ]] && \
-		echo "table of contents requested but heading_ids is off" && return
+		echo "table of contents requested but heading_ids is off" && return 2
 	[[ "$(file_has_toc_code "${FILE}")" != "" ]] && op_set "${OPTIONS}" heading_ids
 	return 0
 }
