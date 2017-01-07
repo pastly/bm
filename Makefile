@@ -111,7 +111,7 @@ $(METADATA_DIR)/%/foot: | $(OUT_DIRS)
 	build_content_footer $* | $(M4) $(M4_FLAGS) > $@
 
 # Target for per-post body. Completely HTML formatted.
-$(METADATA_DIR)/%/body: $(METADATA_DIR)/%/headers $(METADATA_DIR)/%/content $(METADATA_DIR)/%/toc
+$(METADATA_DIR)/%/body: $(METADATA_DIR)/%/headers $(METADATA_DIR)/%/content $(METADATA_DIR)/%/toc $(METADATA_DIR)/%/options
 	@echo $@
 	$(eval METADATA := $(METADATA_DIR)/$(shell get_id $<))
 	< $(METADATA)/content \

@@ -565,27 +565,33 @@ function post_markdown {
 
 	# 3: make heading ids if needed
 
-	HEADINGS=( )
-	while read LINE
-	do
-		if [[ "$(echo "${LINE}" | grep "^<h[[:digit:]]>.*</h[[:digit:]]>" )" == "" ]]
-		then
-			echo "${LINE}"
-			continue
-		fi
-		HEADING="$(echo ${LINE} | sed 's|^<h[[:digit:]]>\(.*\)</h[[:digit:]]>|\1|')"
-		HEADING="$(echo "${HEADING}" | title_to_heading_id)"
-		WORKING_HEADING="${HEADING}"
-		while (( "${#HEADINGS[@]}" > "0" )) && [[ " ${HEADINGS[@]} " =~ " ${WORKING_HEADING} " ]]
+	OPTIONS="${METADATA_DIR}/$1/options"
+	if [[ "$(op_is_set "${OPTIONS}" heading_ids)" == "" ]]
+	then
+		cat "${TMP2}" > "${TMP1}"
+	else
+		HEADINGS=( )
+		while read LINE
 		do
-			I=$((I+1))
-			WORKING_HEADING="${HEADING}-${I}"
-		done
-		HEADINGS+=(${WORKING_HEADING})
-		echo "${LINE}" | sed \
-			-e "s|^<h\([[:digit:]]\)>|<h\1 id=\'${WORKING_HEADING}'>|" \
-			-e "s|</h\([[:digit:]]\)>|</h\1>|"
-	done < "${TMP2}" > "${TMP1}"
+			if [[ "$(echo "${LINE}" | grep "^<h[[:digit:]]>.*</h[[:digit:]]>" )" == "" ]]
+			then
+				echo "${LINE}"
+				continue
+			fi
+			HEADING="$(echo ${LINE} | sed 's|^<h[[:digit:]]>\(.*\)</h[[:digit:]]>|\1|')"
+			HEADING="$(echo "${HEADING}" | title_to_heading_id)"
+			WORKING_HEADING="${HEADING}"
+			while (( "${#HEADINGS[@]}" > "0" )) && [[ " ${HEADINGS[@]} " =~ " ${WORKING_HEADING} " ]]
+			do
+				I=$((I+1))
+				WORKING_HEADING="${HEADING}-${I}"
+			done
+			HEADINGS+=(${WORKING_HEADING})
+			echo "${LINE}" | sed \
+				-e "s|^<h\([[:digit:]]\)>|<h\1 id=\'${WORKING_HEADING}'>|" \
+				-e "s|</h\([[:digit:]]\)>|</h\1>|"
+		done < "${TMP2}" > "${TMP1}"
+	fi
 
 	cat "${TMP1}"
 	rm "${TMP1}" "${TMP2}"
