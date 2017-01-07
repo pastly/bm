@@ -725,7 +725,14 @@ function build_tagindex_footer {
 
 function build_tagindex_body {
 	ALL_TAGS=( $(cat "${METADATA_DIR}/tags") )
-	ALL_POSTS=( $(find "${METADATA_DIR}/" -mindepth 2 -type f -name tags) )
+	# first get all post headers
+	TMP=( $(find "${METADATA_DIR}/" -mindepth 2 -type f -name headers) )
+	# then sort the headers by date
+	TMP=( $(sort_by_date ${TMP[@]} | tac) )
+	# then change from headers to tags
+	ALL_POSTS=( )
+	for P in ${TMP[@]}; do ALL_POSTS[${#ALL_POSTS[@]}]="$(dirname ${P})/tags"; done
+	# finally, build page
 	for T in ${ALL_TAGS[@]}
 	do
 		echo "<h1>${T}</h1>"
