@@ -735,6 +735,7 @@ function build_tagindex_body {
 	# finally, build page
 	for T in ${ALL_TAGS[@]}
 	do
+		CURRENT_EPOCH=
 		echo "<h1>${T}</h1>"
 		echo "<ul>"
 		for P in ${ALL_POSTS[@]}
@@ -743,11 +744,25 @@ function build_tagindex_body {
 			then
 				ID="$(basename $(dirname "${P}"))"
 				HEADERS="${METADATA_DIR}/${ID}/headers"
+				DATE="$(get_date "${HEADERS}")"
+				DATE_PRETTY="$(ts_to_date "${DATE_FRMT}" "$(get_date "${HEADERS}")")"
+				if [[ "${TAG_INDEX_BY}" == "month" ]] && [[ "$(ts_to_date "${MONTHLY_INDEX_DATE_FRMT}" "${DATE}")" != "${CURRENT_EPOCH}" ]]
+				then
+					CURRENT_EPOCH="$(ts_to_date "${MONTHLY_INDEX_DATE_FRMT}" "${DATE}")"
+					echo "</ul>"
+					echo "<h2>${CURRENT_EPOCH}</h2>"
+					echo "<ul>"
+				elif [[ "${TAG_INDEX_BY}" == "year" ]] && [[ "$(ts_to_date "${YEARLY_INDEX_DATE_FRMT}" "${DATE}")" != "${CURRENT_EPOCH}" ]]
+				then
+					CURRENT_EPOCH="$(ts_to_date "${YEARLY_INDEX_DATE_FRMT}" "${DATE}")"
+					echo "</ul>"
+					echo "<h2>${CURRENT_EPOCH}</h2>"
+					echo "<ul>"
+				fi
 				LINK="/p/${ID}.html"
 				TITLE="$(get_title "${HEADERS}")"
 				AUTHOR="$(get_author "${HEADERS}")"
-				DATE="$(ts_to_date "${DATE_FRMT}" "$(get_date "${HEADERS}")")"
-				echo "<li><a href='${LINK}'>${TITLE}</a> by ${AUTHOR} on ${DATE}</li>"
+				echo "<li><a href='${LINK}'>${TITLE}</a> by ${AUTHOR} on ${DATE_PRETTY}</li>"
 			fi
 		done
 		echo "</ul>"
