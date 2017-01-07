@@ -777,4 +777,41 @@ function build_tagindex_body {
 		rm "${TMP_TAG_FILE}"
 	done
 }
+
+function build_postindex {
+	ALL_POSTS=( $(find "${METADATA_DIR}/" -mindepth 2 -type f -name headers) )
+	ALL_POSTS=( $(sort_by_date ${ALL_POSTS[@]} | tac) )
+	CURRENT_EPOCH=
+	echo "m4_include(include/html.m4)"
+	echo "START_HTML([[${ROOT_URL}]], [[${BLOG_TITLE} - Home]])"
+	echo "CONTENT_PAGE_HEADER_HTML([[${ROOT_URL}]], [[${BLOG_TITLE}]], [[${BLOG_SUBTITLE}]])"
+	echo "<h1>Posts</h1>"
+	echo "<ul>"
+	for P in ${ALL_POSTS[@]}
+	do
+		ID="$(basename $(dirname "${P}"))"
+		LINK="/p/${ID}.html"
+		TITLE="$(get_title "${P}")"
+		AUTHOR="$(get_author "${P}")"
+		DATE="$(get_date "${P}")"
+		DATE_PRETTY="$(ts_to_date "${DATE_FRMT}" "${DATE}")"
+		if [[ "${POST_INDEX_BY}" == "month" ]] && [[ "$(ts_to_date "${MONTHLY_INDEX_DATE_FRMT}" "${DATE}")" != "${CURRENT_EPOCH}" ]]
+		then
+			CURRENT_EPOCH="$(ts_to_date "${MONTHLY_INDEX_DATE_FRMT}" "${DATE}")"
+			echo "</ul>"
+			echo "<h2>${CURRENT_EPOCH}</h2>"
+			echo "<ul>"
+		elif [[ "${POST_INDEX_BY}" == "year" ]] && [[ "$(ts_to_date "${YEARLY_INDEX_DATE_FRMT}" "${DATE}")" != "${CURRENT_EPOCH}" ]]
+		then
+			CURRENT_EPOCH="$(ts_to_date "${YEARLY_INDEX_DATE_FRMT}" "${DATE}")"
+			echo "</ul>"
+			echo "<h2>${CURRENT_EPOCH}</h2>"
+			echo "<ul>"
+		fi
+		echo "<li><a href='${LINK}'>${TITLE}</a> by ${AUTHOR} on ${DATE_PRETTY}</li>"
+	done
+	echo "</ul>"
+	echo "CONTENT_PAGE_FOOTER_HTML([[${ROOT_URL}]], [[${VERSION}]])"
+	echo "END_HTML"
+}
 set +a

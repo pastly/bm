@@ -175,7 +175,9 @@ $(BUILD_DIR)/index.html: $(METADATA_DIR)/indexhead $(METADATA_DIR)/indexbody $(M
 
 # Target for posts index
 $(BUILT_POST_DIR)/index.html: $(POST_FILES) $(INCLUDE_FILES) $(CSS_FILES) | $(OUT_DIRS)
+$(BUILT_POST_DIR)/index.html: $(filter $(METADATA_DIR)/%/headers,$(POST_METADATA_FILES)) | $(OUT_DIRS)
 	@echo $@
+	build_postindex | $(M4) $(M4_FLAGS) > $@
 
 # Target for tags index
 $(BUILT_TAG_DIR)/index.html: $(METADATA_DIR)/tagshead $(METADATA_DIR)/tagsbody $(METADATA_DIR)/tagsfoot | $(OUT_DIRS)
