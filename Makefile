@@ -140,7 +140,6 @@ $(BUILD_DIR)/index.html: $(METADATA_DIR)/postsbydate | $(POST_METADATA_FILES)
 	build_index $< | $(M4) $(M4_FLAGS) > $@
 
 # Target for posts index
-$(BUILT_POST_DIR)/index.html: $(POST_FILES) $(INCLUDE_FILES) $(CSS_FILES) | $(OUT_DIRS)
 $(BUILT_POST_DIR)/index.html: $(filter $(METADATA_DIR)/%/headers,$(POST_METADATA_FILES)) | $(OUT_DIRS)
 	@echo $@
 	build_postindex | $(M4) $(M4_FLAGS) > $@
