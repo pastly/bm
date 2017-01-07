@@ -285,7 +285,7 @@ function file_has_tag {
 
 function file_has_toc_code {
 	FILE="$1"
-	LINE_COUNT=$(grep --ignore-case "${TOC_CODE}" "${FILE}" | wc -l)
+	LINE_COUNT=$(strip_comments "${FILE}" | grep --ignore-case "${TOC_CODE}" | wc -l)
 	[[ "${LINE_COUNT}" > 0 ]] && echo "foobar" || echo ""
 }
 
