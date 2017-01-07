@@ -551,14 +551,44 @@ function get_preview_content {
 
 # options must be validated before running this
 function post_markdown {
+	TMP1="$(mktemp)"
+	TMP2="$(mktemp)"
 	# 1: make tags into links
 
-	sed -e "s|${TAG_CODE}\([${TAG_ALPHABET}]\+\)|<a href='${ROOT_URL}/tags/\L\1.html'>\E\1</a>|g" |\
-	\
-	# 2: remove various macros \
-	\
-	sed -e "s|${PREVIEW_STOP_CODE}||g" | \
-	sed -e "s|${TOC_CODE}||g" # shouldn't be necessary as it will have been replaced already
+	sed -e "s|${TAG_CODE}\([${TAG_ALPHABET}]\+\)|<a href='${ROOT_URL}/tags/\L\1.html'>\E\1</a>|g" > "${TMP1}"
+
+	# 2: remove various macros
+
+	cat "${TMP1}" | \
+		sed -e "s|${PREVIEW_STOP_CODE}||g" | \
+		sed -e "s|${TOC_CODE}||g" > "${TMP2}" # TOC_CODE shouldn't be necessary as it will have been replaced already
+
+	# 3: make heading ids if needed
+
+	HEADINGS=( )
+	while read LINE
+	do
+		if [[ "$(echo "${LINE}" | grep "^<h[[:digit:]]>.*</h[[:digit:]]>" )" == "" ]]
+		then
+			echo "${LINE}"
+			continue
+		fi
+		HEADING="$(echo ${LINE} | sed 's|^<h[[:digit:]]>\(.*\)</h[[:digit:]]>|\1|')"
+		HEADING="$(echo "${HEADING}" | title_to_heading_id)"
+		WORKING_HEADING="${HEADING}"
+		while (( "${#HEADINGS[@]}" > "0" )) && [[ " ${HEADINGS[@]} " =~ " ${WORKING_HEADING} " ]]
+		do
+			I=$((I+1))
+			WORKING_HEADING="${HEADING}-${I}"
+		done
+		HEADINGS+=(${WORKING_HEADING})
+		echo "${LINE}" | sed \
+			-e "s|^<h\([[:digit:]]\)>|<h\1 id=\'${WORKING_HEADING}'>|" \
+			-e "s|</h\([[:digit:]]\)>|</h\1>|"
+	done < "${TMP2}" > "${TMP1}"
+
+	cat "${TMP1}"
+	rm "${TMP1}" "${TMP2}"
 }
 
 function post_markdown_heading_ids {
