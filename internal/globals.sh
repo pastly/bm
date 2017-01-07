@@ -271,10 +271,7 @@ function ts_to_date {
 
 function get_tags {
 	FILE="$1"
-	# brackets around grep so that when it returns 1 on no match, bash doesn't
-	# throw a fit. Yes this has the side effect of ignoring a real error (code 2)
-	get_content "${FILE}" | \
-		{ grep --extended-regexp --only-matching "${TAG_CODE}[${TAG_ALPHABET}]+" || true; } | \
+	cat ${FILE} | grep --extended-regexp --only-matching "${TAG_CODE}[${TAG_ALPHABET}]+" | \
 		sed -e "s|${TAG_CODE}||g" | to_lower | \
 		sort | uniq
 }
