@@ -711,19 +711,7 @@ END_HTML
 EOF
 }
 
-function build_tagindex_header {
-	echo "m4_include(include/html.m4)"
-	echo "START_HTML([[${ROOT_URL}]], [[Tags - ${BLOG_TITLE}]])"
-	echo "CONTENT_PAGE_HEADER_HTML([[${ROOT_URL}]], [[${BLOG_TITLE}]], [[${BLOG_SUBTITLE}]])"
-}
-
-function build_tagindex_footer {
-	echo "m4_include(include/html.m4)"
-	echo "CONTENT_PAGE_FOOTER_HTML([[${ROOT_URL}]], [[${VERSION}]])"
-	echo "END_HTML"
-}
-
-function build_tagindex_body {
+function build_tagindex {
 	ALL_TAGS=( $(cat "${METADATA_DIR}/tags") )
 	# first get all post headers
 	TMP=( $(find "${METADATA_DIR}/" -mindepth 2 -type f -name headers) )
@@ -733,6 +721,9 @@ function build_tagindex_body {
 	ALL_POSTS=( )
 	for P in ${TMP[@]}; do ALL_POSTS[${#ALL_POSTS[@]}]="$(dirname ${P})/tags"; done
 	# finally, build page
+	echo "m4_include(include/html.m4)"
+	echo "START_HTML([[${ROOT_URL}]], [[Tags - ${BLOG_TITLE}]])"
+	echo "CONTENT_PAGE_HEADER_HTML([[${ROOT_URL}]], [[${BLOG_TITLE}]], [[${BLOG_SUBTITLE}]])"
 	for T in ${ALL_TAGS[@]}
 	do
 		CURRENT_EPOCH=
@@ -776,6 +767,8 @@ function build_tagindex_body {
 		cat "${TMP_TAG_FILE}" | "${M4}" ${M4_FLAGS} > "${TAG_FILE}"
 		rm "${TMP_TAG_FILE}"
 	done
+	echo "CONTENT_PAGE_FOOTER_HTML([[${ROOT_URL}]], [[${VERSION}]])"
+	echo "END_HTML"
 }
 
 function build_postindex {
