@@ -29,9 +29,6 @@ BUILT_META_FILES := \
 BUILT_SHORT_POSTS := $(foreach file,$(POST_FILES),$(BUILT_SHORT_POST_DIR)/$(shell get_id $(file)).html)
 
 METADATA_FILES := \
-	$(METADATA_DIR)/indexhead \
-	$(METADATA_DIR)/indexbody \
-	$(METADATA_DIR)/indexfoot \
 	$(METADATA_DIR)/postindexbody \
 	$(METADATA_DIR)/postsbydate \
 	$(METADATA_DIR)/tags \
@@ -67,18 +64,6 @@ all: $(OUT_DIRS) \
 
 $(OUT_DIRS):
 	$(MKDIR) $(MKDIR_FLAGS) $@
-
-$(METADATA_DIR)/indexhead:
-	@echo $@
-	build_index_header | $(M4) $(M4_FLAGS) > $@
-
-$(METADATA_DIR)/indexfoot:
-	@echo $@
-	build_index_footer | $(M4) $(M4_FLAGS) > $@
-
-$(METADATA_DIR)/indexbody: $(METADATA_DIR)/postsbydate | $(POST_METADATA_FILES)
-	@echo $@
-	build_index_body $< | $(M4) $(M4_FLAGS) > $@
 
 $(METADATA_DIR)/postindexbody: | $(OUT_DIRS)
 	touch $@
@@ -154,9 +139,9 @@ else
 endif
 
 # Target for homepage
-$(BUILD_DIR)/index.html: $(METADATA_DIR)/indexhead $(METADATA_DIR)/indexbody $(METADATA_DIR)/indexfoot | $(OUT_DIRS)
+$(BUILD_DIR)/index.html: $(METADATA_DIR)/postsbydate | $(POST_METADATA_FILES)
 	@echo $@
-	cat $^ > $@
+	build_index $< | $(M4) $(M4_FLAGS) > $@
 
 # Target for posts index
 $(BUILT_POST_DIR)/index.html: $(POST_FILES) $(INCLUDE_FILES) $(CSS_FILES) | $(OUT_DIRS)

@@ -589,24 +589,10 @@ function post_markdown_heading_ids {
 	done < "${HTML_CONTENT_FILE}"
 }
 
-function build_index_header {
-	cat << EOF
-m4_include(include/html.m4)
-START_HTML([[${ROOT_URL}]], [[${BLOG_TITLE}]])
-HOMEPAGE_HEADER_HTML([[${ROOT_URL}]], [[${BLOG_TITLE}]], [[${BLOG_SUBTITLE}]])
-EOF
-}
-
-function build_index_footer {
-	cat << EOF
-m4_include(include/html.m4)
-HOMEPAGE_FOOTER_HTML([[${ROOT_URL}]], [[${VERSION}]])
-END_HTML
-EOF
-}
-
-function build_index_body {
+function build_index {
 	echo "m4_include(include/html.m4)"
+	echo "START_HTML([[${ROOT_URL}]], [[${BLOG_TITLE}]])"
+	echo "HOMEPAGE_HEADER_HTML([[${ROOT_URL}]], [[${BLOG_TITLE}]], [[${BLOG_SUBTITLE}]])"
 	POSTS="$1"
 	PINNED_POSTS="$(mktemp)"
 	UNPINNED_POSTS="$(mktemp)"
@@ -671,6 +657,8 @@ function build_index_body {
 		INCLUDED_POSTS["${INCLUDED_POSTS_INDEX}"]="${POST}"
 		INCLUDED_POSTS_INDEX=$((INCLUDED_POSTS_INDEX+1))
 	done
+	echo "HOMEPAGE_FOOTER_HTML([[${ROOT_URL}]], [[${VERSION}]])"
+	echo "END_HTML"
 	rm "${PINNED_POSTS}" "${UNPINNED_POSTS}"
 }
 
