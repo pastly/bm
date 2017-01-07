@@ -736,8 +736,13 @@ function build_tagindex_body {
 	for T in ${ALL_TAGS[@]}
 	do
 		CURRENT_EPOCH=
-		echo "<h1>${T}</h1>"
-		echo "<ul>"
+		TMP_TAG_FILE="$(mktemp)"
+		TAG_FILE="${BUILT_TAG_DIR}/${T}.html"
+		echo "m4_include(include/html.m4)" >> "${TMP_TAG_FILE}"
+		echo "START_HTML([[${ROOT_URL}]], [[${T} - ${BLOG_TITLE}]])" >> "${TMP_TAG_FILE}"
+		echo "CONTENT_PAGE_HEADER_HTML([[${ROOT_URL}]], [[${BLOG_TITLE}]], [[${BLOG_SUBTITLE}]])" >> "${TMP_TAG_FILE}"
+		echo "<h1>${T}</h1>" | tee -a "${TMP_TAG_FILE}"
+		echo "<ul>" | tee -a "${TMP_TAG_FILE}"
 		for P in ${ALL_POSTS[@]}
 		do
 			if grep --quiet --line-regexp "${T}" "${P}"
@@ -749,23 +754,27 @@ function build_tagindex_body {
 				if [[ "${TAG_INDEX_BY}" == "month" ]] && [[ "$(ts_to_date "${MONTHLY_INDEX_DATE_FRMT}" "${DATE}")" != "${CURRENT_EPOCH}" ]]
 				then
 					CURRENT_EPOCH="$(ts_to_date "${MONTHLY_INDEX_DATE_FRMT}" "${DATE}")"
-					echo "</ul>"
-					echo "<h2>${CURRENT_EPOCH}</h2>"
-					echo "<ul>"
+					echo "</ul>" | tee -a "${TMP_TAG_FILE}"
+					echo "<h2>${CURRENT_EPOCH}</h2>" | tee -a "${TMP_TAG_FILE}"
+					echo "<ul>" | tee -a "${TMP_TAG_FILE}"
 				elif [[ "${TAG_INDEX_BY}" == "year" ]] && [[ "$(ts_to_date "${YEARLY_INDEX_DATE_FRMT}" "${DATE}")" != "${CURRENT_EPOCH}" ]]
 				then
 					CURRENT_EPOCH="$(ts_to_date "${YEARLY_INDEX_DATE_FRMT}" "${DATE}")"
-					echo "</ul>"
-					echo "<h2>${CURRENT_EPOCH}</h2>"
-					echo "<ul>"
+					echo "</ul>" | tee -a "${TMP_TAG_FILE}"
+					echo "<h2>${CURRENT_EPOCH}</h2>" | tee -a "${TMP_TAG_FILE}"
+					echo "<ul>" | tee -a "${TMP_TAG_FILE}"
 				fi
 				LINK="/p/${ID}.html"
 				TITLE="$(get_title "${HEADERS}")"
 				AUTHOR="$(get_author "${HEADERS}")"
-				echo "<li><a href='${LINK}'>${TITLE}</a> by ${AUTHOR} on ${DATE_PRETTY}</li>"
+				echo "<li><a href='${LINK}'>${TITLE}</a> by ${AUTHOR} on ${DATE_PRETTY}</li>" | tee -a "${TMP_TAG_FILE}"
 			fi
 		done
-		echo "</ul>"
+		echo "</ul>" | tee -a "${TMP_TAG_FILE}"
+		echo "CONTENT_PAGE_FOOTER_HTML([[${ROOT_URL}]], [[${VERSION}]])" >> "${TMP_TAG_FILE}"
+		echo "END_HTML" >> "${TMP_TAG_FILE}"
+		cat "${TMP_TAG_FILE}" | "${M4}" ${M4_FLAGS} > "${TAG_FILE}"
+		rm "${TMP_TAG_FILE}"
 	done
 }
 set +a
