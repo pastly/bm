@@ -593,7 +593,9 @@ function post_markdown {
 		done < "${TMP2}" > "${TMP1}"
 	fi
 
-	cat "${TMP1}"
+	# DONE
+
+	cat "${TMP1}" # output the final temp file. Odd num of steps means tmp1
 	rm "${TMP1}" "${TMP2}"
 }
 
