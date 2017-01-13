@@ -22,6 +22,7 @@ shortlinks for permanent links.
 - `version` command as `--version` prints too much for scripts (#70)
 - add branch descriptions to readme
 - a sad face
+- tool to count rough function usage
 
 ### Changed
 - move many Makefile variables definitions to globals.sh
