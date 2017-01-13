@@ -647,13 +647,12 @@ function build_index {
 	only_unpinned_posts "${POSTS}" > "${UNPINNED_POSTS}"
 	for POST in $(cat "${PINNED_POSTS}") $(tac "${UNPINNED_POSTS}" | head -n "${POSTS_ON_HOMEPAGE}")
 	do
-		POST_FILE="$(find ${POST_DIR} -name "*${POST}.${POST_EXTENSION}")"
 		HEADERS="${METADATA_DIR}/${POST}/headers"
 		CONTENT="${METADATA_DIR}/${POST}/previewcontent"
 		OPTIONS="${METADATA_DIR}/${POST}/options"
 		TITLE="$(get_title "${HEADERS}")"
 		POST_FILE="$(echo "${TITLE}" | title_to_post_url)${TITLE_SEPARATOR_CHAR}${POST}.html"
-		if [[ "${MAKE_SHORT_POSTS}" == "yes" ]]
+		if [[ "${PREFER_SHORT_POSTS}" == "yes" ]]
 		then
 			POST_LINK="${ROOT_URL}/p/${POST}.html"
 		else
@@ -788,8 +787,13 @@ function build_tagindex {
 					echo "<h2>${CURRENT_EPOCH}</h2>" | tee -a "${TMP_TAG_FILE}"
 					echo "<ul>" | tee -a "${TMP_TAG_FILE}"
 				fi
-				LINK="/p/${ID}.html"
 				TITLE="$(get_title "${HEADERS}")"
+				if [[ "${PREFER_SHORT_POSTS}" == "yes" ]]
+				then
+					LINK="/p/${ID}.html"
+				else
+					LINK="/posts/$(echo "${TITLE}" | title_to_post_url)${TITLE_SEPARATOR_CHAR}${ID}.html"
+				fi
 				AUTHOR="$(get_author "${HEADERS}")"
 				echo "<li><a href='${LINK}'>${TITLE}</a> by ${AUTHOR} on ${DATE_PRETTY}</li>" | tee -a "${TMP_TAG_FILE}"
 			fi
@@ -816,8 +820,13 @@ function build_postindex {
 	for P in ${ALL_POSTS[@]}
 	do
 		ID="$(basename $(dirname "${P}"))"
-		LINK="/p/${ID}.html"
 		TITLE="$(get_title "${P}")"
+		if [[ "${PREFER_SHORT_POSTS}" == "yes" ]]
+		then
+			LINK="/p/${ID}.html"
+		else
+			LINK="/posts/$(echo "${TITLE}" | title_to_post_url)${TITLE_SEPARATOR_CHAR}${ID}.html"
+		fi
 		AUTHOR="$(get_author "${P}")"
 		DATE="$(get_date "${P}")"
 		DATE_PRETTY="$(ts_to_date "${DATE_FRMT}" "${DATE}")"
