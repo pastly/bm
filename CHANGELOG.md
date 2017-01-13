@@ -29,9 +29,15 @@ shortlinks for permanent links.
 - move a ton of logic into the Makefile (#65)
 - limit long post URLs to the first three words and the ID instead of all words
   (#73)
+- #section-links on the homepage don't jump to the post page, they stay on the
+  homepage and work as long as (see #69 for reference)
+   - the heading id is unique
+   - the heading is within the post preview
 
 ### Fixed
 - force full rebuild if post title changes (#68)
+- #section-links now stay on the same post page instead of going to the long
+  post URL (#69)
 
 ### Removed
 - `-v` and `--version` options from `bm` script
