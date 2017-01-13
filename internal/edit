@@ -42,7 +42,7 @@ if [[ "${OLD_HASH}" != "${NEW_HASH}" ]]
 then
 	NEW_TITLE="$(get_title "${TEMP}" | to_lower | strip_punctuation | strip_space)"
 	NEW_ID="$(get_id "${TEMP}")"
-	NEW_FILE="$(dirname "${FILE}")/${NEW_TITLE}${TITLE_SEPERATOR_CHAR}${NEW_ID}.${POST_EXTENSION}"
+	NEW_FILE="$(dirname "${FILE}")/${NEW_TITLE}${TITLE_SEPARATOR_CHAR}${NEW_ID}.${POST_EXTENSION}"
 	if [[ "${FILE}" != "${NEW_FILE}" ]]
 	then
 		echo "Warning: ${FILE} moving to ${NEW_FILE}"

@@ -75,7 +75,7 @@ do
 			MONTH=$(date --date=@${POST_DATE} +'%m')
 			"${MKDIR}" ${MKDIR_FLAGS} "${POST_DIR}/${YEAR}/${MONTH}"
 			TITLE=$(get_title "${TEMP}" | to_lower | strip_punctuation | strip_space)
-			FILENAME="${POST_DIR}/${YEAR}/${MONTH}/${TITLE}${TITLE_SEPERATOR_CHAR}${ID}.${POST_EXTENSION}"
+			FILENAME="${POST_DIR}/${YEAR}/${MONTH}/${TITLE}${TITLE_SEPARATOR_CHAR}${ID}.${POST_EXTENSION}"
 			mv "${TEMP}" "${FILENAME}"
 			if [[ "${REBUILD_POLICY}" != "manual" ]]
 			then

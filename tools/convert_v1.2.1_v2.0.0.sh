@@ -13,7 +13,7 @@ function do_it {
 		head -n 2 "${TEMP}" > "${FILE}"
 		echo "${ID}" >> "${FILE}"
 		tail -n +4 "${TEMP}" >> "${FILE}"
-		NEW_FILE="$(dirname "${FILE}")/${TITLE}${TITLE_SEPERATOR_CHAR}${ID}.${POST_EXTENSION}"
+		NEW_FILE="$(dirname "${FILE}")/${TITLE}${TITLE_SEPARATOR_CHAR}${ID}.${POST_EXTENSION}"
 		[[ "${NEW_FILE}" != "${FILE}" ]] && mv "${FILE}" "${NEW_FILE}"
 	done < <(find "${POST_DIR}" -type f -name "*.${POST_EXTENSION}")
 	rm "${TEMP}"

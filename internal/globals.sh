@@ -6,7 +6,7 @@ COMMENT_CODE='///'
 TAG_CODE='@@'
 PREVIEW_STOP_CODE='{preview-stop}'
 TOC_CODE='{toc}'
-TITLE_SEPERATOR_CHAR='-'
+TITLE_SEPARATOR_CHAR='-'
 POST_EXTENSION='bm'
 POST_DIR='posts'
 BUILD_DIR="build"
@@ -240,7 +240,7 @@ function strip_punctuation {
 
 function strip_space {
 	sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' | \
-		tr --squeeze-repeats '[:blank:]' "${TITLE_SEPERATOR_CHAR}"
+		tr --squeeze-repeats '[:blank:]' "${TITLE_SEPARATOR_CHAR}"
 }
 
 function set_editor {
@@ -649,7 +649,7 @@ function build_index {
 		CONTENT="${METADATA_DIR}/${POST}/previewcontent"
 		OPTIONS="${METADATA_DIR}/${POST}/options"
 		TITLE="$(get_title "${HEADERS}")"
-		POST_FILE="$(echo "${TITLE}" | title_to_post_url)${TITLE_SEPERATOR_CHAR}${POST}.html"
+		POST_FILE="$(echo "${TITLE}" | title_to_post_url)${TITLE_SEPARATOR_CHAR}${POST}.html"
 		if [[ "${MAKE_SHORT_POSTS}" == "yes" ]]
 		then
 			POST_LINK="${ROOT_URL}/p/${POST}.html"
