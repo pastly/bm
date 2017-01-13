@@ -4,7 +4,7 @@ source internal/globals.sh
 
 if [[ ! -d "${POST_DIR}" ]]
 then
-	echo "No posts exist to list"
+	echo "No posts exist to list :("
 	exit 0
 fi
 
