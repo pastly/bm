@@ -56,10 +56,10 @@ then
 fi
 
 which "${MAKE}" &> /dev/null
-[[ $? != 0 ]] && echo "make not found" && exit 1
+[[ $? != 0 ]] && echo "error: make not found" && exit 1
 
-[ ! -x "${MARKDOWN}" ] && echo "Markdown.pl not found" && exit 1
-[ ! -x "${M4}" ] && echo "m4 not found" && exit 1
+[ ! -x "${MARKDOWN}" ] && echo "error: Markdown.pl not found" && exit 1
+[ ! -x "${M4}" ] && echo "error: m4 not found" && exit 1
 
 [[ "${MULTI_MATCH_STRAT}" == "" ]] && MULTI_MATCH_STRAT="simple"
 [[ "${DEFAULT_INDEX_BY}" == "" ]] && DEFAULT_INDEX_BY="none"
