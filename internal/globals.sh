@@ -648,14 +648,14 @@ function build_index {
 		HEADERS="${METADATA_DIR}/${POST}/headers"
 		CONTENT="${METADATA_DIR}/${POST}/previewcontent"
 		OPTIONS="${METADATA_DIR}/${POST}/options"
+		TITLE="$(get_title "${HEADERS}")"
+		POST_FILE="$(echo "${TITLE}" | title_to_post_url)${TITLE_SEPERATOR_CHAR}${POST}.html"
 		if [[ "${MAKE_SHORT_POSTS}" == "yes" ]]
 		then
 			POST_LINK="${ROOT_URL}/p/${POST}.html"
-			POST_LINK="${ROOT_URL}/posts/$(basename "${POST_FILE}" ".${POST_EXTENSION}").html"
 		else
-			POST_LINK="${ROOT_URL}/posts/$(basename "${POST_FILE}" ".${POST_EXTENSION}").html"
+			POST_LINK="${ROOT_URL}/posts/${POST_FILE}"
 		fi
-		TITLE="$(get_title "${HEADERS}")"
 		AUTHOR="$(get_author "${HEADERS}")"
 		DATE="$(get_date "${HEADERS}")"
 		MOD_DATE="$(get_mod_date "${HEADERS}")"

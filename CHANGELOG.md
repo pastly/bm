@@ -5,6 +5,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+__Breaking changes__
+
+__Long post URLs are now limited__. Before, a post titled "My New Post On
+My New Blog" would have the post URL of
+`/posts/my-new-post-on-my-new-blog-12345678.html`, but starting with this
+version, it will be truncated to the first three words:
+`/posts/my-new-post-12345678.html`. __All existing links to posts with titles
+longer than three words will break__. From this version on, use the new
+shortlinks for permanent links.
+
 ### Added
 - config option to make permalinks/shortlinks (#66)
 - `version` command as `--version` prints too much for scripts (#70)
@@ -15,6 +26,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - move many Makefile variables definitions to globals.sh
 - moved generic option functions to options.sh
 - move a ton of logic into the Makefile (#65)
+- limit long post URLs to the first three words and the ID instead of all words
 
 ### Fixed
 - force full rebuild if post title changes (#68)
