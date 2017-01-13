@@ -19,7 +19,7 @@ BUILT_STATIC_DIR="${BUILD_DIR}/static"
 M4="$(which m4)"
 M4_FLAGS="--prefix-builtins"
 MAKE="make"
-MAKE_FLAGS="-np"
+MAKE_FLAGS="-npq"
 MAKE_FLAGS="-j --output-sync"
 MKDIR="mkdir"
 MKDIR_FLAGS="-p"
@@ -223,6 +223,10 @@ function get_toc {
 }
 
 function title_to_heading_id {
+	to_lower | strip_punctuation | strip_space | cut -d '-' -f -3
+}
+
+function title_to_post_url {
 	to_lower | strip_punctuation | strip_space | cut -d '-' -f -3
 }
 
