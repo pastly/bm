@@ -27,6 +27,7 @@ shortlinks for permanent links.
 - moved generic option functions to options.sh
 - move a ton of logic into the Makefile (#65)
 - limit long post URLs to the first three words and the ID instead of all words
+  (#73)
 
 ### Fixed
 - force full rebuild if post title changes (#68)
