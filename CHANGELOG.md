@@ -18,6 +18,7 @@ shortlinks for permanent links.
 
 ### Added
 - config option to make permalinks/shortlinks (#66)
+- config option to prefer permalinks/shortlinks
 - `version` command as `--version` prints too much for scripts (#70)
 - add branch descriptions to readme
 - a sad face

@@ -70,6 +70,9 @@ which "${MAKE}" &> /dev/null
 [[ "${CREATE_HELP_VERBOSITY}" == "" ]] && CREATE_HELP_VERBOSITY="long"
 [[ "${REBUILD_POLICY}" == "" ]] && REBUILD_POLICY="asap"
 [[ "${MAKE_SHORT_POSTS}" == "" ]] && MAKE_SHORT_POSTS="yes"
+[[ "${PREFER_SHORT_POSTS}" == "" ]] && PREFER_SHORT_POSTS="no"
+[[ "${PREFER_SHORT_POSTS}" == "yes" ]] && [[ "${MAKE_SHORT_POSTS}" != "yes" ]] && \
+	echo "error: PREFER_SHORT_POSTS requires MAKE_SHORT_POSTS" && exit 1
 
 # Parses the options in FILE into OP_FILE and returns the contents of OP_FILE.
 # FILE must be an original post file. It cannot be temporary, even if it has
