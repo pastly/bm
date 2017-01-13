@@ -283,13 +283,6 @@ function get_tags {
 		sort | uniq
 }
 
-function file_has_tag {
-	FILE="$1"
-	TAG="${TAG_CODE}$2"
-	LINE_COUNT=$(grep --ignore-case "${TAG}" "$FILE" | wc -l)
-	[[ "${LINE_COUNT}" > 0 ]] && echo "foobar" || echo ""
-}
-
 function file_has_toc_code {
 	FILE="$1"
 	LINE_COUNT=$(strip_comments "${FILE}" | grep --ignore-case "${TOC_CODE}" | wc -l)
@@ -298,61 +291,6 @@ function file_has_toc_code {
 
 function content_make_tag_links {
 	sed -e "s|${TAG_CODE}\([${TAG_ALPHABET}]\+\)|<a href='${ROOT_URL}/tags/\L\1.html'>\E\1</a>|g"
-}
-
-function content_will_be_trimmed {
-	FILE="$1"
-	CONTENT="$(mktemp)"
-	get_content "${FILE}" > "${CONTENT}"
-	OPTIONS="$(parse_options "${FILE}")"
-	PREVIEW_STOP_LINE="$(grep --fixed-strings --line-number "${PREVIEW_STOP_CODE}" "${CONTENT}")"
-	if [[ "${PREVIEW_STOP_LINE}" != "" ]]
-	then
-		echo "foobar"
-	else
-		local PREVIEW_MAX_WORDS="${PREVIEW_MAX_WORDS}"
-		if [[ "$(op_is_set "${OPTIONS}" preview_max_words)" != "" ]]
-		then
-			PREVIEW_MAX_WORDS="$(op_get "${OPTIONS}" preview_max_words)"
-		fi
-		WORD_COUNT=0
-		while IFS= read DATA
-		do
-			WORD_COUNT=$((WORD_COUNT+$(echo "${DATA}" | wc -w)))
-			if (( "${WORD_COUNT}" >= "${PREVIEW_MAX_WORDS}" ))
-			then
-				echo "foobar"
-				break
-			fi
-		done < "${CONTENT}"
-	fi
-	rm "${CONTENT}" "${OPTIONS}"
-}
-
-function get_and_parse_content {
-	FILE="$1"
-	shift
-	DO_TRIM="$1"
-	shift
-	ERROR_FILE="$1"
-	shift
-	OPTIONS="$(parse_options "${FILE}")"
-	RET="$(validate_options "${FILE}" "${OPTIONS}")"
-	if [[ "${RET}" != "" ]]
-	then
-		echo "BM: Error parsing options: ${RET}" >> "${ERROR_FILE}"
-		rm "${OPTIONS}"
-		exit 1
-	fi
-
-	get_content "${FILE}" | \
-	pre_markdown "${DO_TRIM}" "${OPTIONS}" | \
-	${MARKDOWN} | \
-	post_markdown "${OPTIONS}" | \
-	content_make_tag_links | \
-	parse_out_our_macros
-
-	rm "${OPTIONS}"
 }
 
 function sort_by_date {
@@ -408,11 +346,6 @@ function hash_data {
 		fi
 	fi
 	${HASH_PROGRAM}
-}
-
-function parse_out_our_macros {
-	sed -e "s|${PREVIEW_STOP_CODE}||g" | \
-	sed -e "s|${TOC_CODE}||g" # shouldn't be necessary as it will have been replaced already
 }
 
 function generate_id {
@@ -604,34 +537,6 @@ function post_markdown {
 
 	cat "${TMP1}" # output the final temp file. Odd num of steps means tmp1
 	rm "${TMP1}" "${TMP2}"
-}
-
-function post_markdown_heading_ids {
-	HTML_URL="$1"
-	shift
-	HTML_CONTENT_FILE="$1"
-	shift
-	HEADINGS=( )
-	while read LINE
-	do
-		if [[ "$(echo "${LINE}" | grep "^<h[[:digit:]]>.*</h[[:digit:]]>" )" == "" ]]
-		then
-			echo "${LINE}"
-			continue
-		fi
-		HEADING="$(echo ${LINE} | cut -d ':' -f 2- | sed 's|^<h[[:digit:]]>\(.*\)</h[[:digit:]]>|\1|')"
-		HEADING="$(echo "${HEADING}" | to_lower | strip_punctuation | strip_space)"
-		WORKING_HEADING="${HEADING}"
-		while [[ " ${HEADINGS[@]} " =~ " ${WORKING_HEADING} " ]]
-		do
-			I=$((I+1))
-			WORKING_HEADING="${HEADING}-${I}"
-		done
-		HEADINGS+=(${WORKING_HEADING})
-		echo "${LINE}" | sed \
-			-e "${LINE_NUM}s|^<h\([[:digit:]]\)>|<h\1 id=\'${WORKING_HEADING}'>|" \
-			-e "${LINE_NUM}s|</h\([[:digit:]]\)>|</h\1>|"
-	done < "${HTML_CONTENT_FILE}"
 }
 
 function build_index {
