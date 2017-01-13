@@ -38,6 +38,8 @@ shortlinks for permanent links.
 - force full rebuild if post title changes (#68)
 - #section-links now stay on the same post page instead of going to the long
   post URL (#69)
+- Heading ids with special chars somehow fixed with new table of contents
+  generating functions (#61)
 
 ### Removed
 - `-v` and `--version` options from `bm` script
