@@ -33,8 +33,7 @@ source internal/options.sh
 source include/bm.conf.example
 [[ -f include/bm.conf ]] && source include/bm.conf
 
-which "Markdown.pl" &> /dev/null
-if [[ $? != 0 ]]
+if ! which "Markdown.pl" &> /dev/null
 then
 	MARKDOWN="./internal/Markdown.pl"
 	if [ ! -x "${MARKDOWN}" ]
@@ -46,16 +45,14 @@ else
 	MARKDOWN="$(which "Markdown.pl")"
 fi
 
-which git &> /dev/null
-if [[ $? == 0 ]]
+if ! which git &> /dev/null
 then
 	VERSION="${VERSION} ($(git rev-parse --short HEAD))"
 #else
 #	VERSION="${VERSION} (release)"
 fi
 
-which "${MAKE}" &> /dev/null
-[[ $? != 0 ]] && echo "error: make not found" && exit 1
+! which "${MAKE}" && echo "error: make not found" && exit 1
 
 [ ! -x "${MARKDOWN}" ] && echo "error: Markdown.pl not found" && exit 1
 [ ! -x "${M4}" ] && echo "error: m4 not found" && exit 1
@@ -251,8 +248,7 @@ function set_editor {
 		echo "\$ED not set."
 		while read -p "Enter name of desired text editor: " ED
 		do
-			which "${ED}" &> /dev/null
-			if [[ $? != 0 ]]
+			if ! which "${ED}" &> /dev/null
 			then
 				echo "That doesn't seem to be a valid editor."
 			else
@@ -323,8 +319,7 @@ function sort_by_date {
 function get_hash_program {
 	for PROGRAM in ${KNOWN_HASH_PROGRAMS} # No quotes on purpose
 	do
-		which ${PROGRAM} &> /dev/null
-		if [[ "$?" == "0" ]]
+		if ! which ${PROGRAM} &> /dev/null
 		then
 			echo "${PROGRAM}"
 			break
