@@ -48,8 +48,6 @@ fi
 if ! which git &> /dev/null
 then
 	VERSION="${VERSION} ($(git rev-parse --short HEAD))"
-#else
-#	VERSION="${VERSION} (release)"
 fi
 
 ! which "${MAKE}" && echo "error: make not found" && exit 1
