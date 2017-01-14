@@ -16,6 +16,10 @@ version, it will be truncated to the first three words:
 longer than three words will break__. From this version on, use the new
 shortlinks for permanent links.
 
+__The user can no longer call `make` themselves__. `make` now expects to have a
+bunch of variables and functions defined in the environment. The new (as of
+v2.7.0) `./bm build` script is what should be used.
+
 ### Added
 - config option to make permalinks/shortlinks (#66)
 - config option to prefer permalinks/shortlinks
