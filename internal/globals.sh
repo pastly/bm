@@ -29,9 +29,11 @@ TAG_ALPHABET="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-"
 ID_ALPHABET="123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 KNOWN_HASH_PROGRAMS="sha1sum sha1 sha256sum sha256 md5sum md5 cat"
 
+# import more function definitions
 source internal/options.sh
-source include/bm.conf.example
-[[ -f include/bm.conf ]] && source include/bm.conf
+
+# get and validate all options
+source internal/set-defaults.sh
 
 if ! which "Markdown.pl" &> /dev/null
 then
@@ -55,19 +57,6 @@ fi
 
 [ ! -x "${MARKDOWN}" ] && echo "error: Markdown.pl not found" && exit 1
 [ ! -x "${M4}" ] && echo "error: m4 not found" && exit 1
-
-[[ "${MULTI_MATCH_STRAT}" == "" ]] && MULTI_MATCH_STRAT="simple"
-[[ "${DEFAULT_INDEX_BY}" == "" ]] && DEFAULT_INDEX_BY="none"
-[[ "${POST_INDEX_BY}" == "" ]] && POST_INDEX_BY="${DEFAULT_INDEX_BY}"
-[[ "${TAG_INDEX_BY}" == "" ]] && TAG_INDEX_BY="${DEFAULT_INDEX_BY}"
-[[ "${SIGNIFICANT_MOD_AFTER}" == "" ]] && SIGNIFICANT_MOD_AFTER="1" || \
-	SIGNIFICANT_MOD_AFTER="$((${SIGNIFICANT_MOD_AFTER}))"
-[[ "${CREATE_HELP_VERBOSITY}" == "" ]] && CREATE_HELP_VERBOSITY="long"
-[[ "${REBUILD_POLICY}" == "" ]] && REBUILD_POLICY="asap"
-[[ "${MAKE_SHORT_POSTS}" == "" ]] && MAKE_SHORT_POSTS="yes"
-[[ "${PREFER_SHORT_POSTS}" == "" ]] && PREFER_SHORT_POSTS="no"
-[[ "${PREFER_SHORT_POSTS}" == "yes" ]] && [[ "${MAKE_SHORT_POSTS}" != "yes" ]] && \
-	echo "error: PREFER_SHORT_POSTS requires MAKE_SHORT_POSTS" && exit 1
 
 # Parses the options in FILE into OP_FILE and returns the contents of OP_FILE.
 # FILE must be an original post file. It cannot be temporary, even if it has
