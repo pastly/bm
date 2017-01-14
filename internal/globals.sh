@@ -51,6 +51,7 @@ then
 fi
 
 ! which "${MAKE}" &> /dev/null && echo "error: make not found" && exit 1
+! which "${M4}" &> /dev/null && echo "error: m4 not found" && exit 1
 
 [ ! -x "${MARKDOWN}" ] && echo "error: Markdown.pl not found" && exit 1
 [ ! -x "${M4}" ] && echo "error: m4 not found" && exit 1
