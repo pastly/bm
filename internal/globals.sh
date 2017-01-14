@@ -420,7 +420,6 @@ function only_unpinned_posts {
 	done
 }
 
-# options must be validated before running this
 function pre_markdown {
 	ID="$1"
 	METADATA="${METADATA_DIR}/${ID}"
@@ -435,7 +434,6 @@ function pre_markdown {
 	sed "s|${TOC_CODE}|\\n${TOC_ESCAPED}\\n|"
 }
 
-# options must be validated before running this
 function get_preview_content {
 	CONTENT="$1"
 	shift
@@ -467,7 +465,6 @@ function get_preview_content {
 	fi
 }
 
-# options must be validated before running this
 function post_markdown {
 	TMP1="$(mktemp)"
 	TMP2="$(mktemp)"
