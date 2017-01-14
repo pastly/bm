@@ -272,10 +272,6 @@ function file_has_toc_code {
 	[[ "${LINE_COUNT}" > 0 ]] && echo "foobar" || echo ""
 }
 
-function content_make_tag_links {
-	sed -e "s|${TAG_CODE}\([${TAG_ALPHABET}]\+\)|<a href='${ROOT_URL}/tags/\L\1.html'>\E\1</a>|g"
-}
-
 function sort_by_date {
 	# If sending file names in via stdin,
 	# they must be \0 delimited
