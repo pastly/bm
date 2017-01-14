@@ -318,7 +318,7 @@ function sort_by_date {
 function get_hash_program {
 	for PROGRAM in ${KNOWN_HASH_PROGRAMS} # No quotes on purpose
 	do
-		if ! which ${PROGRAM} &> /dev/null
+		if which ${PROGRAM} &> /dev/null
 		then
 			echo "${PROGRAM}"
 			break
