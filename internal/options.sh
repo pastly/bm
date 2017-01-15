@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 function op_get {
 	OPTION_FILE="$1"
 	OP="$2"
