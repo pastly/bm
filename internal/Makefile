@@ -116,7 +116,7 @@ $(METADATA_DIR)/%/body: $(METADATA_DIR)/%/headers $(METADATA_DIR)/%/content $(ME
 	post_markdown $(shell get_id $<) > $@
 
 # Target for short posts
-$(BUILT_SHORT_POST_DIR)/%.html: $(METADATA_DIR)/%/head $(METADATA_DIR)/%/body $(METADATA_DIR)/%/foot
+$(BUILT_SHORT_POST_DIR)/%.html: $(METADATA_DIR)/%/head $(METADATA_DIR)/%/body $(METADATA_DIR)/%/foot | $(BUILD_DIR)/404.html
 	@echo $@
 	cat $^ > $@
 ifeq ($(MAKE_SHORT_POSTS),yes)
