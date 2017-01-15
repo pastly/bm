@@ -463,9 +463,14 @@ function get_preview_content {
 	fi
 }
 
+# first arg is the post id
+# remaining args are options
+# valid options are: "for-preview"
 function post_markdown {
 	TMP1="$(mktemp)"
 	TMP2="$(mktemp)"
+	ID="$1" && shift
+	OPTS=( "$@" )
 	# 1: make tags into links
 
 	sed -e "s|${TAG_CODE}\([${TAG_ALPHABET}]\+\)|<a href='${ROOT_URL}/tags/\L\1.html'>\E\1</a>|g" > "${TMP1}"
@@ -478,7 +483,7 @@ function post_markdown {
 
 	# 3: make heading ids if needed
 
-	OPTIONS="${METADATA_DIR}/$1/options"
+	OPTIONS="${METADATA_DIR}/${ID}/options"
 	if [[ "$(op_is_set "${OPTIONS}" heading_ids)" == "" ]]
 	then
 		cat "${TMP2}" > "${TMP1}"
