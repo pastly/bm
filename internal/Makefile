@@ -18,7 +18,8 @@ BUILT_STATICS := $(addprefix $(BUILT_STATIC_DIR)/,$(BUILT_STATICS))
 BUILT_META_FILES := \
 	$(BUILD_DIR)/index.html \
 	$(BUILT_POST_DIR)/index.html \
-	$(BUILT_TAG_DIR)/index.html
+	$(BUILT_TAG_DIR)/index.html \
+	$(BUILD_DIR)/404.html
 BUILT_SHORT_POSTS := $(foreach file,$(POST_FILES),$(BUILT_SHORT_POST_DIR)/$(shell get_id $(file)).html)
 
 METADATA_FILES := \
@@ -145,6 +146,11 @@ $(BUILT_TAG_DIR)/index.html: $(METADATA_DIR)/tags $(filter $(METADATA_DIR)/%/hea
 $(BUILT_STATIC_DIR)/%.css: $(INCLUDE_DIR)/%.css.in $(INCLUDE_FILES) | $(OUT_DIRS)
 	#@echo $@
 	$(M4) $(M4_FLAGS) $< > $@
+
+# Target to build 404 page
+$(BUILD_DIR)/404.html:
+	@echo $@
+	build_404 | $(M4) $(M4_FLAGS) > $@
 
 # Target to automatically make the config file if necessary
 $(USER_CONF_FILE): $(INCLUDE_DIR)/bm.conf.example

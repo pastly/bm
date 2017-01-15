@@ -27,6 +27,7 @@ v2.7.0) `./bm build` script is what should be used.
 - add branch descriptions to readme
 - a sad face
 - tool to count rough function usage
+- 404 page, must be configured to be used by your web server
 
 ### Changed
 - move many Makefile variables definitions to globals.sh

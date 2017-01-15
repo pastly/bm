@@ -745,4 +745,18 @@ function build_postindex {
 	echo "CONTENT_PAGE_FOOTER_HTML([[${ROOT_URL}]], [[${VERSION}]])"
 	echo "END_HTML"
 }
+
+function build_404 {
+	cat << EOF
+m4_include(include/html.m4)
+START_HTML([[${ROOT_URL}]], [[${BLOG_TITLE} - Home]])
+CONTENT_PAGE_HEADER_HTML([[${ROOT_URL}]], [[${BLOG_TITLE}]], [[${BLOG_SUBTITLE}]])
+<h1>404 Not Found</h1>
+<p>It seems you've stumbled upon a bad link. Perhaps these will help you.</p>
+<a href='${ROOT_URL}/'>Homepage</a><br/>
+<a href='${ROOT_URL}/posts/index.html'>All posts</a><br/>
+CONTENT_PAGE_FOOTER_HTML([[${ROOT_URL}]], [[${VERSION}]])
+END_HTML
+EOF
+}
 set +a
