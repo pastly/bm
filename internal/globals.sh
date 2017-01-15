@@ -439,9 +439,7 @@ function get_preview_content {
 	shift
 	OPTIONS="$1"
 	shift
-	# curly brackets so bash doesn't throw a fit when grep doesn't find a match
-	# this has the side effect of ignoring real error codes
-	PREVIEW_STOP_LINE="$({ grep --fixed-strings --line-number "${PREVIEW_STOP_CODE}" "${CONTENT}" || true; })"
+	PREVIEW_STOP_LINE="$(grep --fixed-strings --line-number "${PREVIEW_STOP_CODE}" "${CONTENT}")"
 	if [[ "${PREVIEW_STOP_LINE}" != "" ]]
 	then
 		PREVIEW_STOP_LINE="$(echo "${PREVIEW_STOP_LINE}" | head -n 1 | sed -E 's|^([0-9]+):.*|\1|')"
