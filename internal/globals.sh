@@ -511,9 +511,22 @@ function post_markdown {
 		done < "${TMP2}" > "${TMP1}"
 	fi
 
+	# 4: make relative #section-links into absolute #section-links
+	# like for the table of contents
+
+	if (( "${#OPTS[@]}" > 0 )) && [[ " ${OPTS[@]} " =~ " for-preview " ]]
+	then
+		[[ "${PREFER_SHORT_POSTS}" == "yes" ]] && \
+			LINK="/p/${ID}.html" || \
+			LINK="/posts/$(get_title "${METADATA_DIR}/${ID}/headers" | title_to_post_url)${TITLE_SEPARATOR_CHAR}${ID}.html"
+		sed "s|\(<a href=['\"]\)\(#.*\)|\1${LINK}\2|" "${TMP1}" > "${TMP2}"
+	else
+		cat "${TMP1}" > "${TMP2}"
+	fi
+
 	# DONE
 
-	cat "${TMP1}" # output the final temp file. Odd num of steps means tmp1
+	cat "${TMP2}" # output the final temp file. Odd num of steps means tmp1
 	rm "${TMP1}" "${TMP2}"
 }
 
@@ -574,7 +587,7 @@ function build_index {
 		< "${CONTENT}" \
 		pre_markdown "$(get_id "${HEADERS}")" |\
 		${MARKDOWN} |\
-		post_markdown "$(get_id "${HEADERS}")"
+		post_markdown "$(get_id "${HEADERS}")" "for-preview"
 		if [[ "${CONTENT_IS_TRIMMED}" != "" ]]
 		then
 			echo "<a href='${POST_LINK}'><em>Read the entire post</em></a>"
