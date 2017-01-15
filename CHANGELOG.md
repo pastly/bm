@@ -23,6 +23,8 @@ v2.7.0) `./bm build` script is what should be used.
 ### Added
 - config option to make permalinks/shortlinks (#66)
 - config option to prefer permalinks/shortlinks
+- config option to copy post source files to the build directory for serving up
+  by the webserver (#67)
 - `version` command as `--version` prints too much for scripts (#70)
 - add branch descriptions to readme
 - a sad face

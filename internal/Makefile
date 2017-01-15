@@ -12,7 +12,9 @@ INCLUDE_FILES := $(shell find $(INCLUDE_DIR) -name '*.html' -or -name '*.m4' -or
 
 # These are the targets. These files don't exist until after a successful build
 BUILT_POSTS := $(foreach p,$(POST_FILES),$(BUILT_POST_DIR)/$(shell get_title $(p) | title_to_post_url)$(TITLE_SEPARATOR_CHAR)$(shell get_id $(p)).html)
-BUILT_SHORT_POSTS := $(foreach file,$(POST_FILES),$(BUILT_SHORT_POST_DIR)/$(shell get_id $(file)).html)
+BUILT_SHORT_POSTS := $(foreach p,$(POST_FILES),$(BUILT_SHORT_POST_DIR)/$(shell get_id $(p)).html)
+BUILT_SRC_FILES := $(BUILT_POSTS:.html=.bm)
+BUILT_SHORT_SRC_FILES := $(BUILT_SHORT_POSTS:.html=.bm)
 BUILT_STATICS := $(CSS_FILES:.css.in=.css)
 BUILT_STATICS := $(notdir $(BUILT_STATICS))
 BUILT_STATICS := $(addprefix $(BUILT_STATIC_DIR)/,$(BUILT_STATICS))
@@ -51,6 +53,7 @@ all: $(OUT_DIRS) \
 	$(METADATA_FILES) \
 	$(POST_METADATA_FILES) \
 	$(BUILT_SHORT_POSTS) \
+	$(BUILT_SHORT_SRC_FILES) \
 	$(BUILT_STATICS) \
 	$(BUILT_META_FILES)
 
@@ -120,6 +123,17 @@ ifeq ($(MAKE_SHORT_POSTS),yes)
 	cp $@ $(filter %-$*.html,$(BUILT_POSTS))
 else
 	mv $@ $(filter %-$*.html,$(BUILT_POSTS))
+	ln --symbolic $(realpath $(BUILD_DIR)/404.html) $@
+endif
+
+# Target for short source files
+$(BUILT_SHORT_POST_DIR)/%.bm: $(POST_DIR)/*/*/*-%.bm | $(BUILD_DIR)/404.html
+	@echo $@
+	cp $^ $@
+ifeq ($(MAKE_SHORT_POSTS),yes)
+	cp $@ $(filter %-$*.bm,$(BUILT_SRC_FILES))
+else
+	mv $@ $(filter %-$*.bm,$(BUILT_SRC_FILES))
 	ln --symbolic $(realpath $(BUILD_DIR)/404.html) $@
 endif
 

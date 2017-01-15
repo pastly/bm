@@ -13,6 +13,8 @@
 	BLOG_SUBTITLE="Where super awesome things happen"
 [[ "${BLOG_TITLE}" == "" ]] && \
 	BLOG_TITLE="My Super Awesome Blog"
+[[ "${CP_SRC_FILES_TO_BUILD}" == "" ]] && \
+	CP_SRC_FILES_TO_BUILD="no"
 [[ "${CREATE_HELP_VERBOSITY}" == "" ]] && \
 	CREATE_HELP_VERBOSITY="long"
 [[ "${DATE_FRMT}" == "" ]] && \
