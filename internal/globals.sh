@@ -2,6 +2,9 @@
 # Variable gathering and setting all needs to be auto-exported
 set -a
 
+################################################################################
+# define some variables that shouldn't be configurable
+################################################################################
 COMMENT_CODE='///'
 TAG_CODE='@@'
 PREVIEW_STOP_CODE='{preview-stop}'
@@ -29,12 +32,19 @@ TAG_ALPHABET="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-"
 ID_ALPHABET="123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 KNOWN_HASH_PROGRAMS="sha1sum sha1 sha256sum sha256 md5sum md5 cat"
 
+################################################################################
 # import more function definitions
+################################################################################
 source internal/options.sh
 
+################################################################################
 # get and validate all options
+################################################################################
 source internal/set-defaults.sh
 
+################################################################################
+# check for some required programs
+################################################################################
 if ! which "Markdown.pl" &> /dev/null
 then
 	MARKDOWN="./internal/Markdown.pl"
@@ -47,17 +57,21 @@ else
 	MARKDOWN="$(which "Markdown.pl")"
 fi
 
+[ ! -x "${MARKDOWN}" ] && echo "error: Markdown.pl not found" && exit 1
+[ ! -x "${MAKE}" ] && echo "error: make not found" && exit 1
+[ ! -x "${M4}" ]  && echo "error: m4 not found" && exit 1
+
+################################################################################
+# if git is available, elaborate on the version
+################################################################################
 if ! which git &> /dev/null
 then
 	VERSION="${VERSION} ($(git rev-parse --short HEAD))"
 fi
 
-! which "${MAKE}" &> /dev/null && echo "error: make not found" && exit 1
-! which "${M4}" &> /dev/null && echo "error: m4 not found" && exit 1
-
-[ ! -x "${MARKDOWN}" ] && echo "error: Markdown.pl not found" && exit 1
-[ ! -x "${M4}" ] && echo "error: m4 not found" && exit 1
-
+################################################################################
+# function definitions
+################################################################################
 # Parses the options in FILE into OP_FILE and returns the contents of OP_FILE.
 # FILE must be an original post file. It cannot be temporary, even if it has
 # full headers and content
