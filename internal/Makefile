@@ -72,6 +72,7 @@ $(METADATA_DIR)/tags: $(filter $(METADATA_DIR)/%/tags,$(POST_METADATA_FILES)) | 
 	cat $^ | sort | uniq > $@
 
 # Target for per-post headers
+# headers are the first handful of lines in a post file
 $(METADATA_DIR)/%/headers: $(POST_DIR)/*/*/*-%.bm | $(OUT_DIRS)
 	@echo $@
 	get_headers $< > $@
@@ -82,7 +83,7 @@ $(METADATA_DIR)/%/tags: $(METADATA_DIR)/%/content
 	get_tags $< > $@
 
 # Target for per-post options file, fully validated
-$(METADATA_DIR)/%/options: $(POST_DIR)/*/*/*-%.bm | $(OUT_DIRS)
+$(METADATA_DIR)/%/options: $(METADATA_DIR)/%/headers
 	parse_options $< > $@
 	validate_options $< $@
 
@@ -96,20 +97,20 @@ $(METADATA_DIR)/%/content: $(POST_DIR)/*/*/*-%.bm | $(OUT_DIRS)
 	@echo $@
 	get_content $< > $@
 
-# Target for content that appears on the homepage
+# Target for content that appears on the homepage. Just Markdown
 $(METADATA_DIR)/%/previewcontent: $(METADATA_DIR)/%/content $(METADATA_DIR)/%/options
 	@echo $@
 	get_preview_content $(@D)/content $(@D)/options > $@
 
 # Target for per-post header. Completely HTML formatted
-$(METADATA_DIR)/%/head: $(METADATA_DIR)/%/headers
+$(METADATA_DIR)/%/head: $(METADATA_DIR)/%/headers $(CSS_FILES) $(INCLUDE_FILES)
 	@echo $@
-	build_content_header $* | $(M4) $(M4_FLAGS) > $@
+	build_content_header $< | $(M4) $(M4_FLAGS) > $@
 
 # Target for per-post footer. Completely HTML formatted
-$(METADATA_DIR)/%/foot: | $(OUT_DIRS)
+$(METADATA_DIR)/%/foot: $(CSS_FILES) $(INCLUDE_FILES) | $(OUT_DIRS)
 	@echo $@
-	build_content_footer $* | $(M4) $(M4_FLAGS) > $@
+	build_content_footer | $(M4) $(M4_FLAGS) > $@
 
 # Target for per-post body. Completely HTML formatted.
 $(METADATA_DIR)/%/body: $(METADATA_DIR)/%/headers $(METADATA_DIR)/%/content $(METADATA_DIR)/%/toc $(METADATA_DIR)/%/options
@@ -143,22 +144,23 @@ else
 endif
 
 # Target for homepage
-$(BUILD_DIR)/index.html: $(METADATA_DIR)/postsbydate | $(POST_METADATA_FILES)
+$(BUILD_DIR)/index.html: $(METADATA_DIR)/postsbydate $(CSS_FILES) $(INCLUDE_FILES) $(BUILT_SHORT_POSTS)
 	@echo $@
 	build_index $< | $(M4) $(M4_FLAGS) > $@
 
 # Target for posts index
-$(BUILT_POST_DIR)/index.html: $(filter $(METADATA_DIR)/%/headers,$(POST_METADATA_FILES)) | $(OUT_DIRS)
+$(BUILT_POST_DIR)/index.html: $(filter $(METADATA_DIR)/%/headers,$(POST_METADATA_FILES)) $(CSS_FILES) $(INCLUDE_FILES) | $(OUT_DIRS)
 	@echo $@
 	build_postindex | $(M4) $(M4_FLAGS) > $@
 
 # Target for tags index
-$(BUILT_TAG_DIR)/index.html: $(METADATA_DIR)/tags $(filter $(METADATA_DIR)/%/headers,$(POST_METADATA_FILES)) | $(OUT_DIRS)
+$(BUILT_TAG_DIR)/index.html: $(METADATA_DIR)/tags $(filter $(METADATA_DIR)/%/headers,$(POST_METADATA_FILES)) $(CSS_FILES) $(INCLUDE_FILES) | $(OUT_DIRS)
+	@echo $@
 	build_tagindex | $(M4) $(M4_FLAGS) > $@
 
 # Target for all CSS
 $(BUILT_STATIC_DIR)/%.css: $(INCLUDE_DIR)/%.css.in $(INCLUDE_FILES) | $(OUT_DIRS)
-	#@echo $@
+	@echo $@
 	$(M4) $(M4_FLAGS) $< > $@
 
 # Target to build 404 page

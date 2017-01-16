@@ -95,8 +95,7 @@ EOF
 }
 
 function build_content_header {
-	METADATA="${METADATA_DIR}/$1"
-	HEADERS="${METADATA}/headers"
+	HEADERS="$1"
 	TITLE="$(get_title "${HEADERS}")"
 	DATE="$(get_date "${HEADERS}")"
 	MOD_DATE="$(get_mod_date "${HEADERS}")"
