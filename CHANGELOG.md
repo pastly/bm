@@ -32,7 +32,6 @@ v2.7.0) `./bm build` script is what should be used.
 - `version` command as `--version` prints too much for scripts (#70)
 - add branch descriptions to readme
 - a sad face
-- tool to count rough function usage
 - 404 page, must be configured to be used by your web server
 
 ### Changed
