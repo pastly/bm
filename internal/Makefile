@@ -13,8 +13,13 @@ INCLUDE_FILES := $(shell find $(INCLUDE_DIR) -name '*.html' -or -name '*.m4' -or
 # These are the targets. These files don't exist until after a successful build
 BUILT_POSTS := $(foreach p,$(POST_FILES),$(BUILT_POST_DIR)/$(shell get_title $(p) | title_to_post_url)$(TITLE_SEPARATOR_CHAR)$(shell get_id $(p)).html)
 BUILT_SHORT_POSTS := $(foreach p,$(POST_FILES),$(BUILT_SHORT_POST_DIR)/$(shell get_id $(p)).html)
+ifeq ($(CP_SRC_FILES_TO_BUILD),yes)
 BUILT_SRC_FILES := $(BUILT_POSTS:.html=.bm)
 BUILT_SHORT_SRC_FILES := $(BUILT_SHORT_POSTS:.html=.bm)
+else
+BUILT_SRC_FILES :=
+BUILT_SHORT_SRC_FILES :=
+endif
 BUILT_STATICS := $(CSS_FILES:.css.in=.css)
 BUILT_STATICS := $(notdir $(BUILT_STATICS))
 BUILT_STATICS := $(addprefix $(BUILT_STATIC_DIR)/,$(BUILT_STATICS))
