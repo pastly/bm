@@ -104,7 +104,8 @@ function build_content_header {
 	DATE="$(ts_to_date "${DATE_FRMT}" "${DATE}")"
 	MOD_DATE="$(ts_to_date "${LONG_DATE_FRMT}" "${MOD_DATE}")"
 	AUTHOR="$(get_author "${HEADERS}")"
-	PERMALINK="${ROOT_URL}/p/$1.html"
+	ID="$(get_id "${HEADERS}")"
+	PERMALINK="${ROOT_URL}/p/${ID}.html"
 	cat << EOF
 m4_include(include/html.m4)
 START_HTML([[${ROOT_URL}]], [[${TITLE} - ${BLOG_TITLE}]])
