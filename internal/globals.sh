@@ -499,8 +499,6 @@ function only_unpinned_posts {
 }
 
 # Parses the options in FILE into OP_FILE and returns the contents of OP_FILE.
-# FILE must be an original post file. It cannot be temporary, even if it has
-# full headers and content
 function parse_options {
 	FILE="$1"
 	OPTIONS_IN="$(head -n 4 "${FILE}" | tail -n 1)"
@@ -517,11 +515,6 @@ function parse_options {
 		fi
 		op_set "${OP_FILE}" "${OP}" "${V}"
 	done
-	# Set post_file_name to FILE
-	# post_file_name should never be set as an option, this is just to
-	# make it easier to keep track of the original file name when we're
-	# many temporary files deep
-	op_set "${OP_FILE}" post_file_name "${FILE}"
 	cat "${OP_FILE}"
 	rm "${OP_FILE}"
 }
