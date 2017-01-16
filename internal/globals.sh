@@ -64,7 +64,7 @@ fi
 ################################################################################
 # if git is available, elaborate on the version
 ################################################################################
-if ! which git &> /dev/null
+if which git &> /dev/null
 then
 	VERSION="${VERSION} ($(git rev-parse --short HEAD))"
 fi
