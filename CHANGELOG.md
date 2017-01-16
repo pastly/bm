@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+.
+
+## [v3.0.0] - 2017-01-16
+
 __Breaking changes__
 
 __Long post URLs are now limited__. Before, a post titled "My New Post On
@@ -196,6 +200,7 @@ v2.7.0) `./bm build` script is what should be used.
 - author, date, mod date metadata
 - post id (unused)
 
+[v3.0.0]: https://gogs.system33.pw/mello/bm/src/v3.0.0
 [v2.7.0]: https://gogs.system33.pw/mello/bm/src/v2.7.0
 [v2.6.0]: https://gogs.system33.pw/mello/bm/src/v2.6.0
 [v2.5.0]: https://gogs.system33.pw/mello/bm/src/v2.5.0
@@ -210,4 +215,4 @@ v2.7.0) `./bm build` script is what should be used.
 [v1.2.0]: https://gogs.system33.pw/mello/bm/src/v1.2.0
 [v1.1.0]: https://gogs.system33.pw/mello/bm/src/v1.1.0
 [v1.0.0]: https://gogs.system33.pw/mello/bm/src/v1.0.0
-[Unreleased]: https://gogs.system33.pw/mello/bm
+[Unreleased]: https://gogs.system33.pw/mello/bm/src/next
