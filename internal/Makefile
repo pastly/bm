@@ -83,7 +83,7 @@ $(METADATA_DIR)/%/tags: $(METADATA_DIR)/%/content
 	get_tags $< > $@
 
 # Target for per-post options file, fully validated
-$(METADATA_DIR)/%/options: $(METADATA_DIR)/%/headers
+$(METADATA_DIR)/%/options: $(POST_DIR)/*/*/*-%.bm | $(OUT_DIRS)
 	parse_options $< > $@
 	validate_options $< $@
 

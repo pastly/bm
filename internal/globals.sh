@@ -744,8 +744,7 @@ function ts_to_date {
 }
 
 # checks that the combination of options is valid for the given file.
-# FILE is a full post file. It cannot be a temporary file, even if the
-# temporary file has headers in addition to content.
+# FILE is a full post file. We need the content to look for {toc}.
 # Also sets any options in the OPTIONS file that need setting
 # For example, if heading_ids is __unset__ coming in but FILE has a {toc}
 # then heading_ids will be set to true here
