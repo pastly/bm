@@ -124,23 +124,23 @@ $(METADATA_DIR)/%/body: $(METADATA_DIR)/%/headers $(METADATA_DIR)/%/content $(ME
 # Target for short posts
 $(BUILT_SHORT_POST_DIR)/%.html: $(METADATA_DIR)/%/head $(METADATA_DIR)/%/body $(METADATA_DIR)/%/foot | $(BUILD_DIR)/404.html
 	@echo $@
-	cat $^ > $@
 ifeq ($(MAKE_SHORT_POSTS),yes)
+	cat $^ > $@
 	cp $@ $(filter %-$*.html,$(BUILT_POSTS))
 else
-	mv $@ $(filter %-$*.html,$(BUILT_POSTS))
-	ln --symbolic $(realpath $(BUILD_DIR)/404.html) $@
+	cat $^ > $(filter %-$*.html,$(BUILT_POSTS))
+	cp $(BUILD_DIR)/404.html $@
 endif
 
 # Target for short source files
-$(BUILT_SHORT_POST_DIR)/%.bm: $(POST_DIR)/*/*/*-%.bm | $(BUILD_DIR)/404.html
+$(BUILT_SHORT_POST_DIR)/%.bm: $(POST_DIR)/*/*/*-%.bm $(INCLUDE_FILES) | $(BUILD_DIR)/404.html
 	@echo $@
-	cp $^ $@
 ifeq ($(MAKE_SHORT_POSTS),yes)
-	cp $@ $(filter %-$*.bm,$(BUILT_SRC_FILES))
+	cp $< $@
+	cp $< $(filter %-$*.bm,$(BUILT_SRC_FILES))
 else
-	mv $@ $(filter %-$*.bm,$(BUILT_SRC_FILES))
-	ln --symbolic $(realpath $(BUILD_DIR)/404.html) $@
+	cp $< $(filter %-$*.bm,$(BUILT_SRC_FILES))
+	cp $(BUILD_DIR)/404.html $@
 endif
 
 # Target for homepage
