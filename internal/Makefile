@@ -164,7 +164,7 @@ $(BUILT_STATIC_DIR)/%.css: $(INCLUDE_DIR)/%.css.in $(INCLUDE_FILES) | $(OUT_DIRS
 	$(M4) $(M4_FLAGS) $< > $@
 
 # Target to build 404 page
-$(BUILD_DIR)/404.html:
+$(BUILD_DIR)/404.html: | $(OUT_DIRS)
 	@echo $@
 	build_404 | $(M4) $(M4_FLAGS) > $@
 

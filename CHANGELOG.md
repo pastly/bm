@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-.
+### Fixed
+
+- fix 404 page sometimes getting scheduled for building before output dirs
 
 ## [v3.0.0] - 2017-01-16
 
