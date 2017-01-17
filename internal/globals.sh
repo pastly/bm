@@ -25,6 +25,8 @@ MAKE="$(which make)"
 MAKE_FLAGS="-j --output-sync --makefile internal/Makefile --quiet"
 MKDIR="$(which mkdir)"
 MKDIR_FLAGS="-p"
+GPG="$(which gpg)"
+GPG_SIGN_FLAGS="--yes --armor --detach-sign"
 RM="rm"
 RM_FLAGS="-fr"
 VERSION="v3.0.0"
@@ -41,6 +43,11 @@ source internal/options.sh
 # get and validate all options
 ################################################################################
 source internal/set-defaults.sh
+
+################################################################################
+# now that options are validated, modify some internal variables if needed
+################################################################################
+GPG_SIGN_FLAGS="${GPG_SIGN_FLAGS} --local-user ${GPG_FINGERPRINT}"
 
 ################################################################################
 # check for some required programs
@@ -60,6 +67,7 @@ fi
 [ ! -x "${MARKDOWN}" ] && echo "error: Markdown.pl not found" && exit 1
 [ ! -x "${MAKE}" ] && echo "error: make not found" && exit 1
 [ ! -x "${M4}" ]  && echo "error: m4 not found" && exit 1
+[ ! -x "${GPG}" ]  && echo "error: gpg not found" && exit 1
 
 ################################################################################
 # if git is available, elaborate on the version
@@ -297,6 +305,8 @@ function build_tagindex {
 		echo "END_HTML" >> "${TMP_TAG_FILE}"
 		cat "${TMP_TAG_FILE}" | "${M4}" ${M4_FLAGS} > "${TAG_FILE}"
 		rm "${TMP_TAG_FILE}"
+		[[ "${GPG_SIGN_PAGES}" == "yes" ]] && \
+			</dev/null "${GPG}" ${GPG_SIGN_FLAGS} "${TAG_FILE}"
 	done
 	echo "CONTENT_PAGE_FOOTER_HTML([[${ROOT_URL}]], [[${VERSION}]])"
 	echo "END_HTML"

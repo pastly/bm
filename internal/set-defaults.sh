@@ -25,6 +25,10 @@
 	DEFAULT_INDEX_BY="none"
 [[ "${ED}" == "" ]] && \
 	ED="${EDITOR}"
+[[ "${GPG_FINGERPRINT}" == "" ]] && \
+	GPG_FINGERPRINT=""
+[[ "${GPG_SIGN_PAGES}" == "" ]] && \
+	GPG_SIGN_PAGES="no"
 [[ "${LONG_DATE_FRMT}" == "" ]] && \
 	LONG_DATE_FRMT="%d %b %Y at %l:%M %P"
 [[ "${MAKE_SHORT_POSTS}" == "" ]] && \
@@ -61,4 +65,14 @@
 [[ "${PREFER_SHORT_POSTS}" == "yes" ]] && \
 [[ "${MAKE_SHORT_POSTS}" != "yes" ]] && \
 	echo "error: PREFER_SHORT_POSTS requires MAKE_SHORT_POSTS" && \
+	exit 1
+
+[[ "${GPG_FINGERPRINT}" != "" ]] && \
+! which gpg &> /dev/null && \
+	echo "error: GPG_FINGERPRINT set but gnupg doesn't seem to be installed" && \
+	exit 1
+
+[[ "${GPG_FINGERPRINT}" == "" ]] && \
+[[ "${GPG_SIGN_PAGES}" == "yes" ]] && \
+	echo "error: GPG_SIGN_PAGES enabled but GPG_FINGERPRINT needs to be set" && \
 	exit 1

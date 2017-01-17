@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- config option to cryptographically sign all output files (#84)
+
 ### Fixed
 
 - fix 404 page sometimes getting scheduled for building before output dirs

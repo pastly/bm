@@ -28,6 +28,17 @@ BUILT_META_FILES := \
 	$(BUILT_POST_DIR)/index.html \
 	$(BUILT_TAG_DIR)/index.html \
 	$(BUILD_DIR)/404.html
+ifeq ($(GPG_SIGN_PAGES),yes)
+BUILT_SIG_PAGES := $(addsuffix .asc,$(BUILT_POSTS)) $(addsuffix .asc,$(BUILT_SRC_FILES))
+BUILT_SHORT_SIG_PAGES := $(addsuffix .asc,$(BUILT_SHORT_POSTS)) $(addsuffix .asc,$(BUILT_SHORT_SRC_FILES))
+BUILT_META_SIG_PAGES := $(addsuffix .asc,$(BUILT_META_FILES))
+BUILT_SIG_STATICS := $(addsuffix .asc,$(BUILT_STATICS))
+else
+BUILT_SIG_PAGES :=
+BUILT_SHORT_SIG_PAGES :=
+BUILT_META_SIG_PAGES :=
+BUILT_SIG_STATICS :=
+endif
 
 METADATA_FILES := \
 	$(METADATA_DIR)/postsbydate \
@@ -59,8 +70,11 @@ all: $(OUT_DIRS) \
 	$(POST_METADATA_FILES) \
 	$(BUILT_SHORT_POSTS) \
 	$(BUILT_SHORT_SRC_FILES) \
+	$(BUILT_SHORT_SIG_PAGES) \
 	$(BUILT_STATICS) \
-	$(BUILT_META_FILES)
+	$(BUILT_SIG_STATICS) \
+	$(BUILT_META_FILES) \
+	$(BUILT_META_SIG_PAGES)
 
 $(OUT_DIRS):
 	$(MKDIR) $(MKDIR_FLAGS) $@
@@ -142,6 +156,21 @@ else
 	cp $< $(filter %-$*.bm,$(BUILT_SRC_FILES))
 	cp $(BUILD_DIR)/404.html $@
 endif
+
+# Target for gpg signature pages for posts, if enabled
+$(BUILT_SHORT_POST_DIR)/%.asc: $(BUILT_SHORT_POST_DIR)/%
+ifeq ($(MAKE_SHORT_POSTS),yes)
+	</dev/null $(GPG) $(GPG_SIGN_FLAGS) $<
+	cp $@ $(filter %-$*.asc,$(BUILT_SIG_PAGES))
+else
+	</dev/null $(GPG) $(GPG_SIGN_FLAGS) $<
+	mv $@ $(filter %-$*.asc,$(BUILT_SIG_PAGES))
+	cp $(BUILD_DIR)/404.html $@
+endif
+
+# Target for all other gpg signature pages, if enabled
+%.asc: %
+	</dev/null $(GPG) $(GPG_SIGN_FLAGS) $<
 
 # Target for homepage
 $(BUILD_DIR)/index.html: $(METADATA_DIR)/postsbydate $(CSS_FILES) $(INCLUDE_FILES) $(BUILT_SHORT_POSTS)
