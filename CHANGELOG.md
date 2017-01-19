@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - remove `--output-sync` option to `make` as it is unecessary with how it is
   currently configured. Having it makes it confusing what step is taking a
   while.
+- only create temporary tag file once in `build_tagindex`
 
 ### Fixed
 

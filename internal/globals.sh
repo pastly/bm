@@ -246,6 +246,7 @@ function build_postindex {
 }
 
 function build_tagindex {
+	TMP_TAG_FILE="$(mktemp)"
 	ALL_TAGS=( $(cat "${METADATA_DIR}/tags") )
 	# first get all post headers
 	TMP=( $(find "${METADATA_DIR}/" -mindepth 2 -type f -name headers) )
@@ -261,7 +262,6 @@ function build_tagindex {
 	for T in ${ALL_TAGS[@]}
 	do
 		CURRENT_EPOCH=
-		TMP_TAG_FILE="$(mktemp)"
 		TAG_FILE="${BUILT_TAG_DIR}/${T}.html"
 		echo "m4_include(include/html.m4)" >> "${TMP_TAG_FILE}"
 		echo "START_HTML([[${ROOT_URL}]], [[${T} - ${BLOG_TITLE}]])" >> "${TMP_TAG_FILE}"
@@ -304,12 +304,13 @@ function build_tagindex {
 		echo "CONTENT_PAGE_FOOTER_HTML([[${ROOT_URL}]], [[${VERSION}]])" >> "${TMP_TAG_FILE}"
 		echo "END_HTML" >> "${TMP_TAG_FILE}"
 		cat "${TMP_TAG_FILE}" | "${M4}" ${M4_FLAGS} > "${TAG_FILE}"
-		rm "${TMP_TAG_FILE}"
+		echo "" > "${TMP_TAG_FILE}"
 		[[ "${GPG_SIGN_PAGES}" == "yes" ]] && \
 			</dev/null "${GPG}" ${GPG_SIGN_FLAGS} "${TAG_FILE}"
 	done
 	echo "CONTENT_PAGE_FOOTER_HTML([[${ROOT_URL}]], [[${VERSION}]])"
 	echo "END_HTML"
+	rm "${TMP_TAG_FILE}"
 }
 
 function file_has_toc_code {
