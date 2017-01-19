@@ -12,7 +12,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- fix 404 page sometimes getting scheduled for building before output dirs
+- 404 page sometimes getting scheduled for building before output dirs
+- `build/*/*.bm` files not being world readable (#88)
 
 ## [v3.0.0] - 2017-01-16
 
