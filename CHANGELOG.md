@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - config option to cryptographically sign all output files (#84)
 
+### Changed
+
+- remove `--output-sync` option to `make` as it is unecessary with how it is
+  currently configured. Having it makes it confusing what step is taking a
+  while.
+
 ### Fixed
 
 - 404 page sometimes getting scheduled for building before output dirs
