@@ -159,11 +159,10 @@ endif
 
 # Target for gpg signature pages for posts, if enabled
 $(BUILT_SHORT_POST_DIR)/%.asc: $(BUILT_SHORT_POST_DIR)/%
-ifeq ($(MAKE_SHORT_POSTS),yes)
 	</dev/null $(GPG) $(GPG_SIGN_FLAGS) $<
+ifeq ($(MAKE_SHORT_POSTS),yes)
 	cp $@ $(filter %-$*.asc,$(BUILT_SIG_PAGES))
 else
-	</dev/null $(GPG) $(GPG_SIGN_FLAGS) $<
 	mv $@ $(filter %-$*.asc,$(BUILT_SIG_PAGES))
 	cp $(BUILD_DIR)/404.html $@
 endif
