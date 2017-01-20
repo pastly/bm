@@ -151,8 +151,8 @@ $(BUILT_SHORT_POST_DIR)/%.bm: $(POST_DIR)/*/*/*-%.bm $(INCLUDE_FILES) | $(BUILD_
 	@echo $@
 ifeq ($(MAKE_SHORT_POSTS),yes)
 	cp $< $@
-	chmod +r $@
 	cp $< $(filter %-$*.bm,$(BUILT_SRC_FILES))
+	chmod +r $@ $(filter %-$*.bm,$(BUILT_SRC_FILES))
 else
 	cp $< $(filter %-$*.bm,$(BUILT_SRC_FILES))
 	chmod +r $(filter %-$*.bm,$(BUILT_SRC_FILES))

@@ -6,7 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-.
+## [v3.0.2] - 2017-01-20
+
+### Fixed
+
+- actually fix `build/*/*.bm` files not being world readable (#88)
 
 ## [v3.0.1] - 2017-01-18
 
@@ -214,6 +218,7 @@ v2.7.0) `./bm build` script is what should be used.
 - author, date, mod date metadata
 - post id (unused)
 
+[v3.0.2]: https://gogs.system33.pw/mello/bm/src/v3.0.2
 [v3.0.1]: https://gogs.system33.pw/mello/bm/src/v3.0.1
 [v3.0.0]: https://gogs.system33.pw/mello/bm/src/v3.0.0
 [v2.7.0]: https://gogs.system33.pw/mello/bm/src/v2.7.0
