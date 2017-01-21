@@ -121,12 +121,12 @@ $(METADATA_DIR)/%/previewcontent: $(METADATA_DIR)/%/content $(METADATA_DIR)/%/op
 	get_preview_content $(@D)/content $(@D)/options > $@
 
 # Target for per-post header. Completely HTML formatted
-$(METADATA_DIR)/%/head: $(METADATA_DIR)/%/headers $(CSS_FILES) $(INCLUDE_FILES)
+$(METADATA_DIR)/%/head: $(METADATA_DIR)/%/headers $(INCLUDE_FILES)
 	@echo $@
 	build_content_header $< | $(M4) $(M4_FLAGS) > $@
 
 # Target for per-post footer. Completely HTML formatted
-$(METADATA_DIR)/%/foot: $(CSS_FILES) $(INCLUDE_FILES) | $(OUT_DIRS)
+$(METADATA_DIR)/%/foot: $(INCLUDE_FILES) | $(OUT_DIRS)
 	@echo $@
 	build_content_footer | $(M4) $(M4_FLAGS) > $@
 
@@ -178,17 +178,17 @@ endif
 	</dev/null $(GPG) $(GPG_SIGN_FLAGS) $<
 
 # Target for homepage
-$(BUILD_DIR)/index.html: $(METADATA_DIR)/postsbydate $(CSS_FILES) $(INCLUDE_FILES) $(BUILT_SHORT_POSTS)
+$(BUILD_DIR)/index.html: $(METADATA_DIR)/postsbydate $(INCLUDE_FILES) $(BUILT_SHORT_POSTS)
 	@echo $@
 	build_index $< | $(M4) $(M4_FLAGS) > $@
 
 # Target for posts index
-$(BUILT_POST_DIR)/index.html: $(filter $(METADATA_DIR)/%/headers,$(POST_METADATA_FILES)) $(CSS_FILES) $(INCLUDE_FILES) | $(OUT_DIRS)
+$(BUILT_POST_DIR)/index.html: $(filter $(METADATA_DIR)/%/headers,$(POST_METADATA_FILES)) $(INCLUDE_FILES) | $(OUT_DIRS)
 	@echo $@
 	build_postindex | $(M4) $(M4_FLAGS) > $@
 
 # Target for tags index
-$(BUILT_TAG_DIR)/index.html: $(METADATA_DIR)/tags $(filter $(METADATA_DIR)/%/headers,$(POST_METADATA_FILES)) $(CSS_FILES) $(INCLUDE_FILES) | $(OUT_DIRS)
+$(BUILT_TAG_DIR)/index.html: $(METADATA_DIR)/tags $(filter $(METADATA_DIR)/%/headers,$(POST_METADATA_FILES)) $(INCLUDE_FILES) | $(OUT_DIRS)
 	@echo $@
 	build_tagindex | $(M4) $(M4_FLAGS) > $@
 
