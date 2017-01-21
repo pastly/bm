@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+__Breaking changes__
+
+__Themes have been added, style customization should be done through them__.
+`include/*.{html,m4,css.in}` files were moved into theme directories in
+`themes/`.
+
+To change theme, use `./bm theme list` to list them, and use
+`./bm theme set <index>` to set one.
+
+To create your own theme, you can edit one of the existing ones in place, but it
+would also be a good idea to copy one into a new directory before editing that.
+
 ### Added
 
 - config option to include license in footer (#80)
