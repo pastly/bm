@@ -5,7 +5,7 @@ SHELL := /bin/bash
 # These are the files that always exist
 # AKA source files
 POST_FILES := $(shell find $(POST_DIR) -name '*.bm')
-CSS_FILES := $(shell find $(THEME_SYMLINK)/ -name '*.css.in')
+CSS_THEME_FILES := $(shell find $(THEME_SYMLINK)/ -name '*.css.in')
 USER_CONF_FILE := $(INCLUDE_DIR)/bm.conf
 INCLUDE_FILES := $(shell find $(INCLUDE_DIR) -name '*.html' -or -name '*.m4' -or -name '*.conf.example') \
 	$(USER_CONF_FILE)
@@ -20,7 +20,7 @@ else
 BUILT_SRC_FILES :=
 BUILT_SHORT_SRC_FILES :=
 endif
-BUILT_STATICS := $(CSS_FILES:.css.in=.css)
+BUILT_STATICS := $(CSS_THEME_FILES:.css.in=.css)
 BUILT_STATICS := $(notdir $(BUILT_STATICS))
 BUILT_STATICS := $(addprefix $(BUILT_STATIC_DIR)/,$(BUILT_STATICS))
 BUILT_META_FILES := \
@@ -189,7 +189,7 @@ $(BUILT_TAG_DIR)/index.html: $(METADATA_DIR)/tags $(filter $(METADATA_DIR)/%/hea
 	build_tagindex | $(M4) $(M4_FLAGS) > $@
 
 # Target for all CSS
-$(BUILT_STATIC_DIR)/%.css: $(THEME_SYMLINK)/%.css.in $(filter $(THEME_SYMLINK)/%.m4,$(INCLUDE_FILES)) | $(OUT_DIRS) $(THEME_SYMLINK)
+$(BUILT_STATIC_DIR)/%.css: $(THEME_SYMLINK)/%.css.in $(THEME_SYMLINK)/css.m4 | $(OUT_DIRS) $(THEME_SYMLINK)
 	@echo $@
 	$(M4) $(M4_FLAGS) $< > $@
 
