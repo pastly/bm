@@ -74,14 +74,10 @@ all: $(OUT_DIRS) \
 	$(BUILT_STATICS) \
 	$(BUILT_SIG_STATICS) \
 	$(BUILT_META_FILES) \
-	$(BUILT_META_SIG_PAGES) \
-	$(THEME_SYMLINK)
+	$(BUILT_META_SIG_PAGES)
 
 $(OUT_DIRS):
 	$(MKDIR) $(MKDIR_FLAGS) $@
-
-$(THEME_SYMLINK):
-	[ ! -e $@ ] && ln -s default $@
 
 $(METADATA_DIR)/postsbydate: $(filter $(METADATA_DIR)/%/headers,$(POST_METADATA_FILES)) | $(OUT_DIRS)
 	for POST in `sort_by_date $^`; do get_id $$POST; done > $@

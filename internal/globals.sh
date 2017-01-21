@@ -52,6 +52,11 @@ source internal/set-defaults.sh
 GPG_SIGN_FLAGS="${GPG_SIGN_FLAGS} --local-user ${GPG_FINGERPRINT}"
 
 ################################################################################
+# check for required directories (that even make needs)
+################################################################################
+[ ! -e "${THEME_SYMLINK}" ] && ln -s default "${THEME_SYMLINK}"
+
+################################################################################
 # check for some required programs
 ################################################################################
 if ! which "Markdown.pl" &> /dev/null
