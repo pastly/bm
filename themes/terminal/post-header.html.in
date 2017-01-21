@@ -1,0 +1,11 @@
+<h1 id='posttitle'>TITLE</h1>
+<p class='postsubtitle'>Posted on DATE by AUTHOR</p>
+m4_ifelse(MOD_DATE,,,
+<span class='postsubtitle' style='font-size:small;'><em>Last upated MOD_DATE</em></span><br/>
+)
+m4_ifelse(PERMALINK,,,
+<span class='postsubtitle' style='font-size:small;'><a href='PERMALINK'>permalink</a></span><br/>
+)
+m4_ifelse(IS_PINNED,,,
+<span class='postsubtitle' style='font-size:small;'><em>Pinned post</em></span><br/>
+)
