@@ -1,7 +1,7 @@
 m4_changequote(`[[',`]]')
-m4_define(ROOT_URL,m4_esyscmd(echo -n "${ROOT_URL}"))
-m4_define(BLOG_TITLE,m4_esyscmd(echo -n "${BLOG_TITLE}"))
 m4_define(BLOG_SUBTITLE,m4_esyscmd(echo -n "${BLOG_SUBTITLE}"))
+m4_define(BLOG_TITLE,m4_esyscmd(echo -n "${BLOG_TITLE}"))
+m4_define(ROOT_URL,m4_esyscmd(echo -n "${ROOT_URL}"))
 m4_define(VERSION,m4_esyscmd(echo -n "${VERSION}"))
 m4_define(DIR,themes/selected)
 
