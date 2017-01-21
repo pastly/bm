@@ -1,4 +1,5 @@
-m4_include(include/css.m4)
+m4_define(THEME_SYMLINK,m4_esyscmd(echo -n ${THEME_SYMLINK}))
+m4_include(THEME_SYMLINK/css.m4)
 body {
 	font-family:Georgia,"Times New Roman",Times,serif;
 	margin:0;

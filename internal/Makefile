@@ -5,9 +5,9 @@ SHELL := /bin/bash
 # These are the files that always exist
 # AKA source files
 POST_FILES := $(shell find $(POST_DIR) -name '*.bm')
-CSS_FILES := $(shell find $(INCLUDE_DIR) -name '*.css.in')
+CSS_FILES := $(shell find $(THEME_SYMLINK)/ -name '*.css.in')
 USER_CONF_FILE := $(INCLUDE_DIR)/bm.conf
-INCLUDE_FILES := $(shell find $(INCLUDE_DIR) -name '*.html' -or -name '*.m4' -or -name '*.conf.example') \
+INCLUDE_FILES := $(shell find $(INCLUDE_DIR) $(THEME_SYMLINK)/ -name '*.html' -or -name '*.m4' -or -name '*.conf.example') \
 	$(USER_CONF_FILE)
 
 # These are the targets. These files don't exist until after a successful build
@@ -193,7 +193,7 @@ $(BUILT_TAG_DIR)/index.html: $(METADATA_DIR)/tags $(filter $(METADATA_DIR)/%/hea
 	build_tagindex | $(M4) $(M4_FLAGS) > $@
 
 # Target for all CSS
-$(BUILT_STATIC_DIR)/%.css: $(INCLUDE_DIR)/%.css.in $(INCLUDE_FILES) | $(OUT_DIRS)
+$(BUILT_STATIC_DIR)/%.css: $(THEME_SYMLINK)/%.css.in | $(OUT_DIRS) $(THEME_SYMLINK)
 	@echo $@
 	$(M4) $(M4_FLAGS) $< > $@
 
