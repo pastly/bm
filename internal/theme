@@ -47,10 +47,19 @@ then
 		echo "Need to provide an index"
 		exit 1
 	fi
-	[ -L "${THEME_SYMLINK}" ] && rm "${THEME_SYMLINK}"
 	THEME="$(echo ${THEMES[$2]} | cut -d'/' -f 2-)"
-	THEME="$(basename "${THEME}")"
-	ln -s "${THEME}" "${THEME_SYMLINK}"
-	./bm theme list
+	THEME_PATH="$(realpath "${THEME}")"
+	THEME_NAME="$(basename "${THEME}")"
+	[[ "${SELECTED_THEME}" == "${THEME_PATH}" ]] && exit 0
+	[ -L "${THEME_SYMLINK}" ] && rm "${THEME_SYMLINK}"
+	ln -s "${THEME_NAME}" "${THEME_SYMLINK}"
+	touch "${THEME_PATH}"/*
+	if [[ "${REBUILD_POLICY}" != "manual" ]]
+	then
+		./bm build all
+	else
+		echo "You must now run the following command to update the build"
+		echo "./bm build all"
+	fi
 fi
 
