@@ -8,7 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
-- config option to include license (#80)
+- config option to include license in footer (#80)
+- note in footer if pages are signed (#83)
+- pubkey.gpg if pages are signed
 
 ## [v3.0.2] - 2017-01-20
 

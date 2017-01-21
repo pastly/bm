@@ -1,2 +1,8 @@
 <a href='ROOT_URL/tags/index.html'>Posts by tag</a> | <a href='ROOT_URL/posts/index.html'>All posts</a><br />
-<span style='font-size:smaller'>Made with <a href='https://gogs.system33.pw/mello/bm'>bm</a> VERSION</span>
+<span style='font-size:smaller'>Made with <a href='https://gogs.system33.pw/mello/bm'>bm</a> VERSION</span><br />
+m4_ifelse(GPG_SIGN_PAGES,yes,
+<span style='font-size:smaller'>All pages signed with <a href='ROOT_URL/pubkey.gpg'>GPG_FINGERPRINT</a>. Append <code>.asc</code> to URL for signature.</span><br />
+,)
+m4_ifelse(LICENSE_TEXT,,,
+<span style='font-size:smaller'>LICENSE_TEXT</span>
+)

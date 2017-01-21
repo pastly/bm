@@ -29,6 +29,7 @@ MKDIR="$(which mkdir)"
 MKDIR_FLAGS="-p"
 GPG="$(which gpg)"
 GPG_SIGN_FLAGS="--yes --armor --detach-sign"
+GPG_EXPORT_FLAGS="--armor --export"
 RM="rm"
 RM_FLAGS="-fr"
 VERSION="v3.0.2"
@@ -50,6 +51,7 @@ source internal/set-defaults.sh
 # now that options are validated, modify some internal variables if needed
 ################################################################################
 GPG_SIGN_FLAGS="${GPG_SIGN_FLAGS} --local-user ${GPG_FINGERPRINT}"
+GPG_EXPORT_FLAGS="${GPG_EXPORT_FLAGS} ${GPG_FINGERPRINT}"
 
 ################################################################################
 # check for required directories (that even make needs)

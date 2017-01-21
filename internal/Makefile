@@ -27,7 +27,9 @@ BUILT_META_FILES := \
 	$(BUILD_DIR)/index.html \
 	$(BUILT_POST_DIR)/index.html \
 	$(BUILT_TAG_DIR)/index.html \
-	$(BUILD_DIR)/404.html
+	$(BUILD_DIR)/404.html \
+	$(BUILD_DIR)/pubkey.gpg
+
 ifeq ($(GPG_SIGN_PAGES),yes)
 BUILT_SIG_PAGES := $(addsuffix .asc,$(BUILT_POSTS)) $(addsuffix .asc,$(BUILT_SRC_FILES))
 BUILT_SHORT_SIG_PAGES := $(addsuffix .asc,$(BUILT_SHORT_POSTS)) $(addsuffix .asc,$(BUILT_SHORT_SRC_FILES))
@@ -197,6 +199,15 @@ $(BUILT_STATIC_DIR)/%.css: $(THEME_SYMLINK)/%.css.in $(THEME_SYMLINK)/css.m4 | $
 $(BUILD_DIR)/404.html: | $(OUT_DIRS)
 	@echo $@
 	build_404 | $(M4) $(M4_FLAGS) > $@
+
+# Target for fingerprint
+$(BUILD_DIR)/pubkey.gpg: $(USER_CONF_FILE) $(BUILD_DIR)/404.html | $(OUT_DIRS)
+	@echo $@
+ifeq ($(GPG_SIGN_PAGES),yes)
+	</dev/null $(GPG) $(GPG_EXPORT_FLAGS) > $@
+else
+	cp $(BUILD_DIR)/404.html $@
+endif
 
 # Target to automatically make the config file if necessary
 $(USER_CONF_FILE): $(INCLUDE_DIR)/bm.conf.example
