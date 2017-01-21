@@ -4,3 +4,4 @@ meta
 !internal/build
 *.swp
 bm.conf
+themes/selected
