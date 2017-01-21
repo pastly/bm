@@ -1,7 +1,7 @@
-build
-posts
-meta
-!internal/build
-*.swp
 bm.conf
+build
+!internal/build
+meta
+posts
+*.swp
 themes/selected
