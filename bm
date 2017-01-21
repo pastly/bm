@@ -13,7 +13,7 @@ then
 	echo "Wiki at https://gogs.system33.pw/mello/bm/wiki"
 fi
 
-VALID_COMMANDS=( build create edit list remove version )
+VALID_COMMANDS=( build create edit list remove theme version )
 
 if [[ " ${VALID_COMMANDS[@]} " =~ " ${COMMAND} " ]]
 then
