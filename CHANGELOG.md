@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- config option to include license (#80)
+
 ## [v3.0.2] - 2017-01-20
 
 ### Fixed

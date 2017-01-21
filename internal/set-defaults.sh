@@ -29,6 +29,8 @@
 	GPG_FINGERPRINT=""
 [[ "${GPG_SIGN_PAGES}" == "" ]] && \
 	GPG_SIGN_PAGES="no"
+[[ "${LICENSE_TEXT}" == "" ]] && \
+	LICENSE_TEXT=""
 [[ "${LONG_DATE_FRMT}" == "" ]] && \
 	LONG_DATE_FRMT="%d %b %Y at %l:%M %P"
 [[ "${MAKE_SHORT_POSTS}" == "" ]] && \
