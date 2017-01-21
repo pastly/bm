@@ -193,7 +193,7 @@ $(BUILT_TAG_DIR)/index.html: $(METADATA_DIR)/tags $(filter $(METADATA_DIR)/%/hea
 	build_tagindex | $(M4) $(M4_FLAGS) > $@
 
 # Target for all CSS
-$(BUILT_STATIC_DIR)/%.css: $(THEME_SYMLINK)/%.css.in | $(OUT_DIRS) $(THEME_SYMLINK)
+$(BUILT_STATIC_DIR)/%.css: $(THEME_SYMLINK)/%.css.in $(filter $(THEME_SYMLINK)/%.m4,$(INCLUDE_FILES)) | $(OUT_DIRS) $(THEME_SYMLINK)
 	@echo $@
 	$(M4) $(M4_FLAGS) $< > $@
 
