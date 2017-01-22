@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v3.0.3] - 2017-01-22
+
 ### Fixed
 
 - blog generation when there's no pinned posts or tags
@@ -222,6 +224,7 @@ v2.7.0) `./bm build` script is what should be used.
 - author, date, mod date metadata
 - post id (unused)
 
+[v3.0.3]: https://gogs.system33.pw/mello/bm/src/v3.0.3
 [v3.0.2]: https://gogs.system33.pw/mello/bm/src/v3.0.2
 [v3.0.1]: https://gogs.system33.pw/mello/bm/src/v3.0.1
 [v3.0.0]: https://gogs.system33.pw/mello/bm/src/v3.0.0
