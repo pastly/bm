@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- blog generation when there's no pinned posts or tags
+
 ## [v3.0.2] - 2017-01-20
 
 ### Fixed
