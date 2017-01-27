@@ -32,7 +32,7 @@ GPG_SIGN_FLAGS="--yes --armor --detach-sign"
 GPG_EXPORT_FLAGS="--armor --export"
 RM="rm"
 RM_FLAGS="-fr"
-VERSION="v3.0.2"
+VERSION="v3.0.3"
 TAG_ALPHABET="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-"
 ID_ALPHABET="123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 KNOWN_HASH_PROGRAMS="sha1sum sha1 sha256sum sha256 md5sum md5 cat"
@@ -227,48 +227,49 @@ function build_tagindex {
 	for P in ${TMP[@]}; do ALL_POSTS[${#ALL_POSTS[@]}]="$(dirname ${P})/tags"; done
 	# finally, build page
 	echo "START_CONTENT"
-	for T in ${ALL_TAGS[@]}
-	do
-		CURRENT_EPOCH=
-		TAG_FILE="${BUILT_TAG_DIR}/${T}.html"
-		echo "m4_include(${THEME_SYMLINK}/html.m4)" >> "${TMP_TAG_FILE}"
-		echo "START_HTML([[${T} - ${BLOG_TITLE}]])" >> "${TMP_TAG_FILE}"
-		echo "PAGE_HEADER" >> "${TMP_TAG_FILE}"
-		echo "START_CONTENT" >> "${TMP_TAG_FILE}"
-		echo "<h1>${T}</h1>" | tee -a "${TMP_TAG_FILE}"
-		echo "<ul>" | tee -a "${TMP_TAG_FILE}"
-		for P in ${ALL_POSTS[@]}
+	(( "${#ALL_TAGS[@]}" > 0 )) &&
+		for T in ${ALL_TAGS[@]}
 		do
-			if grep --quiet --line-regexp "${T}" "${P}"
-			then
-				ID="$(basename $(dirname "${P}"))"
-				HEADERS="${METADATA_DIR}/${ID}/headers"
-				DATE="$(get_date "${HEADERS}")"
-				DATE_PRETTY="$(ts_to_date "${DATE_FRMT}" "$(get_date "${HEADERS}")")"
-				if [[ "${TAG_INDEX_BY}" == "month" ]] && [[ "$(ts_to_date "${MONTHLY_INDEX_DATE_FRMT}" "${DATE}")" != "${CURRENT_EPOCH}" ]]
+			CURRENT_EPOCH=
+			TAG_FILE="${BUILT_TAG_DIR}/${T}.html"
+			echo "m4_include(${THEME_SYMLINK}/html.m4)" >> "${TMP_TAG_FILE}"
+			echo "START_HTML([[${T} - ${BLOG_TITLE}]])" >> "${TMP_TAG_FILE}"
+			echo "PAGE_HEADER" >> "${TMP_TAG_FILE}"
+			echo "START_CONTENT" >> "${TMP_TAG_FILE}"
+			echo "<h1>${T}</h1>" | tee -a "${TMP_TAG_FILE}"
+			echo "<ul>" | tee -a "${TMP_TAG_FILE}"
+			for P in ${ALL_POSTS[@]}
+			do
+				if grep --quiet --line-regexp "${T}" "${P}"
 				then
-					CURRENT_EPOCH="$(ts_to_date "${MONTHLY_INDEX_DATE_FRMT}" "${DATE}")"
-					echo "</ul>" | tee -a "${TMP_TAG_FILE}"
-					echo "<h2>${CURRENT_EPOCH}</h2>" | tee -a "${TMP_TAG_FILE}"
-					echo "<ul>" | tee -a "${TMP_TAG_FILE}"
-				elif [[ "${TAG_INDEX_BY}" == "year" ]] && [[ "$(ts_to_date "${YEARLY_INDEX_DATE_FRMT}" "${DATE}")" != "${CURRENT_EPOCH}" ]]
-				then
-					CURRENT_EPOCH="$(ts_to_date "${YEARLY_INDEX_DATE_FRMT}" "${DATE}")"
-					echo "</ul>" | tee -a "${TMP_TAG_FILE}"
-					echo "<h2>${CURRENT_EPOCH}</h2>" | tee -a "${TMP_TAG_FILE}"
-					echo "<ul>" | tee -a "${TMP_TAG_FILE}"
+					ID="$(basename $(dirname "${P}"))"
+					HEADERS="${METADATA_DIR}/${ID}/headers"
+					DATE="$(get_date "${HEADERS}")"
+					DATE_PRETTY="$(ts_to_date "${DATE_FRMT}" "$(get_date "${HEADERS}")")"
+					if [[ "${TAG_INDEX_BY}" == "month" ]] && [[ "$(ts_to_date "${MONTHLY_INDEX_DATE_FRMT}" "${DATE}")" != "${CURRENT_EPOCH}" ]]
+					then
+						CURRENT_EPOCH="$(ts_to_date "${MONTHLY_INDEX_DATE_FRMT}" "${DATE}")"
+						echo "</ul>" | tee -a "${TMP_TAG_FILE}"
+						echo "<h2>${CURRENT_EPOCH}</h2>" | tee -a "${TMP_TAG_FILE}"
+						echo "<ul>" | tee -a "${TMP_TAG_FILE}"
+					elif [[ "${TAG_INDEX_BY}" == "year" ]] && [[ "$(ts_to_date "${YEARLY_INDEX_DATE_FRMT}" "${DATE}")" != "${CURRENT_EPOCH}" ]]
+					then
+						CURRENT_EPOCH="$(ts_to_date "${YEARLY_INDEX_DATE_FRMT}" "${DATE}")"
+						echo "</ul>" | tee -a "${TMP_TAG_FILE}"
+						echo "<h2>${CURRENT_EPOCH}</h2>" | tee -a "${TMP_TAG_FILE}"
+						echo "<ul>" | tee -a "${TMP_TAG_FILE}"
+					fi
+					TITLE="$(get_title "${HEADERS}")"
+					if [[ "${PREFER_SHORT_POSTS}" == "yes" ]]
+					then
+						LINK="/p/${ID}.html"
+					else
+						LINK="/posts/$(echo "${TITLE}" | title_to_post_url)${TITLE_SEPARATOR_CHAR}${ID}.html"
+					fi
+					AUTHOR="$(get_author "${HEADERS}")"
+					echo "<li><a href='${LINK}'>${TITLE}</a> by ${AUTHOR} on ${DATE_PRETTY}</li>" | tee -a "${TMP_TAG_FILE}"
 				fi
-				TITLE="$(get_title "${HEADERS}")"
-				if [[ "${PREFER_SHORT_POSTS}" == "yes" ]]
-				then
-					LINK="/p/${ID}.html"
-				else
-					LINK="/posts/$(echo "${TITLE}" | title_to_post_url)${TITLE_SEPARATOR_CHAR}${ID}.html"
-				fi
-				AUTHOR="$(get_author "${HEADERS}")"
-				echo "<li><a href='${LINK}'>${TITLE}</a> by ${AUTHOR} on ${DATE_PRETTY}</li>" | tee -a "${TMP_TAG_FILE}"
-			fi
-		done
+			done
 		echo "</ul>" | tee -a "${TMP_TAG_FILE}"
 		echo "END_CONTENT" >> "${TMP_TAG_FILE}"
 		echo "PAGE_FOOTER" >> "${TMP_TAG_FILE}"
@@ -475,6 +476,8 @@ function only_pinned_posts {
 # it calls only_pinned_posts and echos post ids that aren't pinned
 function only_unpinned_posts {
 	PINNED=( $(only_pinned_posts $1) )
+	(( "${#PINNED[@]}" < "1" )) &&
+		cat $1 && return
 	for ID in $(cat $1)
 	do
 		[[ ! " ${PINNED[@]} " =~ " ${ID} " ]] \
