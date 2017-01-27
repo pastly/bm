@@ -91,32 +91,28 @@ fi
 ################################################################################
 function build_404 {
 	cat << EOF
-m4_include(${THEME_SYMLINK}/html.m4)
-START_HTML([[404 - ${BLOG_TITLE}]])
-PAGE_HEADER
 START_CONTENT
 <h1>404 Not Found</h1>
 <p>It seems you've stumbled upon a bad link. Perhaps these will help you.</p>
 <a href='${ROOT_URL}/'>Homepage</a><br/>
 <a href='${ROOT_URL}/posts/index.html'>All posts</a><br/>
 END_CONTENT
-PAGE_FOOTER
-END_HTML
 EOF
 }
 
-function build_content_footer {
-	cat << EOF
-m4_include(${THEME_SYMLINK}/html.m4)
-END_CONTENT
-PAGE_FOOTER
-END_HTML
-EOF
-}
-
+# valid options are: "for-preview"
 function build_content_header {
-	HEADERS="$1"
+	POST="$1" && shift
+	OPTS=( "$@" )
+	HEADERS="${METADATA_DIR}/${POST}/headers"
+	OPTIONS="${METADATA_DIR}/${POST}/options"
 	TITLE="$(get_title "${HEADERS}")"
+	POST_FILE="$(echo "${TITLE}" | title_to_post_url)${TITLE_SEPARATOR_CHAR}${POST}.html"
+	[[ "${PREFER_SHORT_POSTS}" == "yes" ]] &&
+		POST_LINK="${ROOT_URL}/p/${POST}.html" ||
+		POST_LINK="${ROOT_URL}/posts/${POST_FILE}"
+	(( "${#OPTS[@]}" > 0 )) && [[ " ${OPTS[@]} " =~ " for-preview " ]] &&
+		TITLE="<a href='${POST_LINK}'>${TITLE}</a>"
 	DATE="$(get_date "${HEADERS}")"
 	MOD_DATE="$(get_mod_date "${HEADERS}")"
 	(( "$((${MOD_DATE}-${DATE}))" > "${SIGNIFICANT_MOD_AFTER}" )) &&
@@ -128,19 +124,17 @@ function build_content_header {
 	[[ "${MAKE_SHORT_POSTS}" == "yes" ]] &&
 		PERMALINK="${ROOT_URL}/p/$(get_id "${HEADERS}").html" ||
 		PERMALINK=
+	IS_PINNED="$(op_get "${OPTIONS}" pinned)"
+	(( "${#OPTS[@]}" > 0 )) && [[ " ${OPTS[@]} " =~ " for-preview " ]] &&
+		[[ "${IS_PINNED}" != "" ]] &&
+		IS_PINNED="foobar" ||
+		IS_PINNED=""
 	cat << EOF
-m4_include(${THEME_SYMLINK}/html.m4)
-START_HTML([[${TITLE} - ${BLOG_TITLE}]])
-PAGE_HEADER
-START_CONTENT
-POST_HEADER(${TITLE},${AUTHOR},${DATE},${MOD_DATE},${PERMALINK},)
+POST_HEADER(${TITLE},${AUTHOR},${DATE},${MOD_DATE},${PERMALINK},${IS_PINNED})
 EOF
 }
 
 function build_index {
-	echo "m4_include(${THEME_SYMLINK}/html.m4)"
-	echo "START_HTML(${BLOG_TITLE})"
-	echo "PAGE_HEADER"
 	POSTS="$1"
 	PINNED_POSTS="$(mktemp)"
 	UNPINNED_POSTS="$(mktemp)"
@@ -150,57 +144,45 @@ function build_index {
 	only_unpinned_posts "${POSTS}" > "${UNPINNED_POSTS}"
 	for POST in $(cat "${PINNED_POSTS}") $(tac "${UNPINNED_POSTS}" | head -n "${POSTS_ON_HOMEPAGE}")
 	do
+		echo "START_CONTENT"
 		HEADERS="${METADATA_DIR}/${POST}/headers"
 		CONTENT="${METADATA_DIR}/${POST}/previewcontent"
-		OPTIONS="${METADATA_DIR}/${POST}/options"
 		TITLE="$(get_title "${HEADERS}")"
 		POST_FILE="$(echo "${TITLE}" | title_to_post_url)${TITLE_SEPARATOR_CHAR}${POST}.html"
 		[[ "${PREFER_SHORT_POSTS}" == "yes" ]] &&
 			POST_LINK="${ROOT_URL}/p/${POST}.html" ||
 			POST_LINK="${ROOT_URL}/posts/${POST_FILE}"
-		AUTHOR="$(get_author "${HEADERS}")"
-		DATE="$(get_date "${HEADERS}")"
-		MOD_DATE="$(get_mod_date "${HEADERS}")"
-		(( "$((${MOD_DATE}-${DATE}))" > "${SIGNIFICANT_MOD_AFTER}" )) &&
-			MOD_DATE="$(ts_to_date "${LONG_DATE_FRMT}" "${MOD_DATE}")" ||
-			MOD_DATE=
-		DATE="$(ts_to_date "${DATE_FRMT}" "${DATE}")"
-		[[ "${MAKE_SHORT_POSTS}" == "yes" ]] &&
-			PERMALINK="${ROOT_URL}/p/$(get_id "${HEADERS}").html" ||
-			PERMALINK=
-		IS_PINNED="$(op_get "${OPTIONS}" pinned)"
-		[[ "${IS_PINNED}" != "" ]] &&
-			IS_PINNED="foobar"
 		[[ "$(cat "${METADATA_DIR}/${POST}/previewcontent" | hash_data)" != \
 			"$(cat "${METADATA_DIR}/${POST}/content" | hash_data)" ]] &&
 			CONTENT_IS_TRIMMED="foobar" ||
 			CONTENT_IS_TRIMMED=""
-		echo "START_POST_PREVIEW"
-		echo "POST_HEADER(<a href='${POST_LINK}'>${TITLE}</a>,${AUTHOR},${DATE},
-			${MOD_DATE},${PERMALINK},${IS_PINNED})"
+		build_content_header "${POST}" "for-preview"
 		< "${CONTENT}" \
 		pre_markdown "$(get_id "${HEADERS}")" |\
 		${MARKDOWN} |\
 		post_markdown "$(get_id "${HEADERS}")" "for-preview"
 		[[ "${CONTENT_IS_TRIMMED}" != "" ]] &&
 			echo "<a href='${POST_LINK}'><em>Read the entire post</em></a>"
-		echo "END_POST_PREVIEW"
+		echo "END_CONTENT"
 
 		INCLUDED_POSTS["${INCLUDED_POSTS_INDEX}"]="${POST}"
 		INCLUDED_POSTS_INDEX=$((INCLUDED_POSTS_INDEX+1))
 	done
-	echo "PAGE_FOOTER"
-	echo "END_HTML"
 	rm "${PINNED_POSTS}" "${UNPINNED_POSTS}"
+}
+
+function build_page_foot {
+	echo "PAGE_FOOTER"
+}
+
+function build_page_head {
+	echo "PAGE_HEADER"
 }
 
 function build_postindex {
 	ALL_POSTS=( $(find "${METADATA_DIR}/" -mindepth 2 -type f -name headers) )
 	ALL_POSTS=( $(sort_by_date ${ALL_POSTS[@]} | tac) )
 	CURRENT_EPOCH=
-	echo "m4_include(${THEME_SYMLINK}/html.m4)"
-	echo "START_HTML([[Posts - ${BLOG_TITLE}]])"
-	echo "PAGE_HEADER"
 	echo "START_CONTENT"
 	echo "<h1>Posts</h1>"
 	echo "<ul>"
@@ -231,8 +213,6 @@ function build_postindex {
 	done
 	echo "</ul>"
 	echo "END_CONTENT"
-	echo "PAGE_FOOTER"
-	echo "END_HTML"
 }
 
 function build_tagindex {
@@ -246,9 +226,6 @@ function build_tagindex {
 	ALL_POSTS=( )
 	for P in ${TMP[@]}; do ALL_POSTS[${#ALL_POSTS[@]}]="$(dirname ${P})/tags"; done
 	# finally, build page
-	echo "m4_include(${THEME_SYMLINK}/html.m4)"
-	echo "START_HTML([[Tags - ${BLOG_TITLE}]])"
-	echo "PAGE_HEADER"
 	echo "START_CONTENT"
 	for T in ${ALL_TAGS[@]}
 	do
@@ -302,9 +279,11 @@ function build_tagindex {
 			</dev/null "${GPG}" ${GPG_SIGN_FLAGS} "${TAG_FILE}"
 	done
 	echo "END_CONTENT"
-	echo "PAGE_FOOTER"
-	echo "END_HTML"
 	rm "${TMP_TAG_FILE}"
+}
+
+function end_html {
+	echo "END_HTML"
 }
 
 function file_has_toc_code {
@@ -679,6 +658,12 @@ function set_editor {
 			fi
 		done
 	fi
+}
+
+function start_html {
+	TITLE="$1"
+	echo "m4_include(${THEME_SYMLINK}/html.m4)"
+	echo "START_HTML(${TITLE})"
 }
 
 function sort_by_date {

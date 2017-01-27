@@ -43,15 +43,14 @@ BUILT_SIG_STATICS :=
 endif
 
 METADATA_FILES := \
+	$(METADATA_DIR)/pagefoot \
+	$(METADATA_DIR)/pagehead \
 	$(METADATA_DIR)/postsbydate \
 	$(METADATA_DIR)/tags \
 
 POST_METADATA_FILES := $(foreach file,$(POST_FILES),$(METADATA_DIR)/$(shell get_id $(file)))
 POST_METADATA_FILES := $(foreach dir,$(POST_METADATA_FILES),\
 	$(dir)/headers \
-	$(dir)/head \
-	$(dir)/body \
-	$(dir)/foot \
 	$(dir)/tags \
 	$(dir)/options \
 	$(dir)/toc \
@@ -118,38 +117,34 @@ $(METADATA_DIR)/%/previewcontent: $(METADATA_DIR)/%/content $(METADATA_DIR)/%/op
 	@echo $@
 	get_preview_content $(@D)/content $(@D)/options > $@
 
-# Target for per-post header. Completely HTML formatted
-$(METADATA_DIR)/%/head: $(METADATA_DIR)/%/headers $(INCLUDE_FILES)
-	@echo $@
-	build_content_header $< | $(M4) $(M4_FLAGS) > $@
-
-# Target for per-post footer. Completely HTML formatted
-$(METADATA_DIR)/%/foot: $(INCLUDE_FILES) | $(OUT_DIRS)
-	@echo $@
-	build_content_footer | $(M4) $(M4_FLAGS) > $@
-
-# Target for per-post body. Completely HTML formatted.
-$(METADATA_DIR)/%/body: $(METADATA_DIR)/%/headers $(METADATA_DIR)/%/content $(METADATA_DIR)/%/toc $(METADATA_DIR)/%/options
-	@echo $@
-	$(eval METADATA := $(METADATA_DIR)/$(shell get_id $<))
-	< $(METADATA)/content \
-	pre_markdown $(shell get_id $<) |\
-	$(MARKDOWN) |\
-	post_markdown $(shell get_id $<) > $@
-
 # Target for short posts
-$(BUILT_SHORT_POST_DIR)/%.html: $(METADATA_DIR)/%/head $(METADATA_DIR)/%/body $(METADATA_DIR)/%/foot | $(BUILD_DIR)/404.html
+$(BUILT_SHORT_POST_DIR)/%.html: $(METADATA_DIR)/%/headers $(METADATA_DIR)/pagehead $(METADATA_DIR)/%/content $(METADATA_DIR)/pagefoot $(INCLUDE_FILES) $(BUILD_DIR)/404.html
 	@echo $@
 ifeq ($(MAKE_SHORT_POSTS),yes)
-	cat $^ > $@
+	$(eval OUT_FILE := $@)
+else
+	$(eval OUT_FILE := $(filter %-$*.html,$(BUILT_POSTS)))
+endif
+	$(eval TITLE := $(shell get_title $(METADATA_DIR)/$*/headers))
+	{ start_html "$(TITLE) - $(BLOG_TITLE)"; \
+	cat "$(METADATA_DIR)/pagehead"; \
+	echo "START_CONTENT"; \
+	build_content_header $* ""; \
+	< $(METADATA_DIR)/$*/content \
+		pre_markdown $* |\
+		$(MARKDOWN) |\
+		post_markdown $*; \
+	echo "END_CONTENT"; \
+	cat "$(METADATA_DIR)/pagefoot"; \
+	end_html; } | $(M4) $(M4_FLAGS) > $(OUT_FILE)
+ifeq ($(MAKE_SHORT_POSTS),yes)
 	cp $@ $(filter %-$*.html,$(BUILT_POSTS))
 else
-	cat $^ > $(filter %-$*.html,$(BUILT_POSTS))
 	cp $(BUILD_DIR)/404.html $@
 endif
 
 # Target for short source files
-$(BUILT_SHORT_POST_DIR)/%.bm: $(POST_DIR)/*/*/*-%.bm $(INCLUDE_FILES) | $(BUILD_DIR)/404.html
+$(BUILT_SHORT_POST_DIR)/%.bm: $(POST_DIR)/*/*/*-%.bm $(INCLUDE_FILES) $(BUILD_DIR)/404.html
 	@echo $@
 ifeq ($(MAKE_SHORT_POSTS),yes)
 	cp $< $@
@@ -162,7 +157,7 @@ else
 endif
 
 # Target for gpg signature pages for posts, if enabled
-$(BUILT_SHORT_POST_DIR)/%.asc: $(BUILT_SHORT_POST_DIR)/%
+$(BUILT_SHORT_POST_DIR)/%.asc: $(BUILT_SHORT_POST_DIR)/% $(BUILD_DIR)/404.html
 	</dev/null $(GPG) $(GPG_SIGN_FLAGS) $<
 ifeq ($(MAKE_SHORT_POSTS),yes)
 	cp $@ $(filter %-$*.asc,$(BUILT_SIG_PAGES))
@@ -171,24 +166,46 @@ else
 	cp $(BUILD_DIR)/404.html $@
 endif
 
+# Target for the footer for all pages, m4 formatted
+$(METADATA_DIR)/pagefoot: $(INCLUDE_FILES) $(THEME_SYMLINK)/html.m4 $(THEME_SYMLINK)/footer.html.in $(THEME_SYMLINK)/end-html.html.in | $(OUT_DIRS)
+	@echo $@
+	build_page_foot > $@
+
+# Target for the head for all pages, m4 formatted
+$(METADATA_DIR)/pagehead: $(INCLUDE_FILES) $(THEME_SYMLINK)/html.m4 $(THEME_SYMLINK)/header.html.in $(THEME_SYMLINK)/start-html.html.in | $(OUT_DIRS)
+	@echo $@
+	build_page_head > $@
+
 # Target for all other gpg signature pages, if enabled
 %.asc: %
 	</dev/null $(GPG) $(GPG_SIGN_FLAGS) $<
 
 # Target for homepage
-$(BUILD_DIR)/index.html: $(METADATA_DIR)/postsbydate $(INCLUDE_FILES) $(BUILT_SHORT_POSTS)
+$(BUILD_DIR)/index.html: $(METADATA_DIR)/postsbydate $(INCLUDE_FILES) $(BUILT_SHORT_POSTS) $(METADATA_DIR)/pagehead $(METADATA_DIR)/pagefoot
 	@echo $@
-	build_index $< | $(M4) $(M4_FLAGS) > $@
+	{ start_html "$(BLOG_TITLE)"; \
+	cat $(METADATA_DIR)/pagehead; \
+	build_index $<; \
+	cat $(METADATA_DIR)/pagefoot; \
+	end_html; } | $(M4) $(M4_FLAGS) > $@
 
 # Target for posts index
-$(BUILT_POST_DIR)/index.html: $(filter $(METADATA_DIR)/%/headers,$(POST_METADATA_FILES)) $(INCLUDE_FILES) | $(OUT_DIRS)
+$(BUILT_POST_DIR)/index.html: $(filter $(METADATA_DIR)/%/headers,$(POST_METADATA_FILES)) $(INCLUDE_FILES) $(METADATA_DIR)/pagehead $(METADATA_DIR)/pagefoot | $(OUT_DIRS)
 	@echo $@
-	build_postindex | $(M4) $(M4_FLAGS) > $@
+	{ start_html "Posts - $(BLOG_TITLE)"; \
+	cat $(METADATA_DIR)/pagehead; \
+	build_postindex; \
+	cat $(METADATA_DIR)/pagefoot; \
+	end_html; } | $(M4) $(M4_FLAGS) > $@
 
 # Target for tags index
-$(BUILT_TAG_DIR)/index.html: $(METADATA_DIR)/tags $(filter $(METADATA_DIR)/%/headers,$(POST_METADATA_FILES)) $(INCLUDE_FILES) | $(OUT_DIRS)
+$(BUILT_TAG_DIR)/index.html: $(METADATA_DIR)/tags $(filter $(METADATA_DIR)/%/headers,$(POST_METADATA_FILES)) $(INCLUDE_FILES) $(METADATA_DIR)/pagehead $(METADATA_DIR)/pagefoot | $(OUT_DIRS)
 	@echo $@
-	build_tagindex | $(M4) $(M4_FLAGS) > $@
+	{ start_html "Tags - $(BLOG_TITLE)"; \
+	cat $(METADATA_DIR)/pagehead; \
+	build_tagindex; \
+	cat $(METADATA_DIR)/pagefoot; \
+	end_html; } | $(M4) $(M4_FLAGS) > $@
 
 # Target for all CSS
 $(BUILT_STATIC_DIR)/%.css: $(THEME_SYMLINK)/%.css.in $(THEME_SYMLINK)/css.m4 | $(OUT_DIRS) $(THEME_SYMLINK)
@@ -196,9 +213,13 @@ $(BUILT_STATIC_DIR)/%.css: $(THEME_SYMLINK)/%.css.in $(THEME_SYMLINK)/css.m4 | $
 	$(M4) $(M4_FLAGS) $< > $@
 
 # Target to build 404 page
-$(BUILD_DIR)/404.html: | $(OUT_DIRS)
+$(BUILD_DIR)/404.html: $(METADATA_DIR)/pagehead $(METADATA_DIR)/pagefoot | $(OUT_DIRS)
 	@echo $@
-	build_404 | $(M4) $(M4_FLAGS) > $@
+	{ start_html "404 - $(BLOG_TITLE)"; \
+	cat $(METADATA_DIR)/pagehead; \
+	build_404; \
+	cat $(METADATA_DIR)/pagefoot; \
+	end_html; } | $(M4) $(M4_FLAGS) > $@
 
 # Target for fingerprint
 $(BUILD_DIR)/pubkey.gpg: $(USER_CONF_FILE) $(BUILD_DIR)/404.html | $(OUT_DIRS)

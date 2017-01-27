@@ -24,6 +24,16 @@ would also be a good idea to copy one into a new directory before editing that.
 - note in footer if pages are signed (#83)
 - pubkey.gpg if pages are signed
 
+### Changed
+
+- stop generating per-post head/foot files. Foot is the same for every page, and
+  head is the same expect the `<title>`. Should save build time. (#91)
+
+### Fixed
+
+- many theoretical makefile dependency issues that so far haven't come up due to
+  luck.
+
 ## [v3.0.2] - 2017-01-20
 
 ### Fixed
