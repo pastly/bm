@@ -28,7 +28,7 @@ BUILT_META_FILES := \
 	$(BUILT_POST_DIR)/index.html \
 	$(BUILT_TAG_DIR)/index.html \
 	$(BUILD_DIR)/404.html \
-	$(BUILD_DIR)/pubkey.gpg
+	$(BUILD_DIR)/pubkey.gpg \
 
 ifeq ($(GPG_SIGN_PAGES),yes)
 BUILT_SIG_PAGES := $(addsuffix .asc,$(BUILT_POSTS)) $(addsuffix .asc,$(BUILT_SRC_FILES))
@@ -76,7 +76,7 @@ all: $(OUT_DIRS) \
 	$(BUILT_STATICS) \
 	$(BUILT_SIG_STATICS) \
 	$(BUILT_META_FILES) \
-	$(BUILT_META_SIG_PAGES)
+	$(BUILT_META_SIG_PAGES) \
 
 $(OUT_DIRS):
 	$(MKDIR) $(MKDIR_FLAGS) $@
