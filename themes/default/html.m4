@@ -30,13 +30,6 @@ m4_include(DIR/footer.html.in)
 </div> <!-- footerholder -->
 )
 
-m4_define(START_POST_PREVIEW,
-m4_include(DIR/start-post-preview.html.in)
-)
-m4_define(END_POST_PREVIEW,
-m4_include(DIR/end-post-preview.html.in)
-)
-
 m4_define(START_CONTENT,
 m4_include(DIR/start-content.html.in)
 )
