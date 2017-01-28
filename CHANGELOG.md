@@ -33,6 +33,8 @@ would also be a good idea to copy one into a new directory before editing that.
 
 - many theoretical makefile dependency issues that so far haven't come up due to
   luck.
+- large images need to be limited in width in default theme, changed in terminal
+  theme too. (#93)
 
 ## [v3.0.3] - 2017-01-22
 

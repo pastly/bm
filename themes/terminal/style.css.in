@@ -83,3 +83,6 @@ blockquote img {
 blockquote iframe {
 	margin:12px 0px;
 }
+img {
+	max-width:100%;
+}
