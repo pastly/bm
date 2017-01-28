@@ -6,9 +6,8 @@ SHELL := /bin/bash
 # AKA source files
 POST_FILES := $(shell find $(POST_DIR) -name '*.bm')
 CSS_THEME_FILES := $(shell find $(THEME_SYMLINK)/ -name '*.css.in')
-USER_CONF_FILE := $(INCLUDE_DIR)/bm.conf
-INCLUDE_FILES := $(shell find $(INCLUDE_DIR) -name '*.html' -or -name '*.m4' -or -name '*.conf.example') \
-	$(USER_CONF_FILE)
+USER_CONF_FILE := $(POST_DIR)/bm.conf
+CONF_FILES := $(USER_CONF_FILE) internal/bm.conf.example
 
 # These are the targets. These files don't exist until after a successful build
 BUILT_POSTS := $(foreach p,$(POST_FILES),$(BUILT_POST_DIR)/$(shell get_title $(p) | title_to_post_url)$(TITLE_SEPARATOR_CHAR)$(shell get_id $(p)).html)
@@ -118,7 +117,7 @@ $(METADATA_DIR)/%/previewcontent: $(METADATA_DIR)/%/content $(METADATA_DIR)/%/op
 	get_preview_content $(@D)/content $(@D)/options > $@
 
 # Target for short posts
-$(BUILT_SHORT_POST_DIR)/%.html: $(METADATA_DIR)/%/headers $(METADATA_DIR)/pagehead $(METADATA_DIR)/%/content $(METADATA_DIR)/pagefoot $(INCLUDE_FILES) $(BUILD_DIR)/404.html
+$(BUILT_SHORT_POST_DIR)/%.html: $(METADATA_DIR)/%/headers $(METADATA_DIR)/pagehead $(METADATA_DIR)/%/content $(METADATA_DIR)/pagefoot $(CONF_FILES) $(BUILD_DIR)/404.html
 	@echo $@
 ifeq ($(MAKE_SHORT_POSTS),yes)
 	$(eval OUT_FILE := $@)
@@ -144,7 +143,7 @@ else
 endif
 
 # Target for short source files
-$(BUILT_SHORT_POST_DIR)/%.bm: $(POST_DIR)/*/*/*-%.bm $(INCLUDE_FILES) $(BUILD_DIR)/404.html
+$(BUILT_SHORT_POST_DIR)/%.bm: $(POST_DIR)/*/*/*-%.bm $(CONF_FILES) $(BUILD_DIR)/404.html
 	@echo $@
 ifeq ($(MAKE_SHORT_POSTS),yes)
 	cp $< $@
@@ -157,7 +156,7 @@ else
 endif
 
 # Target for gpg signature pages for posts, if enabled
-$(BUILT_SHORT_POST_DIR)/%.asc: $(BUILT_SHORT_POST_DIR)/% $(BUILD_DIR)/404.html
+$(BUILT_SHORT_POST_DIR)/%.asc: $(BUILT_SHORT_POST_DIR)/% $(BUILD_DIR)/404.html $(CONF_FILES)
 	</dev/null $(GPG) $(GPG_SIGN_FLAGS) $<
 ifeq ($(MAKE_SHORT_POSTS),yes)
 	cp $@ $(filter %-$*.asc,$(BUILT_SIG_PAGES))
@@ -167,12 +166,12 @@ else
 endif
 
 # Target for the footer for all pages, m4 formatted
-$(METADATA_DIR)/pagefoot: $(INCLUDE_FILES) $(THEME_SYMLINK)/html.m4 $(THEME_SYMLINK)/footer.html.in $(THEME_SYMLINK)/end-html.html.in | $(OUT_DIRS)
+$(METADATA_DIR)/pagefoot: $(CONF_FILES) $(THEME_SYMLINK)/html.m4 $(THEME_SYMLINK)/footer.html.in $(THEME_SYMLINK)/end-html.html.in | $(OUT_DIRS)
 	@echo $@
 	build_page_foot > $@
 
 # Target for the head for all pages, m4 formatted
-$(METADATA_DIR)/pagehead: $(INCLUDE_FILES) $(THEME_SYMLINK)/html.m4 $(THEME_SYMLINK)/header.html.in $(THEME_SYMLINK)/start-html.html.in | $(OUT_DIRS)
+$(METADATA_DIR)/pagehead: $(CONF_FILES) $(THEME_SYMLINK)/html.m4 $(THEME_SYMLINK)/header.html.in $(THEME_SYMLINK)/start-html.html.in | $(OUT_DIRS)
 	@echo $@
 	build_page_head > $@
 
@@ -181,7 +180,7 @@ $(METADATA_DIR)/pagehead: $(INCLUDE_FILES) $(THEME_SYMLINK)/html.m4 $(THEME_SYML
 	</dev/null $(GPG) $(GPG_SIGN_FLAGS) $<
 
 # Target for homepage
-$(BUILD_DIR)/index.html: $(METADATA_DIR)/postsbydate $(INCLUDE_FILES) $(BUILT_SHORT_POSTS) $(METADATA_DIR)/pagehead $(METADATA_DIR)/pagefoot
+$(BUILD_DIR)/index.html: $(METADATA_DIR)/postsbydate $(CONF_FILES) $(BUILT_SHORT_POSTS) $(METADATA_DIR)/pagehead $(METADATA_DIR)/pagefoot
 	@echo $@
 	{ start_html "$(BLOG_TITLE)"; \
 	cat $(METADATA_DIR)/pagehead; \
@@ -190,7 +189,7 @@ $(BUILD_DIR)/index.html: $(METADATA_DIR)/postsbydate $(INCLUDE_FILES) $(BUILT_SH
 	end_html; } | $(M4) $(M4_FLAGS) > $@
 
 # Target for posts index
-$(BUILT_POST_DIR)/index.html: $(filter $(METADATA_DIR)/%/headers,$(POST_METADATA_FILES)) $(INCLUDE_FILES) $(METADATA_DIR)/pagehead $(METADATA_DIR)/pagefoot | $(OUT_DIRS)
+$(BUILT_POST_DIR)/index.html: $(filter $(METADATA_DIR)/%/headers,$(POST_METADATA_FILES)) $(CONF_FILES) $(METADATA_DIR)/pagehead $(METADATA_DIR)/pagefoot | $(OUT_DIRS)
 	@echo $@
 	{ start_html "Posts - $(BLOG_TITLE)"; \
 	cat $(METADATA_DIR)/pagehead; \
@@ -199,7 +198,7 @@ $(BUILT_POST_DIR)/index.html: $(filter $(METADATA_DIR)/%/headers,$(POST_METADATA
 	end_html; } | $(M4) $(M4_FLAGS) > $@
 
 # Target for tags index
-$(BUILT_TAG_DIR)/index.html: $(METADATA_DIR)/tags $(filter $(METADATA_DIR)/%/headers,$(POST_METADATA_FILES)) $(INCLUDE_FILES) $(METADATA_DIR)/pagehead $(METADATA_DIR)/pagefoot | $(OUT_DIRS)
+$(BUILT_TAG_DIR)/index.html: $(METADATA_DIR)/tags $(filter $(METADATA_DIR)/%/headers,$(POST_METADATA_FILES)) $(CONF_FILES) $(METADATA_DIR)/pagehead $(METADATA_DIR)/pagefoot | $(OUT_DIRS)
 	@echo $@
 	{ start_html "Tags - $(BLOG_TITLE)"; \
 	cat $(METADATA_DIR)/pagehead; \
@@ -231,7 +230,7 @@ else
 endif
 
 # Target to automatically make the config file if necessary
-$(USER_CONF_FILE): $(INCLUDE_DIR)/bm.conf.example
+$(USER_CONF_FILE): internal/bm.conf.example
 	[ ! -f $@ ] && grep -vE '^#' $< > $@ || touch $@
 
 clean:

@@ -18,6 +18,13 @@ To change theme, use `./bm theme list` to list them, and use
 To create your own theme, you can edit one of the existing ones in place, but it
 would also be a good idea to copy one into a new directory before editing that.
 
+__Configuration files have moved__. The example configuration file is in
+`internal/` now. A newly created configuration file will be placed in `posts/`,
+and BM will autoatmcailly create one there if it doesn't exist.
+
+There's a new `./tools/convert_v3.0.3_v4.0.0.sh` script to help make the
+transition in most cases.
+
 ### Added
 
 - config option to include license in footer (#80)
@@ -28,6 +35,9 @@ would also be a good idea to copy one into a new directory before editing that.
 
 - stop generating per-post head/foot files. Foot is the same for every page, and
   head is the same expect the `<title>`. Should save build time. (#91)
+- move confiruation files
+   - bm.conf.example to internal/
+   - bm.conf to posts/
 
 ### Fixed
 

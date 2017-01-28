@@ -1,7 +1,7 @@
-[[ -f include/bm.conf.example ]] && \
-	source include/bm.conf.example
-[[ -f include/bm.conf ]] && \
-	source include/bm.conf
+[[ -f internal/bm.conf.example ]] &&
+	source internal/bm.conf.example
+[[ -f posts/bm.conf ]] &&
+	source posts/bm.conf
 
 # Set defaults in case something was still unset
 #
