@@ -542,6 +542,7 @@ function post_markdown {
 			HEADING="$(echo ${LINE} | sed 's|^<h[[:digit:]]>\(.*\)</h[[:digit:]]>|\1|')"
 			HEADING="$(echo "${HEADING}" | title_to_heading_id)"
 			WORKING_HEADING="${HEADING}"
+			I="0"
 			while (( "${#HEADINGS[@]}" > "0" )) && [[ " ${HEADINGS[@]} " =~ " ${WORKING_HEADING} " ]]
 			do
 				I=$((I+1))

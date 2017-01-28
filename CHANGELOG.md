@@ -45,6 +45,8 @@ transition in most cases.
   luck.
 - large images need to be limited in width in default theme, changed in terminal
   theme too. (#93)
+- fixed unbound variable issue when building heading ids and multiple headings
+  are the same
 
 ## [v3.0.3] - 2017-01-22
 
