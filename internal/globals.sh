@@ -13,7 +13,6 @@ TITLE_SEPARATOR_CHAR='-'
 POST_EXTENSION='bm'
 POST_DIR='posts'
 BUILD_DIR="build"
-INCLUDE_DIR="include"
 METADATA_DIR="meta"
 THEME_DIR="themes"
 THEME_SYMLINK="${THEME_DIR}/selected"
