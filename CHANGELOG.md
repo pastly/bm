@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v4.0.0] - 2017-01-29
+
 __Breaking changes__
 
 __Themes have been added, style customization should be done through them__.
@@ -17,13 +19,15 @@ To change theme, use `./bm theme list` to list them, and use
 
 To create your own theme, you can edit one of the existing ones in place, but it
 would also be a good idea to copy one into a new directory before editing that.
+See the [wiki page on theming](https://gogs.system33.pw/mello/bm/wiki/Theming)
+for more information.
 
 __Configuration files have moved__. The example configuration file is in
 `internal/` now. A newly created configuration file will be placed in `posts/`,
-and BM will autoatmcailly create one there if it doesn't exist.
+and BM will automatically create one there if it doesn't exist.
 
 There's a new `./tools/convert_v3.0.3_v4.0.0.sh` script to help make the
-transition in most cases.
+transition in almost all cases.
 
 ### Added
 
@@ -266,6 +270,7 @@ v2.7.0) `./bm build` script is what should be used.
 - author, date, mod date metadata
 - post id (unused)
 
+[v4.0.0]: https://gogs.system33.pw/mello/bm/src/v4.0.0
 [v3.0.3]: https://gogs.system33.pw/mello/bm/src/v3.0.3
 [v3.0.2]: https://gogs.system33.pw/mello/bm/src/v3.0.2
 [v3.0.1]: https://gogs.system33.pw/mello/bm/src/v3.0.1
