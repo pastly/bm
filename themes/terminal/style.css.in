@@ -15,8 +15,7 @@ body {
 	max-width:874px;
 	/*margin:24px auto;*/
 }
-#divbody,
-div.postpreview {
+.divcontent {
 	border-top:solid 1px BORDER_COLOR;
 	background-color:BODY_BG_COLOR;
 	padding:0px 48px 24px 48px;
