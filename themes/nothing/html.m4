@@ -16,25 +16,15 @@ m4_include(DIR/end-html.html.in)
 )
 
 m4_define(PAGE_HEADER,[[
-<div id='headerholder'>
-<div id='header'>
 m4_include(DIR/header.html.in)
-</div> <!-- header -->
-</div> <!-- headerholder -->
 ]])
 m4_define(PAGE_FOOTER,[[
-<div id='footerholder'>
-<div id='footer'>
 m4_include(DIR/footer.html.in)
-</div> <!-- footer -->
-</div> <!-- footerholder -->
 ]])
 
 m4_define(START_CONTENT,
-m4_include(DIR/start-content.html.in)
 )
 m4_define(END_CONTENT,
-m4_include(DIR/end-content.html.in)
 )
 
 m4_define(POST_HEADER,[[
@@ -44,7 +34,5 @@ m4_define([[DATE]],[[$3]])
 m4_define([[MOD_DATE]],[[$4]])
 m4_define([[PERMALINK]],[[$5]])
 m4_define([[IS_PINNED]],[[$6]])
-<div>
 m4_include(DIR/post-header.html.in)
-</div>
 ]])
