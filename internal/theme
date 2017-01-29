@@ -30,12 +30,13 @@ then
 		THEME="$(echo ${THEME} | cut -d'/' -f 2-)"
 		THEME_PATH="$(realpath "${THEME}")"
 		THEME_NAME="$(basename "${THEME}")"
-		THEME_DESC="${THEME_PATH}/description"
+		THEME_META="${THEME_PATH}/metadata"
+		THEME_DESC="$(op_get "${THEME_META}" description 2>/dev/null)"
 		[[ "${SELECTED_THEME}" == "${THEME_PATH}" ]] &&
 			echo -n "--> " ||
 			echo -n "    "
-		[[ -e "${THEME_DESC}" ]] &&
-			echo "[${INDEX}] ${THEME_NAME}: $(head -n 1 "${THEME_DESC}" | head -c 50)" ||
+		[[ ! -z "${THEME_DESC}" ]] &&
+			echo "[${INDEX}] ${THEME_NAME}: ${THEME_DESC:0:50}" ||
 			echo "[${INDEX}] ${THEME_NAME}"
 	done
 
