@@ -2,7 +2,7 @@
 
 source internal/globals.sh
 
-VALID_COMMANDS=( list set )
+VALID_COMMANDS=( info list set )
 if [[ "$1" == "" ]]
 then
 	echo "Valid commadns are ${VALID_COMMANDS[@]}"
@@ -43,11 +43,9 @@ then
 elif [[ "$1" == "set" ]]
 then
 
-	if [[ "$2" == "" ]]
-	then
-		echo "Need to provide an index"
+	[[ "$2" == "" ]] &&
+		echo "Need to provide an index" &&
 		exit 1
-	fi
 	THEME="$(echo ${THEMES[$2]} | cut -d'/' -f 2-)"
 	THEME_PATH="$(realpath "${THEME}")"
 	THEME_NAME="$(basename "${THEME}")"
@@ -62,5 +60,25 @@ then
 		echo "You must now run the following command to update the build"
 		echo "./bm build all"
 	fi
+elif [[ "$1" == "info" ]]
+then
+	[[ "$2" == "" ]] &&
+		echo "Need to provide an index" &&
+		exit 1
+	THEME="$(echo ${THEMES[$2]} | cut -d'/' -f 2-)"
+	THEME_PATH="$(realpath "${THEME}")"
+	THEME_NAME="$(basename "${THEME}")"
+	THEME_META="${THEME_PATH}/metadata"
+	THEME_DESC="$(op_get "${THEME_META}" description 2>/dev/null)"
+	THEME_AUTHOR="$(op_get "${THEME_META}" author 2>/dev/null)"
+	THEME_VERSION="$(op_get "${THEME_META}" works_with 2>/dev/null)"
+	cat <<EOF
+Theme: ${THEME_NAME}
+By:    ${THEME_AUTHOR}
+Last tested with: ${THEME_VERSION}
+Located at: ${THEME_PATH}
+
+${THEME_DESC}
+EOF
 fi
 
