@@ -22,8 +22,8 @@ about what those are at the following places.
 - under the BM tag on [my blog][blog-bm-tag] (which doubles as an example BM
   website!)
 
-Active development for this project happens at
-<https://gogs.system33.pw/mello/bm>. Github is a manually updated mirror.
+Active development for this project happens at [this Gogs server][bm-repo].
+Github is a manually updated mirror.
 
 # Requirements
 
@@ -45,17 +45,22 @@ Non-exhaustive list.
 - Optionally pin one or more posts to the top of the homepage.
 - Optionally autocreate a table of contents for a post.
 - Keeps track of post time, post modification time, and post author.
+- Quickly change the style of your website with themes
+
+For more information, see [the wiki][wiki].
 
 # Branches
 
-- __master__ should always be the same as the newest release, with possible
-  minor documentation-related fixups due to brainfarts.
-- __next__ is the active development branch. It's _probably_ stable enough to
-  not delete all your posts, and sometimes it will actually do useful things
-  with them. Don't count on it.
-- Each release has a tag, and recent ones will have a branch by the same name.
-  Branches will get pruned eventually so only the most recent ones remain, but
-  tags are eternal.
+__master__ should always be the same as the newest release, with possible
+minor documentation-related fixups due to brainfarts. If you would like to work
+on BM, it would most likely be best to branch off of the latest master.
+
+Each release has a tag. They used to have branches by the same name, then the
+branches got pruned over time, and after v4.0.0 there will be no new
+release branches. Releases will only have tags.
+
+To follow my work, see the non-master branches at [my personal BM
+repo][mello-bm-repo].
 
 # Help and Documentation
 
@@ -75,3 +80,5 @@ Please report issues via the [issue tracker]
 [gogs-releases]: https://gogs.system33.pw/mello/bm/releases
 [gh-releases]: https://github.com/pastly/bm/releases
 [blog-bm-tag]: https://matt.traudt.xyz/tags/bm.html
+[mello-bm-repo]: https://gogs.system33.pw/mello/bm-private
+[bm-repo]: https://gogs.system33.pw/mello/bm
