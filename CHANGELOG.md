@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- don't make /pubkey.gpg a 404 page if not signing pages. Delete it if it
+  exists, and just don't generate it otherwise. (#97)
+
+### Fixed
+
+- when changing to not signing pages, signature files were left behind. Delete
+  them.
+
 ## [v4.0.0] - 2017-01-29
 
 __Breaking changes__

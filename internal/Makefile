@@ -30,9 +30,9 @@ BUILT_META_FILES := \
 	$(BUILT_POST_DIR)/index.html \
 	$(BUILT_TAG_DIR)/index.html \
 	$(BUILD_DIR)/404.html \
-	$(BUILD_DIR)/pubkey.gpg \
 
 ifeq ($(GPG_SIGN_PAGES),yes)
+BUILT_META_FILES := $(BUILT_META_FILES) $(BUILD_DIR)/pubkey.gpg
 BUILT_SIG_PAGES := $(addsuffix .asc,$(BUILT_POSTS)) $(addsuffix .asc,$(BUILT_SRC_FILES))
 BUILT_SHORT_SIG_PAGES := $(addsuffix .asc,$(BUILT_SHORT_POSTS)) $(addsuffix .asc,$(BUILT_SHORT_SRC_FILES))
 BUILT_META_SIG_PAGES := $(addsuffix .asc,$(BUILT_META_FILES))
@@ -49,6 +49,7 @@ METADATA_FILES := \
 	$(METADATA_DIR)/pagehead \
 	$(METADATA_DIR)/postsbydate \
 	$(METADATA_DIR)/tags \
+	$(METADATA_DIR)/.lastconfchange
 
 POST_METADATA_FILES := $(foreach file,$(POST_FILES),$(METADATA_DIR)/$(shell get_id $(file)))
 POST_METADATA_FILES := $(foreach dir,$(POST_METADATA_FILES),\
@@ -226,15 +227,24 @@ $(BUILD_DIR)/404.html: $(METADATA_DIR)/pagehead $(METADATA_DIR)/pagefoot | $(OUT
 # Target for fingerprint
 $(BUILD_DIR)/pubkey.gpg: $(CONF_FILES) $(BUILD_DIR)/404.html | $(OUT_DIRS)
 	@echo $@
-ifeq ($(GPG_SIGN_PAGES),yes)
 	</dev/null $(GPG) $(GPG_EXPORT_FLAGS) > $@
-else
-	cp $(BUILD_DIR)/404.html $@
-endif
 
 # Target to automatically make the config file if necessary
 $(USER_CONF_FILE): internal/bm.conf.example
 	[ ! -f $@ ] && grep -vE '^#' $< > $@ || touch $@
+
+# Target for simple actions that should happen if a configuration file changes.
+# Most likely should only be used for cleanup. For example, the intial reason
+# for adding this is to cleanup signature files when GPG_SIGN_PAGES has just
+# been turned off. Since BUILT_SIG_PAGES (and the like) are empty now, there's
+# nothing else to clean those up in build/
+$(METADATA_DIR)/.lastconfchange: $(CONF_FILES)
+ifneq ($(GPG_SIGN_PAGES),yes)
+	@echo cleaning up old gpg-related files
+	[ -f $(BUILD_DIR)/pubkey.gpg ] && rm $(BUILD_DIR)/pubkey.gpg || true
+	find $(BUILD_DIR)/ -type f -name "*.asc" -delete
+endif
+	touch $@
 
 clean:
 	$(RM) $(RM_FLAGS) -- $(BUILD_DIR)/* $(METADATA_DIR)/*
