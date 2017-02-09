@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v4.0.1] - 2017-02-08
+
 ### Changed
 
 - don't make /pubkey.gpg a 404 page if not signing pages. Delete it if it
@@ -282,6 +284,7 @@ v2.7.0) `./bm build` script is what should be used.
 - author, date, mod date metadata
 - post id (unused)
 
+[v4.0.1]: https://gogs.system33.pw/mello/bm/src/v4.0.1
 [v4.0.0]: https://gogs.system33.pw/mello/bm/src/v4.0.0
 [v3.0.3]: https://gogs.system33.pw/mello/bm/src/v3.0.3
 [v3.0.2]: https://gogs.system33.pw/mello/bm/src/v3.0.2
