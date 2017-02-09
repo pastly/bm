@@ -10,11 +10,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - don't make /pubkey.gpg a 404 page if not signing pages. Delete it if it
   exists, and just don't generate it otherwise. (#97)
+- move program variables and program sanity checks to a new file.
 
 ### Fixed
 
 - when changing to not signing pages, signature files were left behind. Delete
   them.
+- only require gpg when signing pages. (#102)
 
 ## [v4.0.0] - 2017-01-29
 
