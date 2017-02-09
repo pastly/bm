@@ -2,18 +2,45 @@
 SHELL := /bin/bash
 .SHELLFLAGS := -u -c
 
-# These are the files that always exist
-# AKA source files
+################################################################################
+## The following variables store source files. These files are not changed by BM
+## and they do not depend on anything. Think of these as "incoming" files that
+## when combined put together the final product.
+################################################################################
 POST_FILES := $(shell find $(POST_DIR) -name '*.bm')
-CSS_THEME_FILES := $(shell find $(THEME_SYMLINK)/ -name '*.css.in') $(THEME_SYMLINK)/css.m4
-HTML_THEME_FILES := $(shell find $(THEME_SYMLINK)/ -name '*.html.in') $(THEME_SYMLINK)/html.m4
+CSS_THEME_FILES := $(shell find $(THEME_SYMLINK)/ -name '*.css.in') \
+	$(THEME_SYMLINK)/css.m4
+HTML_THEME_FILES := $(shell find $(THEME_SYMLINK)/ -name '*.html.in') \
+	$(THEME_SYMLINK)/html.m4
 THEME_FILES := $(CSS_THEME_FILES) $(HTML_THEME_FILES)
 USER_CONF_FILE := $(POST_DIR)/bm.conf
 CONF_FILES := $(USER_CONF_FILE) internal/bm.conf.example
+################################################################################
+################################################################################
 
-# These are the targets. These files don't exist until after a successful build
-BUILT_POSTS := $(foreach p,$(POST_FILES),$(BUILT_POST_DIR)/$(shell get_title $(p) | title_to_post_url)$(TITLE_SEPARATOR_CHAR)$(shell get_id $(p)).html)
-BUILT_SHORT_POSTS := $(foreach p,$(POST_FILES),$(BUILT_SHORT_POST_DIR)/$(shell get_id $(p)).html)
+################################################################################
+## This section is for building up the list of output files based on what input
+## files we have and what the configuration says (which is also an input file!).
+################################################################################
+
+# A long post is always built and looks like build/posts/the-title-abcd1234.html
+BUILT_POSTS := $(foreach p,$(POST_FILES),\
+	$(BUILT_POST_DIR)/$(shell get_title $(p) | title_to_post_url)$(TITLE_SEPARATOR_CHAR)$(shell get_id $(p)).html)
+
+# We always have to have a list of short posts, even if the MAKE_SHORT_POSTS
+# option is false. This is because the post building process outputs to short
+# files (as it is easier), and then the short file are either copied or moved
+# to the long files based on MAKE_SHORT_POSTS. A short post looks like
+# build/p/abcd1234.html
+BUILT_SHORT_POSTS := $(foreach p,$(POST_FILES),\
+	$(BUILT_SHORT_POST_DIR)/$(shell get_id $(p)).html)
+
+# If the user wants to copy the source files to the build directory, then build
+# the list of (short) post source files based on the list of (short) post files.
+# They look like build/posts/the-title-abcd1234.bm and build/p/abcd1234.bm
+# BUILT_SHORT_SRC_FILES will always be set if CP_SRC_FILES_TO_BUILD is true even
+# if MAKE_SHORT_POSTS isn't for the same reasoning as why BUILT_SHORT_POSTS
+# can't be empty.
 ifeq ($(CP_SRC_FILES_TO_BUILD),yes)
 BUILT_SRC_FILES := $(BUILT_POSTS:.html=.bm)
 BUILT_SHORT_SRC_FILES := $(BUILT_SHORT_POSTS:.html=.bm)
@@ -21,29 +48,73 @@ else
 BUILT_SRC_FILES :=
 BUILT_SHORT_SRC_FILES :=
 endif
+
+# Here is a convoluted process of getting path/to/style.css.in turned into
+# $(BUILT_STATIC_DIR)/style.css. Any other files that should go in
+# BUILT_STATIC_DIR should get added here as well, but at the time of writing,
+# CSS files are the only ones.
 BUILT_STATICS := $(filter %.css.in, $(CSS_THEME_FILES))
 BUILT_STATICS := $(BUILT_STATICS:.css.in=.css)
 BUILT_STATICS := $(notdir $(BUILT_STATICS))
 BUILT_STATICS := $(addprefix $(BUILT_STATIC_DIR)/,$(BUILT_STATICS))
+
+# These are _not_ the files in METADATA_DIR. These files are output files that
+# contain information about other output files (or, honestly, don't really fit
+# anywhere else...).
 BUILT_META_FILES := \
 	$(BUILD_DIR)/index.html \
 	$(BUILT_POST_DIR)/index.html \
 	$(BUILT_TAG_DIR)/index.html \
 	$(BUILD_DIR)/404.html \
 
+# If the user has turned on automatic output page signing, then generate the
+# lists of signature files based on the lists of all other output files. If we
+# aren't doing page signing, then the lists are empty. No surprise there.
 ifeq ($(GPG_SIGN_PAGES),yes)
 BUILT_META_FILES := $(BUILT_META_FILES) $(BUILD_DIR)/pubkey.gpg
-BUILT_SIG_PAGES := $(addsuffix .asc,$(BUILT_POSTS)) $(addsuffix .asc,$(BUILT_SRC_FILES))
-BUILT_SHORT_SIG_PAGES := $(addsuffix .asc,$(BUILT_SHORT_POSTS)) $(addsuffix .asc,$(BUILT_SHORT_SRC_FILES))
-BUILT_META_SIG_PAGES := $(addsuffix .asc,$(BUILT_META_FILES))
-BUILT_SIG_STATICS := $(addsuffix .asc,$(BUILT_STATICS))
+BUILT_SIG_PAGES := \
+	$(addsuffix .asc,$(BUILT_POSTS)) \
+	$(addsuffix .asc,$(BUILT_SRC_FILES))
+BUILT_SHORT_SIG_PAGES := \
+	$(addsuffix .asc,$(BUILT_SHORT_POSTS)) \
+	$(addsuffix .asc,$(BUILT_SHORT_SRC_FILES))
+BUILT_SIG_STATICS := \
+	$(addsuffix .asc,$(BUILT_STATICS))
+BUILT_META_SIG_PAGES := \
+	$(addsuffix .asc,$(BUILT_META_FILES))
 else
 BUILT_SIG_PAGES :=
 BUILT_SHORT_SIG_PAGES :=
-BUILT_META_SIG_PAGES :=
 BUILT_SIG_STATICS :=
+BUILT_META_SIG_PAGES :=
 endif
 
+# Finally, let's collect _most of_ the above lists of output files into one big
+# list so it can be given to the all recipe easily. We do not include the long
+# form of short files: the BUILT_SHORT POSTS recipe takes care of BUILT_POSTS,
+# BUILT_SHORT_SIG_PAGES takes care of BUILT_SIG_PAGES, and BUILT_SHORT_SRC_FILES
+# takes care of BUILT_SRC_FILES
+ALL_BUILT_FILES := \
+	$(BUILT_SHORT_POSTS) \
+	$(BUILT_SHORT_SIG_PAGES) \
+	$(BUILT_SHORT_SRC_FILES) \
+	$(BUILT_STATICS) \
+	$(BUILT_SIG_STATICS) \
+	$(BUILT_META_FILES) \
+	$(BUILT_META_SIG_PAGES) \
+################################################################################
+################################################################################
+
+################################################################################
+## This section is for 'metadata' files, which are an intermediate step between
+## the input files and the output files. As much as possible, the output files
+## should depends on these instead of the input files.
+################################################################################
+
+# These are 'global' metadata files. They impact all (or most) output files or
+# are impacted by all (or most) input files. For example, pagehead is the
+# visible page header (liking containing the website title and subtitle) for all
+# output pages, and tags contains a list of all tags used in any post.
 METADATA_FILES := \
 	$(METADATA_DIR)/pagefoot \
 	$(METADATA_DIR)/pagehead \
@@ -51,34 +122,51 @@ METADATA_FILES := \
 	$(METADATA_DIR)/tags \
 	$(METADATA_DIR)/.lastconfchange
 
-POST_METADATA_FILES := $(foreach file,$(POST_FILES),$(METADATA_DIR)/$(shell get_id $(file)))
-POST_METADATA_FILES := $(foreach dir,$(POST_METADATA_FILES),\
-	$(dir)/headers \
-	$(dir)/tags \
-	$(dir)/options \
-	$(dir)/toc \
-	$(dir)/content \
-	$(dir)/previewcontent)
+# These are per-post metadata files. They each only depend on one specfic post
+# file. First we get a per-post metadata directory based on the list of all
+# posts so POST_METADATA_FILES is
+# "$(METADATA_DIR)/abcd1234 $(METADATA_DIR)/5678abcd", and then we explode that
+# into a list of all the given files in each per-post metadata directory.
+POST_METADATA_FILES := $(foreach f,$(POST_FILES),\
+	$(METADATA_DIR)/$(shell get_id $(f)))
+POST_METADATA_FILES := $(foreach d,$(POST_METADATA_FILES),\
+	$(d)/headers \
+	$(d)/tags \
+	$(d)/options \
+	$(d)/toc \
+	$(d)/content \
+	$(d)/previewcontent)
 
-# These are output dirs that need to exist before files start getting dropped in them
+# As with the output files, let's collect all the metadata files into a single
+# variable for easy handing off to the all recipe
+ALL_METADATA_FILES := \
+	$(METADATA_FILES) \
+	$(POST_METADATA_FILES) \
+################################################################################
+################################################################################
+
+################################################################################
+## This short section just builds up a list of directories that have to exist
+## before metadata or output files start getting generated. Many recipes depend
+## on these directories as a order-only prerequisite.
+################################################################################
+
+# In order to get a list of per-post metadata directories, we pick an arbitrary
+# per-post metadata file, and then take only its parent directory. Example:
+# meta/abcd1234/headers --> meta/abcd1234
 OUT_DIRS := $(METADATA_DIR) \
 	$(dir $(filter $(METADATA_DIR)/%/headers,$(POST_METADATA_FILES))) \
 	$(BUILT_POST_DIR) \
 	$(BUILT_STATIC_DIR) \
 	$(BUILT_TAG_DIR) \
 	$(BUILT_SHORT_POST_DIR)
+################################################################################
+################################################################################
 
 
 all: $(OUT_DIRS) \
-	$(METADATA_FILES) \
-	$(POST_METADATA_FILES) \
-	$(BUILT_SHORT_POSTS) \
-	$(BUILT_SHORT_SRC_FILES) \
-	$(BUILT_SHORT_SIG_PAGES) \
-	$(BUILT_STATICS) \
-	$(BUILT_SIG_STATICS) \
-	$(BUILT_META_FILES) \
-	$(BUILT_META_SIG_PAGES) \
+	$(ALL_METADATA_FILES) \
+	$(ALL_BUILT_FILES) \
 
 $(OUT_DIRS):
 	$(MKDIR) $(MKDIR_FLAGS) $@
