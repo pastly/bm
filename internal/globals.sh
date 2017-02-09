@@ -20,17 +20,6 @@ BUILT_POST_DIR="${BUILD_DIR}/posts"
 BUILT_SHORT_POST_DIR="${BUILD_DIR}/p"
 BUILT_TAG_DIR="${BUILD_DIR}/tags"
 BUILT_STATIC_DIR="${BUILD_DIR}/static"
-M4="$(which m4)"
-M4_FLAGS="--prefix-builtins"
-MAKE="$(which make)"
-MAKE_FLAGS="-j --makefile internal/Makefile --quiet"
-MKDIR="$(which mkdir)"
-MKDIR_FLAGS="-p"
-GPG="$(which gpg)"
-GPG_SIGN_FLAGS="--yes --armor --detach-sign"
-GPG_EXPORT_FLAGS="--armor --export"
-RM="rm"
-RM_FLAGS="-fr"
 VERSION="v4.0.0"
 TAG_ALPHABET="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-"
 ID_ALPHABET="123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
@@ -47,35 +36,15 @@ source internal/options.sh
 source internal/set-defaults.sh
 
 ################################################################################
-# now that options are validated, modify some internal variables if needed
-################################################################################
-GPG_SIGN_FLAGS="${GPG_SIGN_FLAGS} --local-user ${GPG_FINGERPRINT}"
-GPG_EXPORT_FLAGS="${GPG_EXPORT_FLAGS} ${GPG_FINGERPRINT}"
-
-################################################################################
 # check for required directories (that even make needs)
 ################################################################################
 [ ! -e "${THEME_SYMLINK}" ] && ln -s default "${THEME_SYMLINK}"
 
 ################################################################################
-# check for some required programs
+# now that options are validated, all required programs definitions can be made
+# and required programs checked for
 ################################################################################
-if ! which "Markdown.pl" &> /dev/null
-then
-	MARKDOWN="./internal/Markdown.pl"
-	if [ ! -x "${MARKDOWN}" ]
-	then
-		echo "Markdown.pl not found"
-		exit 1
-	fi
-else
-	MARKDOWN="$(which "Markdown.pl")"
-fi
-
-[ ! -x "${MARKDOWN}" ] && echo "error: Markdown.pl not found" && exit 1
-[ ! -x "${MAKE}" ] && echo "error: make not found" && exit 1
-[ ! -x "${M4}" ]  && echo "error: m4 not found" && exit 1
-[ ! -x "${GPG}" ]  && echo "error: gpg not found" && exit 1
+source internal/set-programs.sh
 
 ################################################################################
 # if git is available, elaborate on the version
