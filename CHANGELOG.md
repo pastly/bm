@@ -4,34 +4,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
-
+## Unreleased
 ### Added
-
 - massive amounts of comments to the Makefile
 
 ### Changed
-
 - `make clean` is much simplier now, using `find` instead some convoluted
   process involving checking for symlinks. We just leave behind `build/` and
   `meta/`. No big deal.
 
 ## [v4.0.1] - 2017-02-08
-
 ### Changed
-
 - don't make /pubkey.gpg a 404 page if not signing pages. Delete it if it
   exists, and just don't generate it otherwise. (#97)
 - move program variables and program sanity checks to a new file.
 
 ### Fixed
-
 - when changing to not signing pages, signature files were left behind. Delete
   them.
 - only require gpg when signing pages. (#102)
 
 ## [v4.0.0] - 2017-01-29
-
 __Breaking changes__
 
 __Themes have been added, style customization should be done through them__.
@@ -54,13 +47,11 @@ There's a new `./tools/convert_v3.0.3_v4.0.0.sh` script to help make the
 transition in almost all cases.
 
 ### Added
-
 - config option to include license in footer (#80)
 - note in footer if pages are signed (#83)
 - pubkey.gpg if pages are signed
 
 ### Changed
-
 - stop generating per-post head/foot files. Foot is the same for every page, and
   head is the same expect the `<title>`. Should save build time. (#91)
 - move confiruation files
@@ -68,7 +59,6 @@ transition in almost all cases.
    - bm.conf to posts/
 
 ### Fixed
-
 - many theoretical makefile dependency issues that so far haven't come up due to
   luck.
 - large images need to be limited in width in default theme, changed in terminal
@@ -77,37 +67,28 @@ transition in almost all cases.
   are the same
 
 ## [v3.0.3] - 2017-01-22
-
 ### Fixed
-
 - blog generation when there's no pinned posts or tags
 
 ## [v3.0.2] - 2017-01-20
-
 ### Fixed
-
 - actually fix `build/*/*.bm` files not being world readable (#88)
 
 ## [v3.0.1] - 2017-01-18
-
 ### Added
-
 - config option to cryptographically sign all output files (#84)
 
 ### Changed
-
 - remove `--output-sync` option to `make` as it is unecessary with how it is
   currently configured. Having it makes it confusing what step is taking a
   while.
 - only create temporary tag file once in `build_tagindex`
 
 ### Fixed
-
 - 404 page sometimes getting scheduled for building before output dirs
 - `build/*/*.bm` files not being world readable (#88)
 
 ## [v3.0.0] - 2017-01-16
-
 __Breaking changes__
 
 __Long post URLs are now limited__. Before, a post titled "My New Post On
@@ -314,4 +295,3 @@ v2.7.0) `./bm build` script is what should be used.
 [v1.2.0]: https://gogs.system33.pw/mello/bm/src/v1.2.0
 [v1.1.0]: https://gogs.system33.pw/mello/bm/src/v1.1.0
 [v1.0.0]: https://gogs.system33.pw/mello/bm/src/v1.0.0
-[Unreleased]: https://gogs.system33.pw/mello/bm/src/next
