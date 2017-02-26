@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- massive amounts of comments to the Makefile
+
 ## [v4.0.1] - 2017-02-08
 
 ### Changed

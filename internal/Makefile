@@ -113,7 +113,7 @@ ALL_BUILT_FILES := \
 
 # These are 'global' metadata files. They impact all (or most) output files or
 # are impacted by all (or most) input files. For example, pagehead is the
-# visible page header (liking containing the website title and subtitle) for all
+# visible page header (likely containing the website title and subtitle) for all
 # output pages, and tags contains a list of all tags used in any post.
 METADATA_FILES := \
 	$(METADATA_DIR)/pagefoot \
@@ -164,6 +164,14 @@ OUT_DIRS := $(METADATA_DIR) \
 ################################################################################
 
 
+################################################################################
+## Finally getting to the actual recipes
+################################################################################
+
+    ###############################
+    ## General
+    ###############################
+
 all: $(OUT_DIRS) \
 	$(ALL_METADATA_FILES) \
 	$(ALL_BUILT_FILES) \
@@ -171,51 +179,88 @@ all: $(OUT_DIRS) \
 $(OUT_DIRS):
 	$(MKDIR) $(MKDIR_FLAGS) $@
 
+    ###############################
+    ## Files in meta/
+    ###############################
+
+# List of post ids, one per line, oldest first
 $(METADATA_DIR)/postsbydate: $(filter $(METADATA_DIR)/%/headers,$(POST_METADATA_FILES)) | $(OUT_DIRS)
 	for POST in `sort_by_date $^`; do get_id $$POST; done > $@
 
+# Alphabetical list of all tags used in any post
 $(METADATA_DIR)/tags: $(filter $(METADATA_DIR)/%/tags,$(POST_METADATA_FILES)) | $(OUT_DIRS)
 	cat $^ | sort | uniq > $@
 
-# Target for per-post headers
-# headers are the first handful of lines in a post file
+# Header for every output page (probably containing website title, etc.).
+# This is m4 formatted (waiting to be piped through m4).
+$(METADATA_DIR)/pagehead: $(CONF_FILES) $(HTML_THEME_FILES) | $(OUT_DIRS)
+	@echo $@
+	build_page_head > $@
+
+# Footer for every output page (probably containing license, bm version, etc.).
+# This is m4 formatted (waiting to be piped through m4).
+$(METADATA_DIR)/pagefoot: $(CONF_FILES) $(HTML_THEME_FILES) | $(OUT_DIRS)
+	@echo $@
+	build_page_foot > $@
+
+    ###############################
+    ## Files in meta/<postid>
+    ###############################
+
+# Headers are the first handful of lines in a post file
 $(METADATA_DIR)/%/headers: $(POST_DIR)/*/*/*-%.bm | $(OUT_DIRS)
 	@echo $@
 	get_headers $< > $@
 
-# Target for per-post tags, deduplicated and one per line
+# Tags that a post has, deduplicated and one per line
 $(METADATA_DIR)/%/tags: $(METADATA_DIR)/%/content
 	@echo $@
 	get_tags $< > $@
 
-# Target for per-post options file, fully validated
+# Gets (parses) and validates options for a post. Must depend on post file.
 $(METADATA_DIR)/%/options: $(POST_DIR)/*/*/*-%.bm | $(OUT_DIRS)
 	parse_options $< > $@
 	validate_options $< $@
 
-# Target for per-post table of contents, or empty of no toc needed
+# Stores the table of contents for a post, if any. Empty if no toc wanted
 $(METADATA_DIR)/%/toc: $(METADATA_DIR)/%/content
 	@echo $@
 	get_toc $< > $@
 
-# Target for content that appears an per-post page. Just Markdown, no processing
+# The body of the post file (no headers [the first few lines], and no comments)
+# Just Markdown. No processing.
 $(METADATA_DIR)/%/content: $(POST_DIR)/*/*/*-%.bm | $(OUT_DIRS)
 	@echo $@
 	get_content $< > $@
 
-# Target for content that appears on the homepage. Just Markdown, no processing
+# Post content, but trimmed (if necessary) for as it should appear in a homepage
+# preview. Just Markdown. No processing.
 $(METADATA_DIR)/%/previewcontent: $(METADATA_DIR)/%/content $(METADATA_DIR)/%/options
 	@echo $@
 	get_preview_content $(@D)/content $(@D)/options > $@
 
-# Target for short posts
+    ###############################
+    ## Output files
+    ###############################
+
+# Short posts, like build/p/abcd1234.html
+# This also takes care of regular posts, like build/posts/my-post-abcd1234.html
 $(BUILT_SHORT_POST_DIR)/%.html: $(METADATA_DIR)/%/headers $(METADATA_DIR)/pagehead $(METADATA_DIR)/%/content $(METADATA_DIR)/pagefoot $(CONF_FILES) $(BUILD_DIR)/404.html $(HTML_THEME_FILES)
 	@echo $@
+	# First we determine where to send the generated post content: either to
+	# the short post file (that will be copied to the regular post file after)
+	# or directly to the regular post file
 ifeq ($(MAKE_SHORT_POSTS),yes)
 	$(eval OUT_FILE := $@)
 else
 	$(eval OUT_FILE := $(filter %-$*.html,$(BUILT_POSTS)))
 endif
+	# Then we do all the generation at once, piping into the OUT_FILE.
+	# First is everything before the body of the post. Then with the body
+	# content, we do pre-markdown tasks, send that through markdown, and then
+	# send that through post-markdown tasks. Finally is everything after the
+	# body of the post. All of this gets sent through m4 and the finished
+	# product goes into the OUT_FILE. Whew!
 	$(eval TITLE := $(shell get_title $(METADATA_DIR)/$*/headers))
 	{ start_html "$(TITLE) - $(BLOG_TITLE)"; \
 	cat "$(METADATA_DIR)/pagehead"; \
@@ -228,15 +273,25 @@ endif
 	echo "END_CONTENT"; \
 	cat "$(METADATA_DIR)/pagefoot"; \
 	end_html; } | $(M4) $(M4_FLAGS) > $(OUT_FILE)
+	# If we are making short posts, then we need to copy build/p/abcd1234.html
+	# to build/posts/my-post-abcd1234.html. Otherwise, we already output to the
+	# latter, and the short post should be a 404.
 ifeq ($(MAKE_SHORT_POSTS),yes)
 	cp $@ $(filter %-$*.html,$(BUILT_POSTS))
 else
 	cp $(BUILD_DIR)/404.html $@
 endif
 
-# Target for short source files
+# Short source files, like build/p/abcd1234.bm
+# This also takes care of regular source files, like
+# build/posts/my-post-abcd1234.bm
 $(BUILT_SHORT_POST_DIR)/%.bm: $(POST_DIR)/*/*/*-%.bm $(CONF_FILES) $(BUILD_DIR)/404.html
 	@echo $@
+	# This is relatively straight forward compared to short posts. Either we
+	# (1) copy the post file to both build/p/abcd1234.bm and
+	# build/posts/my-post-abcd1234.bm and make sure they're readable, or we (2)
+	# only copy the post to build/posts/my-post-abcd1234.bm and make sure it's
+	# readable.
 ifeq ($(MAKE_SHORT_POSTS),yes)
 	cp $< $@
 	cp $< $(filter %-$*.bm,$(BUILT_SRC_FILES))
@@ -247,7 +302,15 @@ else
 	cp $(BUILD_DIR)/404.html $@
 endif
 
-# Target for gpg signature pages for posts, if enabled
+
+# Most GPG signature files
+%.asc: %
+	</dev/null $(GPG) $(GPG_SIGN_FLAGS) $<
+
+# GPG signature files for short posts and regular posts, if signing is enabled.
+# These have to be handled separately from the other signing recipe because of
+# the extra logic concerning whether to copy or to move the short post signature
+# to the regular post.
 $(BUILT_SHORT_POST_DIR)/%.asc: $(BUILT_SHORT_POST_DIR)/% $(BUILD_DIR)/404.html $(CONF_FILES)
 	</dev/null $(GPG) $(GPG_SIGN_FLAGS) $<
 ifeq ($(MAKE_SHORT_POSTS),yes)
@@ -257,21 +320,10 @@ else
 	cp $(BUILD_DIR)/404.html $@
 endif
 
-# Target for the footer for all pages, m4 formatted
-$(METADATA_DIR)/pagefoot: $(CONF_FILES) $(HTML_THEME_FILES) | $(OUT_DIRS)
-	@echo $@
-	build_page_foot > $@
-
-# Target for the head for all pages, m4 formatted
-$(METADATA_DIR)/pagehead: $(CONF_FILES) $(HTML_THEME_FILES) | $(OUT_DIRS)
-	@echo $@
-	build_page_head > $@
-
-# Target for all other gpg signature pages, if enabled
-%.asc: %
-	</dev/null $(GPG) $(GPG_SIGN_FLAGS) $<
-
-# Target for homepage
+# Homepage, some number of post previews. Follows the same general formula of
+# post generation: generate everything in order, pipe through m4, then dump into
+# the final file. This looks much simplier because build_index abstracts away
+# the post selection, preview generation, etc.
 $(BUILD_DIR)/index.html: $(METADATA_DIR)/postsbydate $(CONF_FILES) $(BUILT_SHORT_POSTS) $(HTML_THEME_FILES) $(METADATA_DIR)/pagehead $(METADATA_DIR)/pagefoot | $(OUT_DIRS)
 	@echo $@
 	{ start_html "$(BLOG_TITLE)"; \
@@ -280,7 +332,7 @@ $(BUILD_DIR)/index.html: $(METADATA_DIR)/postsbydate $(CONF_FILES) $(BUILT_SHORT
 	cat $(METADATA_DIR)/pagefoot; \
 	end_html; } | $(M4) $(M4_FLAGS) > $@
 
-# Target for posts index
+# Post index, a list of links to all posts.
 $(BUILT_POST_DIR)/index.html: $(filter $(METADATA_DIR)/%/headers,$(POST_METADATA_FILES)) $(CONF_FILES) $(HTML_THEME_FILES) $(METADATA_DIR)/pagehead $(METADATA_DIR)/pagefoot | $(OUT_DIRS)
 	@echo $@
 	{ start_html "Posts - $(BLOG_TITLE)"; \
@@ -289,7 +341,10 @@ $(BUILT_POST_DIR)/index.html: $(filter $(METADATA_DIR)/%/headers,$(POST_METADATA
 	cat $(METADATA_DIR)/pagefoot; \
 	end_html; } | $(M4) $(M4_FLAGS) > $@
 
-# Target for tags index
+# Tag index, a list of all tags with links to each post. Also generates per-tag
+# files (a tag of "foo" would generate build/tags/foo.html). Conceptually
+# speaking (but not implementation-ally), the tag index is simply the
+# concatination of all the per-tag pages.
 $(BUILT_TAG_DIR)/index.html: $(METADATA_DIR)/tags $(filter $(METADATA_DIR)/%/headers,$(POST_METADATA_FILES)) $(CONF_FILES) $(HTML_THEME_FILES) $(METADATA_DIR)/pagehead $(METADATA_DIR)/pagefoot | $(OUT_DIRS)
 	@echo $@
 	{ start_html "Tags - $(BLOG_TITLE)"; \
@@ -298,12 +353,12 @@ $(BUILT_TAG_DIR)/index.html: $(METADATA_DIR)/tags $(filter $(METADATA_DIR)/%/hea
 	cat $(METADATA_DIR)/pagefoot; \
 	end_html; } | $(M4) $(M4_FLAGS) > $@
 
-# Target for all CSS
+# All CSS. Easy enough.
 $(BUILT_STATIC_DIR)/%.css: $(CSS_THEME_FILES) | $(OUT_DIRS)
 	@echo $@
 	$(M4) $(M4_FLAGS) $< > $@
 
-# Target to build 404 page
+# 404 page. Easy.
 $(BUILD_DIR)/404.html: $(METADATA_DIR)/pagehead $(METADATA_DIR)/pagefoot | $(OUT_DIRS)
 	@echo $@
 	{ start_html "404 - $(BLOG_TITLE)"; \
@@ -312,12 +367,16 @@ $(BUILD_DIR)/404.html: $(METADATA_DIR)/pagehead $(METADATA_DIR)/pagefoot | $(OUT
 	cat $(METADATA_DIR)/pagefoot; \
 	end_html; } | $(M4) $(M4_FLAGS) > $@
 
-# Target for fingerprint
+# Fingerprint of the key that is signing all the output files, if enabled
 $(BUILD_DIR)/pubkey.gpg: $(CONF_FILES) $(BUILD_DIR)/404.html | $(OUT_DIRS)
 	@echo $@
 	</dev/null $(GPG) $(GPG_EXPORT_FLAGS) > $@
 
-# Target to automatically make the config file if necessary
+    ###############################
+    ## Misc
+    ###############################
+
+# Automatically make the config file if necessary
 $(USER_CONF_FILE): internal/bm.conf.example
 	[ ! -f $@ ] && grep -vE '^#' $< > $@ || touch $@
 
