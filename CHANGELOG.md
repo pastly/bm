@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - massive amounts of comments to the Makefile
 
+### Changed
+
+- `make clean` is much simplier now, using `find` instead some convoluted
+  process involving checking for symlinks. We just leave behind `build/` and
+  `meta/`. No big deal.
+
 ## [v4.0.1] - 2017-02-08
 
 ### Changed
