@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
+
+## [v4.0.2] - 2017-02-27
 ### Added
 - massive amounts of comments to the Makefile
 
@@ -275,6 +277,7 @@ v2.7.0) `./bm build` script is what should be used.
 - author, date, mod date metadata
 - post id (unused)
 
+[v4.0.2]: https://gogs.system33.pw/mello/bm/src/v4.0.2
 [v4.0.1]: https://gogs.system33.pw/mello/bm/src/v4.0.1
 [v4.0.0]: https://gogs.system33.pw/mello/bm/src/v4.0.0
 [v3.0.3]: https://gogs.system33.pw/mello/bm/src/v3.0.3
