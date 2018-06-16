@@ -15,6 +15,7 @@ HTML_THEME_FILES := $(shell find $(THEME_SYMLINK)/ -name '*.html.in') \
 THEME_FILES := $(CSS_THEME_FILES) $(HTML_THEME_FILES)
 USER_CONF_FILE := $(POST_DIR)/bm.conf
 CONF_FILES := $(USER_CONF_FILE) internal/bm.conf.example
+USER_STATIC_FILES := $(shell find $(STATIC_DIR) -mindepth 1 -type f)
 ################################################################################
 ################################################################################
 
@@ -56,6 +57,7 @@ endif
 BUILT_STATICS := $(filter %.css.in, $(CSS_THEME_FILES))
 BUILT_STATICS := $(BUILT_STATICS:.css.in=.css)
 BUILT_STATICS := $(notdir $(BUILT_STATICS))
+BUILT_STATICS := $(BUILT_STATICS) $(subst $(STATIC_DIR)/,,$(USER_STATIC_FILES))
 BUILT_STATICS := $(addprefix $(BUILT_STATIC_DIR)/,$(BUILT_STATICS))
 
 # These are _not_ the files in METADATA_DIR. These files are output files that
@@ -357,6 +359,12 @@ $(BUILT_TAG_DIR)/index.html: $(METADATA_DIR)/tags $(filter $(METADATA_DIR)/%/hea
 $(BUILT_STATIC_DIR)/%.css: $(CSS_THEME_FILES) | $(OUT_DIRS)
 	@echo $@
 	$(M4) $(M4_FLAGS) $< > $@
+
+# Remaining static files. Very easy.
+$(BUILT_STATIC_DIR)/%: $(STATIC_DIR)/%
+	@echo $@
+	$(MKDIR) $(MKDIR_FLAGS) $$(dirname $@)
+	cp $< $@
 
 # 404 page. Easy.
 $(BUILD_DIR)/404.html: $(METADATA_DIR)/pagehead $(METADATA_DIR)/pagefoot | $(OUT_DIRS)

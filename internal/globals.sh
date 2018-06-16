@@ -15,6 +15,7 @@ POST_DIR='posts'
 BUILD_DIR="build"
 METADATA_DIR="meta"
 THEME_DIR="themes"
+STATIC_DIR="static"
 THEME_SYMLINK="${THEME_DIR}/selected"
 BUILT_POST_DIR="${BUILD_DIR}/posts"
 BUILT_SHORT_POST_DIR="${BUILD_DIR}/p"
@@ -39,6 +40,7 @@ source internal/set-defaults.sh
 # check for required directories (that even make needs)
 ################################################################################
 [ ! -e "${THEME_SYMLINK}" ] && ln -s default "${THEME_SYMLINK}"
+[ ! -d "${STATIC_DIR}" ] && mkdir "${STATIC_DIR}"
 
 ################################################################################
 # now that options are validated, all required programs definitions can be made

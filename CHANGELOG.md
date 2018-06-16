@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
+### Added
+- ability to copy files from a `static/` directory into
+  `build/static/`. Now you can put your resume at `static/resume.pdf` and link
+to it in your posts with `[resume](/static/resume.pdf)`!
 
 ## [v4.0.2] - 2017-02-27
 ### Added
