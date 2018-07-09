@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
+
+
+## [v4.1.0] - 2018-07-09
 ### Added
 - ability to copy files from a `static/` directory into
   `build/static/`. Now you can put your resume at `static/resume.pdf` and link
@@ -281,6 +284,7 @@ v2.7.0) `./bm build` script is what should be used.
 - author, date, mod date metadata
 - post id (unused)
 
+[v4.1.0]: https://github.com/pastly/bm/tree/v4.1.0
 [v4.0.2]: https://github.com/pastly/bm/tree/v4.0.2
 [v4.0.1]: https://github.com/pastly/bm/tree/v4.0.1
 [v4.0.0]: https://github.com/pastly/bm/tree/v4.0.0
