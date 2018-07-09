@@ -17,13 +17,12 @@ major version has the potential for breaking changes. You can find information
 about what those are at the following places.
 
 - in `CHANGELOG.md` (the same place you can find _all_ changes)
-- on [the release page][gogs-releases] or the [github release
-  page][gh-releases]
+- on the [github release page][gh-releases]
 - under the BM tag on [my blog][blog-bm-tag] (which doubles as an example BM
   website!)
 
-Active development for this project happens at [this Gogs server][bm-repo].
-Github is a manually updated mirror.
+Development on this project has mostly stalled. What little remains can be
+found [on GitHub][bm-repo].
 
 # Requirements
 
@@ -59,9 +58,6 @@ Each release has a tag. They used to have branches by the same name, then the
 branches got pruned over time, and after v4.0.0 there will be no new
 release branches. Releases will only have tags.
 
-To follow my work, see the non-master branches at [my personal BM
-repo][mello-bm-repo].
-
 # Help and Documentation
 
 See [the Wiki][wiki] for more usage information. You may also enjoy the
@@ -72,13 +68,11 @@ pages.
 
 Please report issues via the [issue tracker]
 
-[wiki]: https://gogs.system33.pw/mello/bm/wiki
-[conf]: https://gogs.system33.pw/mello/bm/wiki/Configuration
-[advconf]: https://gogs.system33.pw/mello/bm/wiki/AdvancedConfiguration
-[opts]: https://gogs.system33.pw/mello/bm/wiki/Options
-[issue tracker]: https://gogs.system33.pw/mello/bm/issues
-[gogs-releases]: https://gogs.system33.pw/mello/bm/releases
+[wiki]: https://github.com/pastly/bm/tree/master/doc
+[conf]: https://github.com/pastly/bm/blob/master/doc/Configuration.md
+[advconf]: https://github.com/pastly/bm/blob/master/doc/AdvancedConfiguration.md
+[opts]: https://github.com/pastly/bm/blob/master/doc/Options.md
+[issue tracker]: https://github.com/pastly/bm/issues
 [gh-releases]: https://github.com/pastly/bm/releases
 [blog-bm-tag]: https://matt.traudt.xyz/tags/bm.html
-[mello-bm-repo]: https://gogs.system33.pw/mello/bm-private
-[bm-repo]: https://gogs.system33.pw/mello/bm
+[bm-repo]: https://github.com/pastly/bm
