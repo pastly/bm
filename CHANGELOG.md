@@ -42,7 +42,7 @@ To change theme, use `./bm theme list` to list them, and use
 
 To create your own theme, you can edit one of the existing ones in place, but it
 would also be a good idea to copy one into a new directory before editing that.
-See the [wiki page on theming](https://gogs.system33.pw/mello/bm/wiki/Theming)
+See the [wiki page on theming](https://github.com/pastly/bm/blob/master/doc/Theming.md)
 for more information.
 
 __Configuration files have moved__. The example configuration file is in
@@ -281,24 +281,24 @@ v2.7.0) `./bm build` script is what should be used.
 - author, date, mod date metadata
 - post id (unused)
 
-[v4.0.2]: https://gogs.system33.pw/mello/bm/src/v4.0.2
-[v4.0.1]: https://gogs.system33.pw/mello/bm/src/v4.0.1
-[v4.0.0]: https://gogs.system33.pw/mello/bm/src/v4.0.0
-[v3.0.3]: https://gogs.system33.pw/mello/bm/src/v3.0.3
-[v3.0.2]: https://gogs.system33.pw/mello/bm/src/v3.0.2
-[v3.0.1]: https://gogs.system33.pw/mello/bm/src/v3.0.1
-[v3.0.0]: https://gogs.system33.pw/mello/bm/src/v3.0.0
-[v2.7.0]: https://gogs.system33.pw/mello/bm/src/v2.7.0
-[v2.6.0]: https://gogs.system33.pw/mello/bm/src/v2.6.0
-[v2.5.0]: https://gogs.system33.pw/mello/bm/src/v2.5.0
-[v2.4.0]: https://gogs.system33.pw/mello/bm/src/v2.4.0
-[v2.3.0]: https://gogs.system33.pw/mello/bm/src/v2.3.0
-[v2.2.0]: https://gogs.system33.pw/mello/bm/src/v2.2.0
-[v2.1.1]: https://gogs.system33.pw/mello/bm/src/v2.1.1
-[v2.1.0]: https://gogs.system33.pw/mello/bm/src/v2.1.0
-[v2.0.1]: https://gogs.system33.pw/mello/bm/src/v2.0.1
-[v2.0.0]: https://gogs.system33.pw/mello/bm/src/v2.0.0
-[v1.2.1]: https://gogs.system33.pw/mello/bm/src/v1.2.1
-[v1.2.0]: https://gogs.system33.pw/mello/bm/src/v1.2.0
-[v1.1.0]: https://gogs.system33.pw/mello/bm/src/v1.1.0
-[v1.0.0]: https://gogs.system33.pw/mello/bm/src/v1.0.0
+[v4.0.2]: https://github.com/pastly/bm/tree/v4.0.2
+[v4.0.1]: https://github.com/pastly/bm/tree/v4.0.1
+[v4.0.0]: https://github.com/pastly/bm/tree/v4.0.0
+[v3.0.3]: https://github.com/pastly/bm/tree/v3.0.3
+[v3.0.2]: https://github.com/pastly/bm/tree/v3.0.2
+[v3.0.1]: https://github.com/pastly/bm/tree/v3.0.1
+[v3.0.0]: https://github.com/pastly/bm/tree/v3.0.0
+[v2.7.0]: https://github.com/pastly/bm/tree/v2.7.0
+[v2.6.0]: https://github.com/pastly/bm/tree/v2.6.0
+[v2.5.0]: https://github.com/pastly/bm/tree/v2.5.0
+[v2.4.0]: https://github.com/pastly/bm/tree/v2.4.0
+[v2.3.0]: https://github.com/pastly/bm/tree/v2.3.0
+[v2.2.0]: https://github.com/pastly/bm/tree/v2.2.0
+[v2.1.1]: https://github.com/pastly/bm/tree/v2.1.1
+[v2.1.0]: https://github.com/pastly/bm/tree/v2.1.0
+[v2.0.1]: https://github.com/pastly/bm/tree/v2.0.1
+[v2.0.0]: https://github.com/pastly/bm/tree/v2.0.0
+[v1.2.1]: https://github.com/pastly/bm/tree/v1.2.1
+[v1.2.0]: https://github.com/pastly/bm/tree/v1.2.0
+[v1.1.0]: https://github.com/pastly/bm/tree/v1.1.0
+[v1.0.0]: https://github.com/pastly/bm/tree/v1.0.0
