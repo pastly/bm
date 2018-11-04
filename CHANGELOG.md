@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+### Fixed
+
+- allow static directory to be a symlink
+
 
 ## [v4.1.0] - 2018-07-09
 ### Added
