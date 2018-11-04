@@ -15,7 +15,7 @@ HTML_THEME_FILES := $(shell find $(THEME_SYMLINK)/ -name '*.html.in') \
 THEME_FILES := $(CSS_THEME_FILES) $(HTML_THEME_FILES)
 USER_CONF_FILE := $(POST_DIR)/bm.conf
 CONF_FILES := $(USER_CONF_FILE) internal/bm.conf.example
-USER_STATIC_FILES := $(shell find $(STATIC_DIR) -mindepth 1 -type f)
+USER_STATIC_FILES := $(shell find $(STATIC_DIR)/ -mindepth 1 -type f)
 ################################################################################
 ################################################################################
 
