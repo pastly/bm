@@ -15,7 +15,7 @@ fi
 
 THEMES=( )
 INDEX="0"
-for THEME in $(find "${THEME_DIR}/" -mindepth 1 -maxdepth 1 -type d | sort)
+for THEME in $(find -L "${THEME_DIR}/" -mindepth 1 -maxdepth 1 -type d | grep -v "${THEME_SYMLINK}" | sort)
 do
 	THEMES+=( "${INDEX}/${THEME}" )
 	INDEX=$((INDEX+1))

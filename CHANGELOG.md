@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - allow static directory to be a symlink
+- allow symlinks to themes in theme directory
 
 
 ## [v4.1.0] - 2018-07-09
