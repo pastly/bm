@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+### Changed
+
+- limit make to 8 jobs
+
 ### Fixed
 
 - allow static directory to be a symlink

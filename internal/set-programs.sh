@@ -7,7 +7,7 @@
 M4="$(which m4)"
 M4_FLAGS="--prefix-builtins"
 MAKE="$(which make)"
-MAKE_FLAGS="-j --makefile internal/Makefile --quiet"
+MAKE_FLAGS="-j 8 --makefile internal/Makefile --quiet"
 MKDIR="$(which mkdir)"
 MKDIR_FLAGS="-p"
 GPG="$(which gpg)"
