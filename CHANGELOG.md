@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - allow static directory to be a symlink
 - allow symlinks to themes in theme directory
+- make the table of contents temporary file be a dependency for the final post
+  html file, resolving a race condition where sometimes the TOC would be
+missing.
 
 
 ## [v4.1.0] - 2018-07-09

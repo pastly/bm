@@ -247,7 +247,7 @@ $(METADATA_DIR)/%/previewcontent: $(METADATA_DIR)/%/content $(METADATA_DIR)/%/op
 
 # Short posts, like build/p/abcd1234.html
 # This also takes care of regular posts, like build/posts/my-post-abcd1234.html
-$(BUILT_SHORT_POST_DIR)/%.html: $(METADATA_DIR)/%/headers $(METADATA_DIR)/pagehead $(METADATA_DIR)/%/content $(METADATA_DIR)/pagefoot $(CONF_FILES) $(BUILD_DIR)/404.html $(HTML_THEME_FILES)
+$(BUILT_SHORT_POST_DIR)/%.html: $(METADATA_DIR)/%/headers $(METADATA_DIR)/pagehead $(METADATA_DIR)/%/content $(METADATA_DIR)/%/toc $(METADATA_DIR)/pagefoot $(CONF_FILES) $(BUILD_DIR)/404.html $(HTML_THEME_FILES)
 	@echo $@
 	# First we determine where to send the generated post content: either to
 	# the short post file (that will be copied to the regular post file after)
