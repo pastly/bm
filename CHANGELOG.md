@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+## [v4.2.0] - 2019-06-09
+
 ### Added
 
 - optional generation of RSS feed
@@ -307,6 +309,7 @@ v2.7.0) `./bm build` script is what should be used.
 - author, date, mod date metadata
 - post id (unused)
 
+[v4.2.0]: https://github.com/pastly/bm/tree/v4.2.0
 [v4.1.1]: https://github.com/pastly/bm/tree/v4.1.1
 [v4.1.0]: https://github.com/pastly/bm/tree/v4.1.0
 [v4.0.2]: https://github.com/pastly/bm/tree/v4.0.2
