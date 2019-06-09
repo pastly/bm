@@ -225,6 +225,51 @@ Valid values are "yes", "no".
 
 - default: "no"
 - recommendation: personal preference
+## RSS
+
+Options related to the generation and format of `/feed.rss`, if enabled.
+
+### `MAKE_RSS_FEED`
+
+Whether or not to generate an RSS feed located at `/feed.rss`. The RSS feed
+will contain all posts, sorted by posting date, with the newest first.
+
+Note for people super hardcore concerned about their privacy/anonymity: if you
+haven't already made your computer use UTC when displaying the time to you,
+this will leak your configured timezone in the RSS feed. If you are in a
+high-risk situation, you probably should have already changed your system
+timezone to UTC; nonetheless, let this be a warning that `bm` will leak to the
+world the timzone given to you when you run the `date` command in a Linux/macOS
+terminal, which in many situations is your real one.
+
+Valid values are "yes", "no".
+
+- default: "no"
+- recommendation: personal preference
+
+### `RSS_HOST`
+
+The host at which your blog is located **including a trailing slash**. Include
+the http/https part, the domain part, and the trailing slash. That's it. If
+your blog isn't located at the root of your webserver, use `ROOT_URL` to
+configure that.
+
+- default: `https://example.com/`
+- recommendation: change it
+
+### `RSS_TITLE`
+
+The title of your overall RSS feed.
+
+- default: the value of `BLOG_TITLE`
+- recommendation: personal preference
+
+### `RSS_DESCRIPTION`
+
+The description of your overall RSS feed.
+
+- default: the value of `BLOG_SUBTITLE`
+- recommendation: personal preference
 
 ## Other
 

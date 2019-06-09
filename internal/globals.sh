@@ -25,6 +25,7 @@ VERSION="v4.1.2-dev"
 TAG_ALPHABET="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-"
 ID_ALPHABET="123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 KNOWN_HASH_PROGRAMS="sha1sum sha1 sha256sum sha256 md5sum md5 cat"
+RSS_DATE_FRMT="%a, %d %b %Y %T %Z"
 
 ################################################################################
 # import more function definitions
@@ -638,6 +639,40 @@ function start_html {
 	TITLE="$1"
 	echo "m4_include(${THEME_SYMLINK}/html.m4)"
 	echo "START_HTML(${TITLE})"
+}
+
+function start_rss {
+	echo "<?xml version='1.0' encoding='utf-8' ?>"
+	echo "<rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'>"
+	echo "<channel>"
+	echo "<title>$RSS_TITLE</title>"
+	echo "<link>$RSS_HOST</link>"
+	echo "<description>$RSS_DESCRIPTION</description>"
+	echo "<atom:link href='${RSS_HOST}${ROOT_URL}/feed.rss' rel='self' type='application/rss+xml' />"
+}
+
+function end_rss {
+	echo "</channel>"
+	echo "</rss>"
+}
+
+function rss_item_for_post {
+	POST="$1"
+	HEADERS="${METADATA_DIR}/${POST}/headers"
+	OPTIONS="${METADATA_DIR}/${POST}/options"
+	TITLE="$(get_title "${HEADERS}")"
+	POST_FILE="$(echo "${TITLE}" | title_to_post_url)${TITLE_SEPARATOR_CHAR}${POST}.html"
+	[[ "${PREFER_SHORT_POSTS}" == "yes" ]] &&
+		POST_LINK="${RSS_HOST}${ROOT_URL}/p/${POST}.html" ||
+		POST_LINK="${RSS_HOST}${ROOT_URL}/posts/${POST_FILE}"
+	DATE="$(get_date "${HEADERS}")"
+	DATE="$(ts_to_date "${RSS_DATE_FRMT}" "${DATE}")"
+	echo "<item>"
+	echo "<title>$(get_title ${HEADERS})</title>"
+	echo "<link>$POST_LINK</link>"
+	echo "<guid isPermaLink='false'>$POST</guid>"
+	echo "<pubDate>$DATE</pubDate>"
+	echo "</item>"
 }
 
 function sort_by_date {

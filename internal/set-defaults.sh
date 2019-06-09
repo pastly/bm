@@ -33,6 +33,8 @@
 	LICENSE_TEXT=""
 [[ "${LONG_DATE_FRMT}" == "" ]] &&
 	LONG_DATE_FRMT="%d %b %Y at %l:%M %P"
+[[ "${MAKE_RSS_FEED}" == "" ]] &&
+	MAKE_RSS_FEED="no"
 [[ "${MAKE_SHORT_POSTS}" == "" ]] &&
 	MAKE_SHORT_POSTS="yes"
 [[ "${MONTHLY_INDEX_DATE_FRMT}" == "" ]] &&
@@ -51,6 +53,12 @@
 	REBUILD_POLICY="asap"
 [[ "${ROOT_URL}" == "" ]] &&
 	ROOT_URL=""
+[[ "${RSS_DESCRIPTION}" == "" ]] &&
+	RSS_DESCRIPTION="${BLOG_SUBTITLE}"
+[[ "${RSS_HOST}" == "" ]] &&
+	RSS_HOST="https://example.com/"
+[[ "${RSS_TITLE}" == "" ]] &&
+	RSS_TITLE="${BLOG_TITLE}"
 [[ "${SIGNIFICANT_MOD_AFTER}" == "" ]] &&
 	SIGNIFICANT_MOD_AFTER="1" ||
 	SIGNIFICANT_MOD_AFTER="$((${SIGNIFICANT_MOD_AFTER}))"

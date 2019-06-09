@@ -68,6 +68,11 @@ BUILT_META_FILES := \
 	$(BUILT_POST_DIR)/index.html \
 	$(BUILT_TAG_DIR)/index.html \
 	$(BUILD_DIR)/404.html \
+# Optionally add RSS feed to BUILT_META_FILES
+ifeq ($(MAKE_RSS_FEED),yes)
+BUILT_META_FILES := $(BUILT_META_FILES) \
+	$(BUILD_DIR)/feed.rss
+endif
 
 # If the user has turned on automatic output page signing, then generate the
 # lists of signature files based on the lists of all other output files. If we
@@ -375,6 +380,14 @@ $(BUILD_DIR)/404.html: $(METADATA_DIR)/pagehead $(METADATA_DIR)/pagefoot | $(OUT
 	cat $(METADATA_DIR)/pagefoot; \
 	end_html; } | $(M4) $(M4_FLAGS) > $@
 
+# Feed page.
+$(BUILD_DIR)/feed.rss: $(ALL_METADATA_FILES) | $(OUT_DIRS)
+	@echo $@
+	rm -fv $@
+	{ start_rss; \
+	tac $(METADATA_DIR)/postsbydate | while read P; do rss_item_for_post "$$P"; done; \
+	end_rss; } > $@
+
 # Fingerprint of the key that is signing all the output files, if enabled
 $(BUILD_DIR)/pubkey.gpg: $(CONF_FILES) $(BUILD_DIR)/404.html | $(OUT_DIRS)
 	@echo $@
@@ -398,6 +411,10 @@ ifneq ($(GPG_SIGN_PAGES),yes)
 	@echo cleaning up old gpg-related files
 	[ -f $(BUILD_DIR)/pubkey.gpg ] && rm $(BUILD_DIR)/pubkey.gpg || true
 	find $(BUILD_DIR)/ -type f -name "*.asc" -delete
+endif
+ifneq ($(MAKE_RSS_FEED),yes)
+	@echo removing old feed.rss
+	rm -f $(BUILD_DIR)/feed.rss
 endif
 	touch $@
 
