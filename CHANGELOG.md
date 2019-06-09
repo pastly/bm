@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+### Added
+
+- optional generation of RSS feed
+
 ### Fixed
 
 - replaced links to my Gogs server (no longer available without Tor) with links

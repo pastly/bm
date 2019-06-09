@@ -43,6 +43,7 @@ Non-exhaustive list.
 - Optionally automatically sign all output files with a pgp key.
 - Optionally pin one or more posts to the top of the homepage.
 - Optionally autocreate a table of contents for a post.
+- Optionally generate an RSS feed.
 - Keeps track of post time, post modification time, and post author.
 - Quickly change the style of your website with themes
 
