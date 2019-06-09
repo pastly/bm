@@ -74,10 +74,10 @@ arguments. You may like to put links to other page indexes here.
 **`PAGE_FOOTER`** should generate the visible page footer. It would make sense
 to put `LICENSE_TEXT` in here (if set) and GPG signature information (if
 enabled). Please respect the attribution part of the GPL and include a link to
-BM's source at <https://gogs.system33.pw/mello/bm> and state it's current
+BM's source at <https://github.com/pastly/bm> and state it's current
 version. An easy way to do this is with the following line.
 
-    <span style='font-size:smaller'>Made with <a href='https://gogs.system33.pw/mello/bm'>bm</a> VERSION</span><br />
+    <span style='font-size:smaller'>Made with <a href='https://github.com/pastly/bm'>bm</a> VERSION</span><br />
 
 It can't take any arguments.
 

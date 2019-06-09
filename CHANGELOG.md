@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+### Fixed
+
+- replaced links to my Gogs server (no longer available without Tor) with links
+  to GitHub
+
 ## [v4.1.1] - 2019-01-02
 
 ### Changed

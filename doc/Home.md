@@ -33,7 +33,7 @@ that may be specified in the header of the post file. For more information, see
 BM runs entirely within it's own directory. Simply clone the source and situate
 yourself in the new directory.
 
-    git clone https://gogs.system33.pw/mello/bm.git
+    git clone https://github.com/pastly/bm.git
     cd bm
 
 # Usage

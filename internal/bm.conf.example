@@ -4,7 +4,7 @@
 # Edit posts/bm.conf instead. Or if it doesn't exist,
 # copy this file to posts/bm.conf, and then edit that.
 #
-# For help, see https://gogs.system33.pw/mello/bm/wiki/Configuration
+# For help, see https://github.com/pastly/bm/blob/master/doc/Options.md
 #
 BLOG_SUBTITLE="Where super awesome things happen"
 BLOG_TITLE="My Super Awesome Blog"

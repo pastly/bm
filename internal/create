@@ -36,7 +36,7 @@ ${COMMENT_CODE} 5. (Reserved for future use)
 ${COMMENT_CODE} 6. The author (feel free to change)
 ${COMMENT_CODE} 7. The title (feel free to change)
 ${COMMENT_CODE}
-${COMMENT_CODE} See https://gogs.system33.pw/mello/bm/wiki/Options for help with valid
+${COMMENT_CODE} See https://github.com/pastly/bm/blob/master/doc/Options.md for help with valid
 ${COMMENT_CODE} options for line four.
 ${COMMENT_CODE}
 ${COMMENT_CODE} Any remaining lines are considered the body. Any word
@@ -57,7 +57,7 @@ ${COMMENT_CODE} Lines beginning with ${COMMENT_CODE} are comments and ignored.
 ${COMMENT_CODE} ${TAG_CODE}foo-bar is a tag named foo-bar.
 ${COMMENT_CODE} ${PREVIEW_STOP_CODE} to stop post preview instead of at ${PREVIEW_MAX_WORDS} words.
 ${COMMENT_CODE} ${TOC_CODE} to generate a table of contents
-${COMMENT_CODE} Options on line four. See https://gogs.system33.pw/mello/bm/wiki/Options
+${COMMENT_CODE} Options on line four. See https://github.com/pastly/bm/blob/master/doc/Options.md
 EOF
 fi
 

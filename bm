@@ -10,7 +10,7 @@ if [[ "${COMMAND}" == "" ]] || \
 then
 	source internal/globals.sh
 	echo "BM blog maker ${VERSION}"
-	echo "Wiki at https://gogs.system33.pw/mello/bm/wiki"
+	echo "Code and docs at https://github.com/pastly/bm"
 fi
 
 VALID_COMMANDS=( build create edit list remove theme version )
