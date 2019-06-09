@@ -1,6 +1,7 @@
 m4_changequote(`[[',`]]')
 m4_define(BLOG_SUBTITLE,[[m4_esyscmd(echo -n "[[${BLOG_SUBTITLE}]]")]])
 m4_define(BLOG_TITLE,[[m4_esyscmd(echo -n "[[${BLOG_TITLE}]]")]])
+m4_define(MAKE_RSS_FEED,[[m4_esyscmd(echo -n "[[${MAKE_RSS_FEED}]]")]])
 m4_define(GPG_SIGN_PAGES,m4_esyscmd(echo -n "${GPG_SIGN_PAGES}"))
 m4_define(GPG_FINGERPRINT,m4_esyscmd(echo -n "${GPG_FINGERPRINT}"))
 m4_define(LICENSE_TEXT,[[m4_esyscmd(echo -n "[[${LICENSE_TEXT}]]")]])
