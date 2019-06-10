@@ -383,7 +383,6 @@ $(BUILD_DIR)/404.html: $(METADATA_DIR)/pagehead $(METADATA_DIR)/pagefoot | $(OUT
 # Feed page.
 $(BUILD_DIR)/feed.rss: $(ALL_METADATA_FILES) | $(OUT_DIRS)
 	@echo $@
-	rm -fv $@
 	{ start_rss; \
 	tac $(METADATA_DIR)/postsbydate | while read P; do rss_item_for_post "$$P"; done; \
 	end_rss; } > $@

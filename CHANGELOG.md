@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+### Fixed
+
+- recipe for feed.rss doesn't need to delete the old one first, so remove `rm`
+  call.
+
 ## [v4.2.0] - 2019-06-09
 
 ### Added
