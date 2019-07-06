@@ -21,12 +21,12 @@ sourced before anything else. It should not be edited. Instead, copy it to
 option, see [Configuration](Configuration.md).
 
 For advanced setup and configuration, such as how to best configure your
-webserver, see the [advanced configuration page](wiki/AdvancedConfiguration).
+webserver, see the [advanced configuration page](AdvancedConfiguration.md).
 # Options
 
 In additional to global configuration options, BM offers some per-post options
 that may be specified in the header of the post file. For more information, see
-[Options](wiki/Options).
+[Options](Options.md).
 
 # Installation
 
@@ -52,19 +52,19 @@ default name of "My Newest Post".
 If your `EDITOR` environment variable is set, it will be respected. If it
 behaves rationally (AKA how I want it to), then it should expect a single file
 name as an argument and open that file for editing. You may also specify an
-editor in the configuration file. See [Configuration](wiki/Configuration).
+editor in the configuration file. See [Configuration](Configuration.md).
 
 In the new post, the first 7 lines are special and must come before anything
 else. The first three are creation date, modification date, and post id.
 The fourth line is for any per-post options you would like to set. See
-[Options](wiki/Options).
+[Options](Options.md).
 
 The fifth line is reserved for future use. If it isn't blank, then this
 documentation needs updating.
 
 The sixth line is the post author. It defaults to the username of the current
 user, but feel free to change this line at any time. Again, see
-[Configuration](wiki/Configuration) if you would like to make the default
+[Configuration](Configuration.md) if you would like to make the default
 author something else.
 
 The seventh line is the post title. Feel free to change this line at any time.
@@ -105,7 +105,7 @@ sensitive__, but searching by post title is __case insensitive__.
 If the search term is a single word, BM will first try to find a _single_ post
 id. If that fails or more than one word was given, it will then search post
 titles. By default, it must also find a single post by title, but this can be
-[configured](wiki/Configuration). I
+[configured](Configuration.md). I
 
 When you're done editing, tell your editor to save the temporary file. Then
 close your editor. BM will take care of the rest by default.
@@ -165,4 +165,4 @@ is. It also comes with a terminal theme that is sterotypical green text on a
 black background and a "nothing" theme that contains the bare minimum
 requirements.
 
-For more information about theming, see [theming](wiki/Theming).
+For more information about theming, see [theming](Theming.md).
