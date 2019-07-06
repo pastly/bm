@@ -18,7 +18,7 @@ be automatically updated every time you make a change.
 BM ships with an example config located at `include/bm.conf.example`. It is
 sourced before anything else. It should not be edited. Instead, copy it to
 `include/bm.conf` and edit it there. For an exaplanation for every config
-option, see [Configuration](wiki/Configuration).
+option, see [Configuration](Configuration.md).
 
 For advanced setup and configuration, such as how to best configure your
 webserver, see the [advanced configuration page](wiki/AdvancedConfiguration).
