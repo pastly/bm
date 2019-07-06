@@ -18,15 +18,15 @@ be automatically updated every time you make a change.
 BM ships with an example config located at `include/bm.conf.example`. It is
 sourced before anything else. It should not be edited. Instead, copy it to
 `include/bm.conf` and edit it there. For an exaplanation for every config
-option, see [Configuration](/Configuration.md).
+option, see [Configuration](doc/Configuration.md).
 
 For advanced setup and configuration, such as how to best configure your
-webserver, see the [advanced configuration page](/AdvancedConfiguration.md).
+webserver, see the [advanced configuration page](doc/AdvancedConfiguration.md).
 # Options
 
 In additional to global configuration options, BM offers some per-post options
 that may be specified in the header of the post file. For more information, see
-[Options](/Options.md).
+[Options](doc/Options.md).
 
 # Installation
 
@@ -52,19 +52,19 @@ default name of "My Newest Post".
 If your `EDITOR` environment variable is set, it will be respected. If it
 behaves rationally (AKA how I want it to), then it should expect a single file
 name as an argument and open that file for editing. You may also specify an
-editor in the configuration file. See [Configuration](/Configuration.md).
+editor in the configuration file. See [Configuration](doc/Configuration.md).
 
 In the new post, the first 7 lines are special and must come before anything
 else. The first three are creation date, modification date, and post id.
 The fourth line is for any per-post options you would like to set. See
-[Options](/Options.md).
+[Options](doc/Options.md).
 
 The fifth line is reserved for future use. If it isn't blank, then this
 documentation needs updating.
 
 The sixth line is the post author. It defaults to the username of the current
 user, but feel free to change this line at any time. Again, see
-[Configuration](/Configuration.md) if you would like to make the default
+[Configuration](doc/Configuration.md) if you would like to make the default
 author something else.
 
 The seventh line is the post title. Feel free to change this line at any time.
@@ -165,4 +165,4 @@ is. It also comes with a terminal theme that is sterotypical green text on a
 black background and a "nothing" theme that contains the bare minimum
 requirements.
 
-For more information about theming, see [theming](/Theming.md).
+For more information about theming, see [theming](doc/Theming.md).
