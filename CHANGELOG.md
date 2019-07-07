@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - recipe for feed.rss doesn't need to delete the old one first, so remove `rm`
   call.
+- link in default config file now points to the docs for config options instead
+  of incorrectly pointing to the docs for per-post options.
 
 ## [v4.2.0] - 2019-06-09
 
