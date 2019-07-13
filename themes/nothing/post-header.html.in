@@ -1,7 +1,7 @@
 <h1>TITLE</h1>
 <p>Posted on DATE by AUTHOR</p>
 m4_ifelse(MOD_DATE,,,
-<em>Last upated MOD_DATE</em><br/>
+<em>Last updated MOD_DATE</em><br/>
 )
 m4_ifelse(PERMALINK,,,
 <a href='PERMALINK'>permalink</a><br/>
