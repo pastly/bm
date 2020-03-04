@@ -360,7 +360,7 @@ function get_toc {
 	FILE="$1"
 	[[ "$(file_has_toc_code "${FILE}")" == "" ]] && return
 	TEMP_HTML="$(mktemp)"
-	< "${FILE}" "${MARKDOWN}" > "${TEMP_HTML}"
+	< "${FILE}" "${MARKDOWN}" ${MARKDOWN_FLAGS} > "${TEMP_HTML}"
 	HEADINGS=( )
 	LINE_NUMBERS=( )
 	while read -r LINE
