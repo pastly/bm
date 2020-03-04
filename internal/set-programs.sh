@@ -15,7 +15,7 @@ GPG_SIGN_FLAGS="--yes --armor --detach-sign --local-user ${GPG_FINGERPRINT}"
 GPG_EXPORT_FLAGS="--armor --export ${GPG_FINGERPRINT}"
 RM="rm"
 RM_FLAGS="-fr"
-MARKDOWN_FLAGS="-e footnotes -e table -e strikethrough -e autolink -e tagfilter"
+MARKDOWN_FLAGS="-e footnotes -e table -e strikethrough -e autolink -e tagfilter -e tasklist"
 
 ################################################################################
 # check for always required programs
