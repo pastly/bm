@@ -1,8 +1,9 @@
 Default CSS is based on that of Carlos Fenollosa's project bashblog.
 https://github.com/cfenollosa/bashblog. Bashblog is also GPLv3.
 
-Markdown.pl is under the 3-clause BSD license.
-https://daringfireball.net/projects/markdown/
+cmark-gfm is under the 2-clause BSD license and includes code under other open
+source licenses.
+https://github.com/github/cmark-gfm
 
 ------------------------------------------------------------------------------
 

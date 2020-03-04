@@ -275,7 +275,7 @@ endif
 	build_content_header $* ""; \
 	< $(METADATA_DIR)/$*/content \
 		pre_markdown $* |\
-		$(MARKDOWN) |\
+		$(MARKDOWN) $(MARKDOWN_FLAGS) |\
 		post_markdown $*; \
 	echo "END_CONTENT"; \
 	cat "$(METADATA_DIR)/pagefoot"; \

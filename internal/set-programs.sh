@@ -15,17 +15,18 @@ GPG_SIGN_FLAGS="--yes --armor --detach-sign --local-user ${GPG_FINGERPRINT}"
 GPG_EXPORT_FLAGS="--armor --export ${GPG_FINGERPRINT}"
 RM="rm"
 RM_FLAGS="-fr"
+MARKDOWN_FLAGS="-e footnotes -e table -e strikethrough -e autolink -e tagfilter"
 
 ################################################################################
 # check for always required programs
 ################################################################################
-if ! which "Markdown.pl" &> /dev/null
+if ! which "cmark-gfm" &> /dev/null
 then
-	MARKDOWN="./internal/Markdown.pl"
+	MARKDOWN="./internal/cmark-gfm"
 else
-	MARKDOWN="$(which "Markdown.pl")"
+	MARKDOWN="$(which "cmark-gfm")"
 fi
-[ ! -x "${MARKDOWN}" ] && echo "error: Markdown.pl not found" && exit 1
+[ ! -x "${MARKDOWN}" ] && echo "error: cmark-gfm not found" && exit 1
 [ ! -x "${MAKE}" ] && echo "error: make not found" && exit 1
 [ ! -x "${M4}" ]  && echo "error: m4 not found" && exit 1
 

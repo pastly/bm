@@ -130,7 +130,7 @@ function build_index {
 		build_content_header "${POST}" "for-preview"
 		< "${CONTENT}" \
 		pre_markdown "$(get_id "${HEADERS}")" |\
-		${MARKDOWN} |\
+		${MARKDOWN} ${MARKDOWN_FLAGS} |\
 		post_markdown "$(get_id "${HEADERS}")" "for-preview"
 		[[ "${CONTENT_IS_TRIMMED}" != "" ]] &&
 			echo "<a href='${POST_LINK}'><em>Read the entire post</em></a>"

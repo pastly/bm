@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+### Changed
+
+- bundled markdown parser to be `cmark-gfm` instead of `Markdown.pl`. This is a
+  major breaking change because they do not render exactly the same way
+
 ### Fixed
 
 - recipe for feed.rss doesn't need to delete the old one first, so remove `rm`
