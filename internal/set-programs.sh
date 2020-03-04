@@ -15,7 +15,10 @@ GPG_SIGN_FLAGS="--yes --armor --detach-sign --local-user ${GPG_FINGERPRINT}"
 GPG_EXPORT_FLAGS="--armor --export ${GPG_FINGERPRINT}"
 RM="rm"
 RM_FLAGS="-fr"
-MARKDOWN_FLAGS="-e footnotes -e table -e strikethrough -e autolink -e tagfilter -e tasklist"
+# --unsafe is needed in order to render manually-entered HTML when generating
+# the table of contents. If you do not trust the markdown-formatted text
+# content of your blog, then it may not be safe to use the --unsafe flag.
+MARKDOWN_FLAGS="--unsafe -e footnotes -e table -e strikethrough -e autolink -e tagfilter -e tasklist"
 
 ################################################################################
 # check for always required programs
