@@ -51,9 +51,10 @@ For more information, see [the wiki][wiki].
 
 # Branches
 
-__master__ should always be the same as the newest release, with possible
-minor documentation-related fixups due to brainfarts. If you would like to work
-on BM, it would most likely be best to branch off of the latest master.
+__master__ is the bleeding edge release and may not be the same as the latest
+tagged release. Realistically, it will probably be very close.  If you would
+like to work on BM, it would most likely be best to branch off of the latest
+master.
 
 Each release has a tag. They used to have branches by the same name, then the
 branches got pruned over time, and after v4.0.0 there will be no new
