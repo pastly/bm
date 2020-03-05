@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+## [v5.0.0] - 2020-03-04
+
 ### Changed
 
 - bundled markdown parser to be `cmark-gfm` instead of `Markdown.pl`. This is a
@@ -321,6 +323,7 @@ v2.7.0) `./bm build` script is what should be used.
 - author, date, mod date metadata
 - post id (unused)
 
+[v5.0.0]: https://github.com/pastly/bm/tree/v5.0.0
 [v4.2.0]: https://github.com/pastly/bm/tree/v4.2.0
 [v4.1.1]: https://github.com/pastly/bm/tree/v4.1.1
 [v4.1.0]: https://github.com/pastly/bm/tree/v4.1.0
