@@ -25,14 +25,6 @@ MARKDOWN_FLAGS="--unsafe -e footnotes -e table -e strikethrough -e autolink -e t
 ################################################################################
 # check for always required programs
 ################################################################################
-# Do not search for system cmark-gfm. It may be older than we expect, thus not
-# supporting all extensions
-#if ! which "cmark-gfm" &> /dev/null
-#then
-#	MARKDOWN="./internal/cmark-gfm"
-#else
-#	MARKDOWN="$(which "cmark-gfm")"
-#fi
 [ ! -x "${MARKDOWN}" ] && echo "error: cmark-gfm not found" && exit 1
 [ ! -x "${MAKE}" ] && echo "error: make not found" && exit 1
 [ ! -x "${M4}" ]  && echo "error: m4 not found" && exit 1
