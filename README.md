@@ -62,7 +62,7 @@ release branches. Releases will only have tags.
 
 # Help and Documentation
 
-See [the Wiki][wiki] for more usage information. You may also enjoy the
+See [the wiki][wiki] for more usage information. You may also enjoy the
 [configuration][conf], [options][opts], and [advanced configuration][advconf]
 pages.
 
