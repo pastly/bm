@@ -105,7 +105,7 @@ sensitive__, but searching by post title is __case insensitive__.
 If the search term is a single word, BM will first try to find a _single_ post
 id. If that fails or more than one word was given, it will then search post
 titles. By default, it must also find a single post by title, but this can be
-[configured](Configuration.md). I
+[configured](Configuration.md).
 
 When you're done editing, tell your editor to save the temporary file. Then
 close your editor. BM will take care of the rest by default.
