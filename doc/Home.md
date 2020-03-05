@@ -36,6 +36,25 @@ yourself in the new directory.
     git clone https://github.com/pastly/bm.git
     cd bm
 
+## `cmark-gfm` issue?
+
+You might want to verify that the bundled copy works on your machine,
+especially if "Linux amd64" doesn't sound like a good description of your
+computer.
+
+One way to do this would be to try parsing the `README.md` into HTML:
+
+    <README.md ./internal/cmark-gfm | head
+
+You should get HTML and no errors.
+
+If you get errors, maybe it's because the binary won't work on your computer.
+There is a script in the `tools` directory to help you download and compile
+`cmark-gfm`. Please be familiar with compiling software from source and
+discovering/fetching dependencies before attempting this.
+
+    ./tools/get-and-build-cmark.sh
+
 # Usage
 
 All BM commands are run through the `./bm` script interface.
