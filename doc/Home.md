@@ -30,7 +30,7 @@ that may be specified in the header of the post file. For more information, see
 
 # Installation
 
-BM runs entirely within it's own directory. Simply clone the source and situate
+BM runs entirely within its own directory. Simply clone the source and situate
 yourself in the new directory.
 
     git clone https://github.com/pastly/bm.git
