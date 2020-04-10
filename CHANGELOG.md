@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+### Changed
+
+- Removed quotes around call to the ED in `internal/create` (such that it
+  matches the behavior of `internal/edit`). This means that your $EDITOR or bm
+$ED variable can be multiple words and they won't get treated as one word. For
+example (and the motivating reason for this change): `gvim --nofork` now calls
+`gvim` with the `--nofork` option, while before this change `internal/create`
+would have tried calling an executable called "`gvim --nofork`".
+
 ## [v5.0.0] - 2020-03-04
 
 ### Changed

@@ -63,7 +63,7 @@ fi
 
 echo "" >> ${TEMP}
 
-"${ED}" "${TEMP}"
+${ED} "${TEMP}"
 
 read -p "Would you like to save this post? " ANSWER
 while [ 1 ]
