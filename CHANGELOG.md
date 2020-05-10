@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+### Fixed
+
+- Better quoting of some arguments to m4 macros such that arguments containing
+  commas are not treated as more than one argument.
+
 ### Changed
 
 - Removed quotes around call to the ED in `internal/create` (such that it

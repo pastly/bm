@@ -101,7 +101,7 @@ function build_content_header {
 		IS_PINNED="foobar" ||
 		IS_PINNED=""
 	cat << EOF
-POST_HEADER(${TITLE},${AUTHOR},${DATE},${MOD_DATE},${PERMALINK},${IS_PINNED})
+POST_HEADER([[${TITLE}]],[[${AUTHOR}]],[[${DATE}]],[[${MOD_DATE}]],[[${PERMALINK}]],[[${IS_PINNED}]])
 EOF
 }
 
@@ -638,7 +638,7 @@ function set_editor {
 function start_html {
 	TITLE="$1"
 	echo "m4_include(${THEME_SYMLINK}/html.m4)"
-	echo "START_HTML(${TITLE})"
+	echo "START_HTML([[${TITLE}]])"
 }
 
 function start_rss {
