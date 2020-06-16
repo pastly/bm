@@ -162,8 +162,8 @@ function build_postindex {
 		ID="$(basename $(dirname "${P}"))"
 		TITLE="$(get_title "${P}")"
 		[[ "${PREFER_SHORT_POSTS}" == "yes" ]] &&
-			LINK="/p/${ID}.html" ||
-			LINK="/posts/$(echo "${TITLE}" | title_to_post_url)${TITLE_SEPARATOR_CHAR}${ID}.html"
+			LINK="${ROOT_URL}/p/${ID}.html" ||
+			LINK="${ROOT_URL}/posts/$(echo "${TITLE}" | title_to_post_url)${TITLE_SEPARATOR_CHAR}${ID}.html"
 		AUTHOR="$(get_author "${P}")"
 		DATE="$(get_date "${P}")"
 		DATE_PRETTY="$(ts_to_date "${DATE_FRMT}" "${DATE}")"
@@ -233,9 +233,9 @@ function build_tagindex {
 					TITLE="$(get_title "${HEADERS}")"
 					if [[ "${PREFER_SHORT_POSTS}" == "yes" ]]
 					then
-						LINK="/p/${ID}.html"
+						LINK="${ROOT_URL}/p/${ID}.html"
 					else
-						LINK="/posts/$(echo "${TITLE}" | title_to_post_url)${TITLE_SEPARATOR_CHAR}${ID}.html"
+						LINK="${ROOT_URL}/posts/$(echo "${TITLE}" | title_to_post_url)${TITLE_SEPARATOR_CHAR}${ID}.html"
 					fi
 					AUTHOR="$(get_author "${HEADERS}")"
 					echo "<li><a href='${LINK}'>${TITLE}</a> by ${AUTHOR} on ${DATE_PRETTY}</li>" | tee -a "${TMP_TAG_FILE}"
@@ -532,9 +532,9 @@ function post_markdown {
 	if (( "${#OPTS[@]}" > 0 )) && [[ " ${OPTS[@]} " =~ " for-preview " ]]
 	then
 		[[ "${PREFER_SHORT_POSTS}" == "yes" ]] && \
-			LINK="/p/${ID}.html" || \
-			LINK="/posts/$(get_title "${METADATA_DIR}/${ID}/headers" | title_to_post_url)${TITLE_SEPARATOR_CHAR}${ID}.html"
-		sed "s|\(<a href=['\"]\)\(#.*\)|\1${ROOT_URL}${LINK}\2|" "${TMP1}" > "${TMP2}"
+			LINK="${ROOT_URL}/p/${ID}.html" || \
+			LINK="${ROOT_URL}/posts/$(get_title "${METADATA_DIR}/${ID}/headers" | title_to_post_url)${TITLE_SEPARATOR_CHAR}${ID}.html"
+		sed "s|\(<a href=['\"]\)\(#.*\)|\1${LINK}\2|" "${TMP1}" > "${TMP2}"
 	else
 		cat "${TMP1}" > "${TMP2}"
 	fi
