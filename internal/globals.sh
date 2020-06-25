@@ -260,8 +260,7 @@ function end_html {
 
 function file_has_toc_code {
 	FILE="$1"
-	LINE_COUNT=$(strip_comments "${FILE}" | grep --ignore-case "${TOC_CODE}" | wc -l)
-	[[ "${LINE_COUNT}" > 0 ]] && echo "foobar" || echo ""
+	strip_comments "${FILE}" | grep --ignore-case "${TOC_CODE}" 2>/dev/null
 }
 
 function generate_id {
@@ -358,7 +357,7 @@ function get_title {
 
 function get_toc {
 	FILE="$1"
-	[[ "$(file_has_toc_code "${FILE}")" == "" ]] && return
+	file_has_toc_code "${FILE}" || return
 	TEMP_HTML="$(mktemp)"
 	< "${FILE}" "${MARKDOWN}" ${MARKDOWN_FLAGS} > "${TEMP_HTML}"
 	HEADINGS=( )
@@ -757,11 +756,11 @@ function validate_options {
 	fi
 	# If user wants a TOC, then heading_ids must be unset or set to on.
 	# Set it to true if unset
-	[[ "$(file_has_toc_code "${FILE}")" != "" ]] && \
+	file_has_toc_code "${FILE}" && \
 		[[ "$(op_is_set "${OPTIONS}" heading_ids)" != "" ]] && \
 		[[ "$(op_get "${OPTIONS}" heading_ids)" == "0" ]] && \
 		echo "table of contents requested but heading_ids is off" && return 2
-	[[ "$(file_has_toc_code "${FILE}")" != "" ]] && op_set "${OPTIONS}" heading_ids
+	file_has_toc_code "${FILE}" && op_set "${OPTIONS}" heading_ids
 	return 0
 }
 
