@@ -83,7 +83,7 @@ function build_content_header {
 		POST_LINK="${ROOT_URL}/p/${POST}.html" ||
 		POST_LINK="${ROOT_URL}/posts/${POST_FILE}"
 	[ -n "$(op_is_set "${METADATA_DIR}/${POST}/options" named)" ] &&
-		POST_LINK="/${POST_FILE%%-${POST}\.html}.html"
+		POST_LINK="${ROOT_URL}/$(op_get "${METADATA_DIR}/${POST}/options" named).html"
 	(( "${#OPTS[@]}" > 0 )) && [[ " ${OPTS[@]} " =~ " for-preview " ]] &&
 		TITLE="<a href='${POST_LINK}'>${TITLE}</a>"
 	DATE="$(get_date "${HEADERS}")"
@@ -538,7 +538,7 @@ function post_markdown {
 			LINK="/posts/$(get_title "${METADATA_DIR}/${ID}/headers" | title_to_post_url)${TITLE_SEPARATOR_CHAR}${ID}.html"
 
 		[ -n "$(op_is_set "${METADATA_DIR}/${ID}/options" named)" ] &&
-			LINK="/${POST_FILE%%-${ID}\.html}.html"
+			LINK="/$(op_get "${METADATA_DIR}/${ID}/options" named).html"
 		sed "s|\(<a href=['\"]\)\(#.*\)|\1${ROOT_URL}${LINK}\2|" "${TMP1}" > "${TMP2}"
 	else
 		cat "${TMP1}" > "${TMP2}"

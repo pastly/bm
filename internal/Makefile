@@ -288,8 +288,8 @@ ifeq ($(MAKE_SHORT_POSTS),yes)
 else
 	cp $(BUILD_DIR)/404.html $@
 endif
-	if [ -n "$$(op_is_set $(METADATA_DIR)/$*/options named)" ]; then \
-		cp $@ $(BUILD_DIR)/$$(cut -d '/' -f 3 <<< $(subst -$*.html,,$(filter %-$*.html,$(BUILT_POSTS)))).html; \
+	if [ -n "$$(op_is_set "$(METADATA_DIR)/$*/options" named)" ]; then \
+		cp $@ "$(BUILD_DIR)/$$(op_get "$(METADATA_DIR)/$*/options" named).html"; \
 	fi
 
 # Short source files, like build/p/abcd1234.bm
