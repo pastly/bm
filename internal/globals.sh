@@ -97,6 +97,8 @@ function build_content_header {
 	[[ "${MAKE_SHORT_POSTS}" == "yes" ]] &&
 		PERMALINK="${ROOT_URL}/p/$(get_id "${HEADERS}").html" ||
 		PERMALINK=
+	[ -n "$(op_is_set "${METADATA_DIR}/${POST}/options" named)" ] &&
+		PERMALINK="$POST_LINK"
 	IS_PINNED="$(op_get "${OPTIONS}" pinned)"
 	(( "${#OPTS[@]}" > 0 )) && [[ " ${OPTS[@]} " =~ " for-preview " ]] &&
 		[[ "${IS_PINNED}" != "" ]] &&
@@ -164,8 +166,10 @@ function build_postindex {
 		ID="$(basename $(dirname "${P}"))"
 		TITLE="$(get_title "${P}")"
 		[[ "${PREFER_SHORT_POSTS}" == "yes" ]] &&
-			LINK="/p/${ID}.html" ||
-			LINK="/posts/$(echo "${TITLE}" | title_to_post_url)${TITLE_SEPARATOR_CHAR}${ID}.html"
+			LINK="${ROOT_URL}/p/${ID}.html" ||
+			LINK="${ROOT_URL}/posts/$(echo "${TITLE}" | title_to_post_url)${TITLE_SEPARATOR_CHAR}${ID}.html"
+		[ -n "$(op_is_set "${METADATA_DIR}/${ID}/options" named)" ] &&
+			LINK="${ROOT_URL}/$(op_get "${METADATA_DIR}/${ID}/options" named).html"
 		AUTHOR="$(get_author "${P}")"
 		DATE="$(get_date "${P}")"
 		DATE_PRETTY="$(ts_to_date "${DATE_FRMT}" "${DATE}")"
@@ -239,6 +243,8 @@ function build_tagindex {
 					else
 						LINK="/posts/$(echo "${TITLE}" | title_to_post_url)${TITLE_SEPARATOR_CHAR}${ID}.html"
 					fi
+					[ -n "$(op_is_set "${METADATA_DIR}/${ID}/options" named)" ] &&
+						LINK="${ROOT_URL}/$(op_get "${METADATA_DIR}/${ID}/options" named).html"
 					AUTHOR="$(get_author "${HEADERS}")"
 					echo "<li><a href='${LINK}'>${TITLE}</a> by ${AUTHOR} on ${DATE_PRETTY}</li>" | tee -a "${TMP_TAG_FILE}"
 				fi
