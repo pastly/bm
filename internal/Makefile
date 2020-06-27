@@ -329,8 +329,8 @@ else
 	mv $@ $(filter %-$*.asc,$(BUILT_SIG_PAGES))
 	cp $(BUILD_DIR)/404.html $@
 endif
-	if [ -n "$$(op_is_set "$(METADATA_DIR)/$*/options" named)" ]; then \
-		cp $@ "$(BUILD_DIR)/$$(op_get "$(METADATA_DIR)/$*/options" named).asc"; \
+	if [ -n "$$(op_is_set "$(METADATA_DIR)/$(subst .html,,$*)/options" named)" ]; then \
+		cp $@ "$(BUILD_DIR)/$$(op_get "$(METADATA_DIR)/$(subst .html,,$*)/options" named).asc"; \
 	fi
 
 # Homepage, some number of post previews. Follows the same general formula of
