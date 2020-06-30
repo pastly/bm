@@ -503,7 +503,7 @@ function post_markdown {
 		cat "${TMP2}" > "${TMP1}"
 	else
 		HEADINGS=( )
-		while read LINE
+		while IFS= read -r LINE
 		do
 			if [[ "$(echo "${LINE}" | grep "^<h[[:digit:]]>.*</h[[:digit:]]>" )" == "" ]]
 			then
