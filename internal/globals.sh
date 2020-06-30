@@ -82,6 +82,8 @@ function build_content_header {
 	[[ "${PREFER_SHORT_POSTS}" == "yes" ]] &&
 		POST_LINK="${ROOT_URL}/p/${POST}.html" ||
 		POST_LINK="${ROOT_URL}/posts/${POST_FILE}"
+	[ -n "$(op_is_set "${METADATA_DIR}/${POST}/options" named)" ] &&
+		POST_LINK="${ROOT_URL}/$(op_get "${METADATA_DIR}/${POST}/options" named).html"
 	(( "${#OPTS[@]}" > 0 )) && [[ " ${OPTS[@]} " =~ " for-preview " ]] &&
 		TITLE="<a href='${POST_LINK}'>${TITLE}</a>"
 	DATE="$(get_date "${HEADERS}")"
@@ -95,6 +97,8 @@ function build_content_header {
 	[[ "${MAKE_SHORT_POSTS}" == "yes" ]] &&
 		PERMALINK="${ROOT_URL}/p/$(get_id "${HEADERS}").html" ||
 		PERMALINK=
+	[ -n "$(op_is_set "${METADATA_DIR}/${POST}/options" named)" ] &&
+		PERMALINK="$POST_LINK"
 	IS_PINNED="$(op_get "${OPTIONS}" pinned)"
 	(( "${#OPTS[@]}" > 0 )) && [[ " ${OPTS[@]} " =~ " for-preview " ]] &&
 		[[ "${IS_PINNED}" != "" ]] &&
@@ -162,8 +166,10 @@ function build_postindex {
 		ID="$(basename $(dirname "${P}"))"
 		TITLE="$(get_title "${P}")"
 		[[ "${PREFER_SHORT_POSTS}" == "yes" ]] &&
-			LINK="/p/${ID}.html" ||
-			LINK="/posts/$(echo "${TITLE}" | title_to_post_url)${TITLE_SEPARATOR_CHAR}${ID}.html"
+			LINK="${ROOT_URL}/p/${ID}.html" ||
+			LINK="${ROOT_URL}/posts/$(echo "${TITLE}" | title_to_post_url)${TITLE_SEPARATOR_CHAR}${ID}.html"
+		[ -n "$(op_is_set "${METADATA_DIR}/${ID}/options" named)" ] &&
+			LINK="${ROOT_URL}/$(op_get "${METADATA_DIR}/${ID}/options" named).html"
 		AUTHOR="$(get_author "${P}")"
 		DATE="$(get_date "${P}")"
 		DATE_PRETTY="$(ts_to_date "${DATE_FRMT}" "${DATE}")"
@@ -237,6 +243,8 @@ function build_tagindex {
 					else
 						LINK="/posts/$(echo "${TITLE}" | title_to_post_url)${TITLE_SEPARATOR_CHAR}${ID}.html"
 					fi
+					[ -n "$(op_is_set "${METADATA_DIR}/${ID}/options" named)" ] &&
+						LINK="${ROOT_URL}/$(op_get "${METADATA_DIR}/${ID}/options" named).html"
 					AUTHOR="$(get_author "${HEADERS}")"
 					echo "<li><a href='${LINK}'>${TITLE}</a> by ${AUTHOR} on ${DATE_PRETTY}</li>" | tee -a "${TMP_TAG_FILE}"
 				fi
@@ -534,7 +542,10 @@ function post_markdown {
 		[[ "${PREFER_SHORT_POSTS}" == "yes" ]] && \
 			LINK="/p/${ID}.html" || \
 			LINK="/posts/$(get_title "${METADATA_DIR}/${ID}/headers" | title_to_post_url)${TITLE_SEPARATOR_CHAR}${ID}.html"
-		sed "s|\(<a href=['\"]\)\(#.*\)|\1${LINK}\2|" "${TMP1}" > "${TMP2}"
+
+		[ -n "$(op_is_set "${METADATA_DIR}/${ID}/options" named)" ] &&
+			LINK="/$(op_get "${METADATA_DIR}/${ID}/options" named).html"
+		sed "s|\(<a href=['\"]\)\(#.*\)|\1${ROOT_URL}${LINK}\2|" "${TMP1}" > "${TMP2}"
 	else
 		cat "${TMP1}" > "${TMP2}"
 	fi
